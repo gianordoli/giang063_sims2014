@@ -2,6 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetVerticalSync(true);
+    ofSetBackgroundAuto(false);
     ofSetCircleResolution(6);
     mouseFunction = 0;
     for(int i = 0; i < NUM_OBJ; i++){
@@ -14,7 +16,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    pct += 0.005;
+    pct += 0.002;
     if(pct > 1.0f){
         pct = 0.0f;
     }
@@ -25,7 +27,10 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(ofColor::royalBlue);
+//    ofBackground(ofColor::royalBlue, 180);
+//    ofBackground(80, 0, 200, 150);
+    ofSetColor(80, 0, 160, 80);
+    ofRect(0, 0, ofGetWidth(), ofGetHeight());
     for(int i = 0; i < NUM_OBJ; i++){
         obj[i].draw();
     }

@@ -2,7 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetFullscreen(true);
+//    ofSetFullscreen(true);
+    ofSetVerticalSync(true);
     for(int i = 0; i < NUM_OBJ; i++){
         ofPoint initPos;
         //        initPos.set(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()));
@@ -28,7 +29,12 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(0, 160, 240);
+//    ofBackground(0, 160, 240);
+    ofColor color1;
+    color1.set(0, 160, 240);
+    ofColor color2;
+    color2.set(0, 240, 160);
+    ofBackgroundGradient(color1, color2, OF_GRADIENT_LINEAR);
     for(int i = 0; i < NUM_OBJ; i++){
         obj[i].draw();
     }

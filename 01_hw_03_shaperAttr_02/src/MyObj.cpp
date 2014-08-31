@@ -36,7 +36,7 @@ void MyObj::draw(){
     ofPushMatrix();
         ofTranslate(ofGetWidth()*0.5, ofGetHeight()*0.5);
         ofRotate(initAngle + angle);
-            ofSetColor(ofColor::violet);
+            ofSetColor(ofColor::salmon);
             ofCircle(pos, 20*scale);
     ofPopMatrix();
 }

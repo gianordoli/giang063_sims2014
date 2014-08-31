@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "MyObj.h"
-#define NUM_OBJ 6
+#define NUM_OBJ 8
 
 class ofApp : public ofBaseApp{
     

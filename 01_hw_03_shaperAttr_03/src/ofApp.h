@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "MyObj.h"
+#define NUM_OBJ 8
 
 class ofApp : public ofBaseApp{
     
@@ -20,6 +21,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    MyObj obj;
+    MyObj allObjects[NUM_OBJ];
     float pct;
 };

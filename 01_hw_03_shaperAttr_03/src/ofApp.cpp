@@ -7,8 +7,10 @@ void ofApp::setup(){
     ofSetBackgroundAuto(false);
 //    ofSetCircleResolution(6);
     ofSetFrameRate(60);
+    for(int i = 0; i < NUM_OBJ; i++){
+        allObjects[i].init();
+    }
     
-    obj.init();
 }
 
 //--------------------------------------------------------------
@@ -19,7 +21,9 @@ void ofApp::update(){
         pct = 0.0f;
     }
     
-    obj.updatePct(pct);
+    for(int i = 0; i < NUM_OBJ; i++){
+        allObjects[i].updatePct(pct);
+    }
 }
 
 //--------------------------------------------------------------
@@ -31,8 +35,14 @@ void ofApp::draw(){
     ofSetColor(255, 220, 0, 5);
 //    ofSetColor(255, 200, 0, 5);
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
-    
-    obj.draw();
+
+    ofPushMatrix();
+    ofTranslate(ofGetWidth()*0.5, ofGetHeight()*0.5);
+    for(int i = 0; i < NUM_OBJ; i++){
+        ofRotate(360/NUM_OBJ);
+        allObjects[i].draw();
+    }
+    ofPopMatrix();
     
 }
 

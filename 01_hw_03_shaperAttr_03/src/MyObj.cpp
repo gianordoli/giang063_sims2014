@@ -9,8 +9,8 @@
 #include "MyObj.h"
 
 void MyObj::init(){
-    setSrc(ofGetWidth()/2, ofGetHeight()*0.8);
-    setDst(ofGetWidth()/2, ofGetHeight()*0.2);
+    setSrc(0, ofGetHeight()*0.4);
+    setDst(0, 0);
 }
 
 void MyObj::setSrc(float _x, float _y){
@@ -37,5 +37,5 @@ void MyObj::draw(){
 //    ofSetColor(ofColor::violet);
     ofSetColor(230, 120, 200);
     //    ofSetColor(180, 120, 0);
-    ofCircle(pos, 30);
+    ofCircle(pos, 20);
 }

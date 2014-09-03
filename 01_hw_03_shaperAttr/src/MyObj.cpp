@@ -9,8 +9,8 @@
 #include "MyObj.h"
 
 void MyObj::init(){
-    setSrc(ofGetWidth()*0.1, ofGetHeight()*0.5);
-    setDst(ofGetWidth()*0.9, ofGetHeight()*0.5);
+    setSrc(ofGetWidth()*0.15, ofGetHeight()*0.5);
+    setDst(ofGetWidth()*0.85, ofGetHeight()*0.5);
     
 	ofTrueTypeFont::setGlobalDpi(72);
 	franklinBook14.loadFont("frabk.ttf", 14);
@@ -51,7 +51,7 @@ void MyObj::draw(){
         float angle = ofMap(shaper, 0, 1, 0, 360);
         ofRotate(angle);
         ofSetColor(ofColor::yellow);
-        ofCircle(0, 0, 60);
+        ofCircle(0, 0, 50);
         
     ofPopMatrix();
 }

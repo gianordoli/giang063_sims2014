@@ -2,17 +2,19 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-//    ofSetWindowShape(500, 500);
-    ofSetCircleResolution(6);
-    ofSetVerticalSync(true);
-    mouseFunction = 0;
+    ofSetWindowShape(500, 500);
+    //    ofSetVerticalSync(true);
+    ofSetBackgroundAuto(false);
+//    ofSetCircleResolution(6);
+    ofSetFrameRate(60);
+    
     obj.init();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    pct += 0.008;
+    pct += 0.005f;
     if(pct > 1.0f){
         pct = 0.0f;
     }
@@ -22,8 +24,16 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(0, 150, 100);
+    //        ofBackground(255, 0, 0, 255);
+    //        ofBackground(ofColor::royalBlue);
+    //        ofBackground(80, 0, 200);
+//    ofSetColor(80, 0, 160, 40);
+    ofSetColor(255, 220, 0, 5);
+//    ofSetColor(255, 200, 0, 5);
+    ofRect(0, 0, ofGetWidth(), ofGetHeight());
+    
     obj.draw();
+    
 }
 
 //--------------------------------------------------------------
@@ -33,7 +43,6 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    
 }
 
 //--------------------------------------------------------------
@@ -53,13 +62,6 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    if(mouseFunction){
-        obj.setSrc(x, y);
-        mouseFunction = 0;
-    }else{
-        obj.setDst(x, y);
-        mouseFunction = 1;
-    }
 }
 
 //--------------------------------------------------------------

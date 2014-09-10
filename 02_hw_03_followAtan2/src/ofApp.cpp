@@ -2,48 +2,42 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetWindowShape(500, 500);
-    //    ofSetVerticalSync(true);
-    ofSetBackgroundAuto(false);
-//    ofSetCircleResolution(6);
-    ofSetFrameRate(60);
+//    ofSetFullscreen(true);
+    ofSetVerticalSync(true);
     for(int i = 0; i < NUM_OBJ; i++){
-        allObjects[i].init();
+        ofPoint initPos;
+        //        initPos.set(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()));
+        initPos.set(ofGetWidth()*0.5, ofGetHeight()*0.5);
+        ofColor color;
+        color.setHsb(200 + (float)i/NUM_OBJ * 50, 255, 255);
+        obj[i].init(initPos, i, color);
     }
-    
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
-    pct += 0.005f;
-    if(pct > 1.0f){
-        pct = 0.0f;
-    }
-    
+    ofPoint mouse;
+    mouse.set(mouseX, mouseY);
     for(int i = 0; i < NUM_OBJ; i++){
-        allObjects[i].updatePct(pct);
+        if(i > 0){
+            obj[i].update(obj[i-1]);
+        }else{
+            obj[i].update(mouse);
+        }
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    //        ofBackground(255, 0, 0, 255);
-    //        ofBackground(ofColor::royalBlue);
-    //        ofBackground(80, 0, 200);
-//    ofSetColor(80, 0, 160, 40);
-    ofSetColor(255, 255, 0, 5);
-//    ofSetColor(255, 200, 0, 5);
-    ofRect(0, 0, ofGetWidth(), ofGetHeight());
-
-    ofPushMatrix();
-    ofTranslate(ofGetWidth()*0.5, ofGetHeight()*0.5);
+//    ofBackground(0, 160, 240);
+    ofColor color1;
+    color1.set(160, 0, 240);
+    ofColor color2;
+    color2.set(80, 0, 120);
+    ofBackgroundGradient(color1, color2, OF_GRADIENT_LINEAR);
     for(int i = 0; i < NUM_OBJ; i++){
-        ofRotate(360/NUM_OBJ);
-        allObjects[i].draw();
+        obj[i].draw();
     }
-    ofPopMatrix();
-    
 }
 
 //--------------------------------------------------------------
@@ -53,6 +47,7 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
+    
 }
 
 //--------------------------------------------------------------
@@ -72,6 +67,7 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
+    
 }
 
 //--------------------------------------------------------------

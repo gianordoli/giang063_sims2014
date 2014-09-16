@@ -14,3 +14,4 @@ a) Create a square canvas, and play with leaving trails for objects in motion by
 ![hw_02_c](_images/02_hw_01_sinCos_02c.png)
 
 b) Use sin / cos to emulate a natural phenomenon. Post a picture or video of what your phenomenon is along with you application.
+![hw_02_pendulum](_images/02_hw_02_pendulum.jpg)

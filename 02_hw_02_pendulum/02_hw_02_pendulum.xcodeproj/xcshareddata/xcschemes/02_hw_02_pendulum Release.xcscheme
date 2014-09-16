@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "02_hw_01_sinCos_02.app"
-               BlueprintName = "02_hw_01_sinCos_02"
-               ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
+               BuildableName = "02_hw_02_pendulum.app"
+               BlueprintName = "02_hw_02_pendulum"
+               ReferencedContainer = "container:02_hw_02_pendulum.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "02_hw_01_sinCos_02.app"
-            BlueprintName = "02_hw_01_sinCos_02"
-            ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
+            BuildableName = "02_hw_02_pendulum.app"
+            BlueprintName = "02_hw_02_pendulum"
+            ReferencedContainer = "container:02_hw_02_pendulum.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "02_hw_01_sinCos_02.app"
-            BlueprintName = "02_hw_01_sinCos_02"
-            ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
+            BuildableName = "02_hw_02_pendulum.app"
+            BlueprintName = "02_hw_02_pendulum"
+            ReferencedContainer = "container:02_hw_02_pendulum.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "02_hw_01_sinCos_02.app"
-            BlueprintName = "02_hw_01_sinCos_02"
-            ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
+            BuildableName = "02_hw_02_pendulum.app"
+            BlueprintName = "02_hw_02_pendulum"
+            ReferencedContainer = "container:02_hw_02_pendulum.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

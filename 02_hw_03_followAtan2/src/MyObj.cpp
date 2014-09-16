@@ -29,14 +29,31 @@ void MyObj::update(ofPoint _target){
     if(angle < 0) {
         angle = TWO_PI - abs(angle);
     }
+    
+    ofPoint thisTail;
+    thisTail.set(-size.x * 0.5, 0.0);
+    tail.push_back(*this);
+    if(tail.size() > 30){
+        tail.erase(tail.begin());
+    }
 }
 
 void MyObj::draw(){
+    ofNoFill();
+    ofSetColor(255, 50);
+    ofSetLineWidth(2);
+    ofBeginShape();
+    for(ofPoint it : tail){
+        ofVertex(it);
+    }
+    ofEndShape(false);
+    
     ofPushMatrix();
         ofTranslate(*this);
         ofRotate(ofRadToDeg(angle));
+            ofFill();
             ofSetColor(color);
 //            ofRect(-size.x, -size.y * 0.5, size.x, size.y);
-    ofTriangle(-size.x, -size.y*0.5, -size.x, size.y*0.5, 0, 0);
+    ofTriangle(-size.x * 0.5, -size.y*0.5, -size.x * 0.5, size.y*0.5, size.x * 0.5, 0);
     ofPopMatrix();
 }

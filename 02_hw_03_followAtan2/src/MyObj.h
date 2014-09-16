@@ -22,4 +22,5 @@ public:
     ofPoint accel;
     ofColor color;
     float angle;
+    vector<ofPoint> tail;
 };

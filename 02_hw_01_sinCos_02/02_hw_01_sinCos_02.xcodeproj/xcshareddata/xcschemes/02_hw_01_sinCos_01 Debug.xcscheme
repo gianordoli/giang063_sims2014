@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "02_hw_01_sinCos_01.app"
+               BuildableName = "02_hw_01_sinCos_02.app"
                BlueprintName = "02_hw_01_sinCos_02"
                ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "02_hw_01_sinCos_01.app"
+            BuildableName = "02_hw_01_sinCos_02.app"
             BlueprintName = "02_hw_01_sinCos_02"
             ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "02_hw_01_sinCos_01.app"
+            BuildableName = "02_hw_01_sinCos_02.app"
             BlueprintName = "02_hw_01_sinCos_02"
             ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "02_hw_01_sinCos_01.app"
+            BuildableName = "02_hw_01_sinCos_02.app"
             BlueprintName = "02_hw_01_sinCos_02"
             ReferencedContainer = "container:02_hw_01_sinCos_02.xcodeproj">
          </BuildableReference>

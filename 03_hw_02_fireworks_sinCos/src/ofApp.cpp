@@ -30,7 +30,7 @@ void ofApp::update(){
         }
     }
     
-    if(ofGetFrameNum() % 5 == 0){
+    if(ofGetFrameNum() % 3 == 0){
         //Create a new particle
         Particle myParticle;
         myParticle.setup();

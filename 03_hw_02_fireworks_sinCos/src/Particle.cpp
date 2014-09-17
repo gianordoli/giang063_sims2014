@@ -10,8 +10,11 @@
 
 //------------------------------------------------------------
 void Particle::setup(){
-    x = ofGetWidth()*0.5;
-    y = ofGetHeight()*0.5;
+//    x = ofGetWidth()*0.5;
+//    y = ofGetHeight()*0.5;
+    x = ofRandom(ofGetWidth());
+    y = ofRandom(ofGetHeight());
+    
     vel.set(ofRandom(-16, 16), ofRandom(-24, 8));
 	damping = ofRandom(0.01, 0.05);
     color.setHsb(ofRandom(200, 255), 255, 255);
@@ -43,7 +46,7 @@ void Particle::update(){
 void Particle::draw(){
     ofNoFill();
     ofSetColor(color);
-    ofSetLineWidth(1);
+    ofSetLineWidth(3);
     ofBeginShape();
     for(ofPoint it : tail){
         ofVertex(it);
@@ -51,7 +54,7 @@ void Particle::draw(){
     ofEndShape(false);
     
     ofFill();
-    ofCircle(pos, 5);
+    ofCircle(pos, 10);
 }
 
 //------------------------------------------------------------

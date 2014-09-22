@@ -5,8 +5,8 @@ void ofApp::setup(){
     ofSetWindowShape(1280, 720);
 	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
-//    ofSetFullscreen(true);
-//	ofHideCursor();
+    ofSetFullscreen(true);
+	ofHideCursor();
     
     gravity.set(0, -0.01);
 	

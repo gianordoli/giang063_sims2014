@@ -2,95 +2,73 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetWindowShape(1280, 720);
-	ofSetVerticalSync(true);
-	ofSetFrameRate(60);
-    ofSetFullscreen(true);
-	ofHideCursor();
+    ofSetWindowShape(500, 500);
+    //    ofSetVerticalSync(true);
+//    ofSetBackgroundAuto(false);
+//    ofSetCircleResolution(6);
+    ofSetFrameRate(60);
+    object.init();
     
-    gravity.set(0, 0.4);
-	
-//	for (int i = 0; i < NUM_PARTICLES; i++){
-//		Particle myParticle;
-//		myParticle.setup();
-//		particles.push_back(myParticle);
-//	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-//    zIndex = amplitude * sin(TWO_PI * ofGetFrameNum() / period) - amplitude;
-	for (int i = 0; i < particles.size(); i++){
-        particles[i].addForce(gravity);
-        particles[i].update();
-        
-        if(particles[i].lifespan <= 0){
-            // Remove
-            particles.erase(particles.begin() + i);
-        }
+    
+    pct += TWO_PI / (ofGetFrameRate() * 16);
+    if(pct > 1.0f){
+        pct = 0.0f;
     }
     
-    int randomNum = (int) ofRandom(1, 5);
-    if(ofGetFrameNum() % randomNum == 0){
-        //Create a new particle
-        Particle myParticle;
-        myParticle.setup();
-        particles.push_back(myParticle);
-    //    cout << zIndex << endl;
-    }
+    object.updatePct(pct);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofColor bg;
-    bg.setHsb(200, 200, 80);
-    ofBackground(bg);
-	for (int i = 0; i < particles.size(); i++){
-        particles[i].draw();
-    }
+    ofBackground(0, 240, 180);
+
+    object.draw();
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
-
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+void ofApp::dragEvent(ofDragInfo dragInfo){
+    
 }

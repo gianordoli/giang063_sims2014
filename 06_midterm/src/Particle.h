@@ -13,7 +13,7 @@ class Particle{
 public:
     
     void setup(float _x, float _y);
-    void update();
+    void update(ofPoint _posOfForce, float _radius, float _strength);
     void addForce(ofPoint _force);
     void resetForce();
 

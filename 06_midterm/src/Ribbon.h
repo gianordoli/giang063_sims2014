@@ -13,8 +13,8 @@
 class Ribbon{
 public:
     void setup(float _x, float _y);
-    void update();
-    void draw(bool _useCamera, float _mouseRadius, float _zDepth);
+    void update(float _x, float _y, float _modifierRadius, float _modifierStrength);
+    void draw(bool _useCamera, float _thickness, float _zDepth);
     
     // Drawing
     void addPoint(float _x, float _y);

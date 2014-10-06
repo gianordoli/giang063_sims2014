@@ -7,18 +7,38 @@
 </Canvas>
 <Widget>
     <Kind>4</Kind>
-    <Name>RIBBON THICKNESS</Name>
-    <Value>10.000000000</Value>
+    <Name>SMOOTH</Name>
+    <Value>2.812808037</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>3D</Name>
-    <Value>0</Value>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>RIBBON THICKNESS</Name>
+    <Value>17.133005142</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Z DEPTH</Name>
-    <Value>-1.000000000</Value>
+    <Value>-3.172413826</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>RED</Name>
+    <Value>1.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>GREEN</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>BLUE</Name>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -32,13 +52,13 @@
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>SMOOTH</Name>
-    <Value>1.000000000</Value>
+    <Name>MODIFIER RADIUS</Name>
+    <Value>99.852218628</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>MOUSE RADIUS</Name>
-    <Value>143.842361450</Value>
+    <Name>MODIFIER STRENGTH</Name>
+    <Value>0.250000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>

@@ -40,10 +40,13 @@ class ofApp : public ofBaseApp{
     /*-------------------- 3D ---------------------*/
     ofEasyCam cam;
     ofLight light;
+    ofMaterial material;
+    ofFloatColor lightColor;
     bool useCamera;
     float thickness;
     float zDepth;
 
     /*----------------- PHYSICS -------------------*/
-    float mouseRadius;
+    float modifierRadius;
+    float modifierStrength;
 };

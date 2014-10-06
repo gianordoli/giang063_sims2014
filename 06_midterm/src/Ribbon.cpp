@@ -15,18 +15,32 @@ void Ribbon::setup(float _x, float _y){
 }
 
 //------------------------------------------------------------
-void Ribbon::update(){
+void Ribbon::update(float _x, float _y, float _modifierRadius, float _modifierStrength){
+    ofPoint mousePos = ofPoint(_x, _y);
     for (int i = 0; i < myParticles.size(); i++) {
-        myParticles[i].update();
+        myParticles[i].update(mousePos, _modifierRadius, _modifierStrength);
         currentLine[i] = myParticles[i].pos;
     }
 }
 
 //------------------------------------------------------------
 void Ribbon::applySmoothing(int _shapeSmoothing){
-    cout << _shapeSmoothing << endl;
+    // Update line
     currentLine = currentLine.getSmoothed(_shapeSmoothing, 0);
-    cout << currentLine.size();
+    
+    // Erase particles vector
+    while(myParticles.size() > 0){
+        int i = myParticles.size() - 1;
+        myParticles.erase(myParticles.begin() + i);
+    }
+    
+    // Update particles vector
+    vector<ofPoint> path = currentLine.getVertices();
+    for (ofPoint p : path) {
+        Particle newParticle;
+        newParticle.setup(p.x, p.y);
+        myParticles.push_back(newParticle);
+    }
 }
 
 //------------------------------------------------------------
@@ -57,11 +71,11 @@ void Ribbon::resetForce(){
 
 
 //------------------------------------------------------------
-void Ribbon::draw(bool _useCamera, float _mouseRadius, float _zDepth){
+void Ribbon::draw(bool _useCamera, float _thickness, float _zDepth){
     
     if(!_useCamera){
         ofNoFill();
-        ofSetLineWidth(_mouseRadius);
+        ofSetLineWidth(_thickness);
         ofSetColor(255);
         currentLine.draw();
     
@@ -95,7 +109,7 @@ void Ribbon::draw(bool _useCamera, float _mouseRadius, float _zDepth){
             //the longer the distance, the narrower the originalLine.
             //this makes it look a bit like brush strokes
     //		float thickness = ofMap(distance, 0, 60, 20, 2, true);
-            float thickness = _mouseRadius;
+            float thickness = _thickness;
             
             //calculate the path to the left and to the right
             //by extending the current point in the direction of left/right by the length

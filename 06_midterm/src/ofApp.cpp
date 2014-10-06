@@ -24,23 +24,30 @@ void ofApp::setup(){
     setCanvas();
     thickness = 10;
     
+    /*-------------------- 3D ---------------------*/
+    useCamera = false;
+    lightColor.set(1.0, 0.0, 0.0);
+//    ofSetSmoothLighting(true);
+    light.setDiffuseColor(lightColor);
+//    light.setSpecularColor( ofFloatColor(1.f, 1.f, 1.f));
+    light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 10.0));
+    cam.setVFlip(true); // you need this, otherwise the camera starts flipped vertically
+                        // I have no idea why
+    zDepth = -1;
+	material.setShininess( 120 );
+    // the light highlight of the material //
+	material.setSpecularColor(ofColor(255, 255, 255, 255));
+    
+    
+    /*----------------- PHYSICS -------------------*/
+    modifierRadius = 10;
+    modifierStrength = 0.25;
+
+    
     /*-------------------- GUI --------------------*/
     cursorModes.push_back("camera/draw");
     cursorModes.push_back("modify");
     setGUI();
-    
-    /*-------------------- 3D ---------------------*/
-    useCamera = false;
-//    ofSetSmoothLighting(true);
-    light.setDiffuseColor(ofFloatColor(1.0, 0.9, 0.8));
-//    light.setSpecularColor( ofFloatColor(1.f, 1.f, 1.f));
-    light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 0.0));
-    cam.setVFlip(true); // you need this, otherwise the camera starts flipped vertically
-                        // I have no idea why
-    zDepth = -1;
-    
-    /*----------------- PHYSICS -------------------*/
-    mouseRadius = 10;
 }
 
 //--------------------------------------------------------------
@@ -48,7 +55,7 @@ void ofApp::update(){
     
     if(selectedCursorMode == "modify"){
         for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].update();
+            shapes[i].update(mouseX, mouseY, modifierRadius, modifierStrength);
         }
     }
 }
@@ -67,6 +74,7 @@ void ofApp::draw(){
         light.enable();
         ofEnableLighting();
         ofEnableDepthTest();
+        material.begin();
         ofPushMatrix();
         ofTranslate(-ofGetWidth()*0.5, -ofGetHeight()*0.5);
     }
@@ -79,11 +87,12 @@ void ofApp::draw(){
         ofNoFill();
         ofSetLineWidth(1);
         ofSetColor(255);
-        ofCircle(mouseX, mouseY, mouseRadius);
+        ofCircle(mouseX, mouseY, modifierRadius);
     }
     
     if(useCamera){
         ofPopMatrix();
+        material.end();
         ofDisableDepthTest();
         ofDisableLighting();
         light.disable();
@@ -185,24 +194,29 @@ void ofApp::setGUI(){
     gui->setColorBack(guiColor);
     gui->addSpacer();
     
-    gui->addSlider("RIBBON THICKNESS", 2, 50, thickness);
-    gui->addSpacer();
-    
-    gui->addToggle("3D", useCamera);
-    gui->addSpacer();
-    
-    gui->addSlider("Z DEPTH", -1, -50, zDepth);
-    gui->addSpacer();
-    
-	gui->addRadio("CURSOR MODE", cursorModes, OFX_UI_ORIENTATION_VERTICAL);
-    gui->addSpacer();
-    
+	gui->addLabel("DRAWING CONTROLS");
     gui->addSlider("SMOOTH", 1, 5, shapeSmoothing);
 	gui->addButton("APPLY", false);
 	gui->addButton("RESET", false);
     gui->addSpacer();
     
-    gui->addSlider("MOUSE RADIUS", 10, 200, mouseRadius);
+	gui->addLabel("3D CONTROLS");
+    gui->addToggle("3D", useCamera);
+    gui->addSlider("RIBBON THICKNESS", 2, 50, thickness);
+    gui->addSlider("Z DEPTH", -1, -50, zDepth);
+	gui->addLabel("LIGHT COLOR");
+    gui->addSlider("RED", 0.0, 1.0, lightColor.r);
+    gui->addSlider("GREEN", 0.0, 1.0, lightColor.g);
+    gui->addSlider("BLUE", 0.0, 1.0, lightColor.b);
+    gui->addSpacer();
+    
+	gui->addLabel("CURSOR MODES");
+	gui->addRadio("CURSOR MODE", cursorModes, OFX_UI_ORIENTATION_VERTICAL);
+    gui->addSpacer();
+    
+	gui->addLabel("MODIFIER CONTROLS");
+    gui->addSlider("MODIFIER RADIUS", 10, 200, modifierRadius);
+    gui->addSlider("MODIFIER STRENGTH", 0.1, 1, modifierStrength);
     gui->addSpacer();
     
     gui->addToggle("FULLSCREEN", false);
@@ -217,26 +231,13 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 	string name = e.widget->getName();
 	int kind = e.widget->getKind();
     
-    if(name == "RIBBON THICKNESS"){
+    // DRAWING ------------------------------------------
+    if(name == "SMOOTH"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
-        thickness = slider->getScaledValue();
-    
-	}else if(name == "3D"){
-        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        useCamera = toggle->getValue();
-        cam.reset();
-        cam.enableMouseInput();
-
-    }else if(name == "Z DEPTH"){
-		ofxUISlider *slider = (ofxUISlider *) e.widget;
-		zDepth = slider->getScaledValue();
+        shapeSmoothing = round(slider->getScaledValue());
         
-    }else if(name == "SMOOTH"){
-		ofxUISlider *slider = (ofxUISlider *) e.widget;
-		shapeSmoothing = round(slider->getScaledValue());
-
     }else if(name == "APPLY"){
-		ofxUIButton *button = (ofxUIButton *) e.getButton();
+        ofxUIButton *button = (ofxUIButton *) e.getButton();
         if(button->getValue()){
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].applySmoothing(shapeSmoothing);
@@ -250,14 +251,50 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
                 shapes[i].resetSmoothing();
             }
         }
+        
+    // 3D -----------------------------------------------
+	}else if(name == "3D"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        useCamera = toggle->getValue();
+        cam.reset();
+        cam.enableMouseInput();
+   
+    }else if(name == "RIBBON THICKNESS"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        thickness = slider->getScaledValue();
 
+    }else if(name == "Z DEPTH"){
+		ofxUISlider *slider = (ofxUISlider *) e.widget;
+		zDepth = slider->getScaledValue();
+        
+    }else if(name == "RED"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        lightColor.r = slider->getScaledValue();
+        light.setDiffuseColor(lightColor);
+        
+    }else if(name == "GREEN"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        lightColor.g = slider->getScaledValue();
+        light.setDiffuseColor(lightColor);
+        
+    }else if(name == "BLUE"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        lightColor.b = slider->getScaledValue();
+        light.setDiffuseColor(lightColor);
+        
+    // CURSOR -------------------------------------------
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
         selectedCursorMode = radio->getActiveName();
-        
-    }else if(name == "MOUSE RADIUS"){
+
+    // MODIFIER -----------------------------------------
+    }else if(name == "MODIFIER RADIUS"){
 		ofxUISlider *slider = (ofxUISlider *) e.widget;
-		mouseRadius = slider->getScaledValue();
+		modifierRadius = slider->getScaledValue();
+        
+    }else if(name == "MODIFIER STRENGTH"){
+		ofxUISlider *slider = (ofxUISlider *) e.widget;
+		modifierStrength = slider->getScaledValue();
         
     }else if(e.getName() == "FULLSCREEN"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;

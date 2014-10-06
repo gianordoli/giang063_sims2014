@@ -1,3 +1,8 @@
+/*--------------------------------------------------------------
+ Ribbon mesh code adapted from:
+ oF > examples > 3d > cameraRibbonExample, by James George
+--------------------------------------------------------------*/
+ 
 #include "ofApp.h"
 
 //--------------------------------------------------------------
@@ -6,6 +11,7 @@ void ofApp::setup(){
 	ofEnableSmoothing();
     ofSetFrameRate(60);
     ofSetVerticalSync(true);
+    ofSetWindowShape(1280, 720);
     
     /*------------------ DRAWING ------------------*/
     isDrawing = false;
@@ -18,6 +24,8 @@ void ofApp::setup(){
     setCanvas();
     
     /*-------------------- GUI --------------------*/
+    cursorModes.push_back("camera/draw");
+    cursorModes.push_back("modify");
     setGUI();
     
     /*-------------------- 3D ---------------------*/
@@ -32,9 +40,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    for(int i = 0; i < shapes.size(); i++){
-        shapes[i].update(shapeSmoothing);
-    }
+
 }
 
 //--------------------------------------------------------------
@@ -78,9 +84,7 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     // Activate camera
     if(key == 32){
-        useCamera = !useCamera;
-        cam.reset();
-        cam.enableMouseInput();
+        
         
     // Erase lines
     }else if(key == 'e'){
@@ -96,50 +100,63 @@ void ofApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-    if(useCamera){
-       if(x < margins[3] || x > ofGetWidth() - margins[1] ||
-          y < margins[0] || y > ofGetHeight() - margins[2]){
-            cam.disableMouseInput();
-       }else{
-            cam.enableMouseInput();
-       }
+void ofApp::mousePressed(int x, int y, int button){
+    
+    if(selectedCursorMode != "modify"){
+        // Add new ribbon, only if mouse is within the canvas AND not on 3D mode
+        if(!useCamera &&
+           x > margins[3] && x < ofGetWidth() - margins[1] &&
+           y > margins[0] && y < ofGetHeight() - margins[2]){
+            Ribbon newRibbon;
+            // Save coordinates based on the center
+            newRibbon.setup(x - ofGetWidth()*0.5, y - ofGetHeight()*0.5);
+            shapes.push_back(newRibbon);
+            isDrawing = true;
+        }
     }
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-    if(!useCamera &&
+void ofApp::mouseMoved(int x, int y ){
+    // Camera is only enabled inside the canvas area
+    if(useCamera &&
+       selectedCursorMode != "modify" &&
        x > margins[3] && x < ofGetWidth() - margins[1] &&
        y > margins[0] && y < ofGetHeight() - margins[2]){
-        Ribbon newRibbon;
-        // Save coordinates based on the center
-        newRibbon.setup(x - ofGetWidth()*0.5, y - ofGetHeight()*0.5);
-        shapes.push_back(newRibbon);
-        isDrawing = true;
+
+       cam.enableMouseInput();
+
+    }else{
+        cam.disableMouseInput();
     }
-}
-
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-    isDrawing = false;
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    if(isDrawing &&
-       x > margins[3] && x < ofGetWidth() - margins[1] &&
-       y > margins[0] && y < ofGetHeight() - margins[2]){
-            if(!useCamera){
-                // Save coordinates based on the center
-                shapes[shapes.size() - 1].addPoint(x - ofGetWidth()*0.5, y - ofGetHeight()*0.5);
-            }else{
-                cam.enableMouseInput();
-            }
+    if(selectedCursorMode != "modify"){
+        
+        if(!useCamera &&
+           isDrawing &&
+           x > margins[3] && x < ofGetWidth() - margins[1] &&
+           y > margins[0] && y < ofGetHeight() - margins[2]){
+            
+            // Save coordinates based on the center
+            shapes[shapes.size() - 1].addPoint(x - ofGetWidth()*0.5, y - ofGetHeight()*0.5);
+
+        }else{
+            // this stops drawing when the mouse leave the canvas area
+            isDrawing = false;
+        }
+        
     }else{
-        isDrawing = false;
+
     }
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseReleased(int x, int y, int button){
+    // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
+    isDrawing = false;
 }
 
 void ofApp::setCanvas(){
@@ -159,14 +176,19 @@ void ofApp::setGUI(){
     gui->addToggle("3D", useCamera);
     gui->addSpacer();
     
-    gui->addSlider("SMOOTH", 1, 5, shapeSmoothing);
+	gui->addRadio("CURSOR MODE", cursorModes, OFX_UI_ORIENTATION_VERTICAL);
     gui->addSpacer();
     
-    gui->addToggle("FULLSCREEN", TRUE);
+    gui->addSlider("SMOOTH", 1, 5, shapeSmoothing);
+	gui->addButton("APPLY", false);
+	gui->addButton("RESET", false);
+    
+    gui->addSpacer();
+    gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
-    gui->loadSettings("guiSettings.xml");
+//    gui->loadSettings("guiSettings.xml");
 }
 
 void ofApp::guiEvent(ofxUIEventArgs &e){
@@ -174,12 +196,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 	string name = e.widget->getName();
 	int kind = e.widget->getKind();
     
-    if(e.getName() == "FULLSCREEN"){
-        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        ofSetFullscreen(toggle->getValue());
-        setCanvas();
-        
-	}else if(name == "3D"){
+	if(name == "3D"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         useCamera = toggle->getValue();
         cam.reset();
@@ -187,8 +204,38 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         
     }else if(name == "SMOOTH"){
 		ofxUISlider *slider = (ofxUISlider *) e.widget;
-		shapeSmoothing = slider->getScaledValue();
+		shapeSmoothing = round(slider->getScaledValue());
+
+    }else if(name == "APPLY"){
+		ofxUIButton *button = (ofxUIButton *) e.getButton();
+        if(button->getValue()){
+            for (int i = 0; i < shapes.size(); i++) {
+                shapes[i].applySmoothing(shapeSmoothing);
+            }
+        }
+    }else if(name == "RESET"){
+        ofxUIButton *button = (ofxUIButton *) e.getButton();
+        if(button->getValue()){
+            for (int i = 0; i < shapes.size(); i++) {
+                shapes[i].resetSmoothing();
+            }
+        }
+        //		bdrawGrid = button->getValue();
+    }else if(name == "CURSOR MODE"){
+        ofxUIRadio *radio = (ofxUIRadio *) e.widget;
+//        cout << radio->getName() << " value: " << radio->getValue() << " active name: " << radio->getActiveName() << endl;
+        selectedCursorMode = radio->getActiveName();
+        
+    }else if(e.getName() == "FULLSCREEN"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        ofSetFullscreen(toggle->getValue());
+        setCanvas();
     }
+}
+
+void ofApp::exit(){
+    gui->saveSettings("guiSettings.xml");
+	delete gui;
 }
 
 //--------------------------------------------------------------

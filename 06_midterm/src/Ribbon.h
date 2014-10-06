@@ -15,7 +15,10 @@ public:
     void update(int _shapeSmoothing);
     void draw(bool _useCamera);
     void addPoint(float _x, float _y);
+    void applySmoothing(int _shapeSmoothing);
+    void resetSmoothing();
     
-    ofPolyline line;
+    ofPolyline originalLine;
+    ofPolyline currentLine;
     float depthInterval;
 };

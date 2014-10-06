@@ -13,18 +13,31 @@ void Ribbon::setup(float _x, float _y){
     depthInterval = -1;
     
     ofPoint pos = ofPoint(_x, _y);
-    line.addVertex(pos);
+    originalLine.addVertex(pos);
 }
 
 //------------------------------------------------------------
 void Ribbon::update(int _shapeSmoothing){
-    line = line.getSmoothed(_shapeSmoothing, 0);
+//    originalLine = originalLine.getSmoothed(_shapeSmoothing, 0);
+}
+
+//------------------------------------------------------------
+void Ribbon::applySmoothing(int _shapeSmoothing){
+    cout << _shapeSmoothing << endl;
+    currentLine = currentLine.getSmoothed(_shapeSmoothing, 0);
+    cout << currentLine.size();
+}
+
+//------------------------------------------------------------
+void Ribbon::resetSmoothing(){
+    currentLine = originalLine;
 }
 
 //------------------------------------------------------------
 void Ribbon::addPoint(float _x, float _y){
     ofPoint pos = ofPoint(_x, _y);
-    line.addVertex(pos);
+    originalLine.addVertex(pos);
+    currentLine = originalLine;
 }
 
 
@@ -35,10 +48,10 @@ void Ribbon::draw(bool _useCamera){
         ofNoFill();
         ofSetColor(255);
         ofSetLineWidth(20);
-        line.draw();
+        currentLine.draw();
     
     }else{
-        vector<ofPoint> path = line.getVertices();
+        vector<ofPoint> path = currentLine.getVertices();
         ofMesh mesh;
         mesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
         for(unsigned int i = 1; i < path.size(); i++){
@@ -63,7 +76,7 @@ void Ribbon::draw(bool _useCamera){
             ofVec3f toTheRight = unitDirection.getRotated(90, ofVec3f(0,0,1));
             
             //use the map function to determine the distance.
-            //the longer the distance, the narrower the line.
+            //the longer the distance, the narrower the originalLine.
             //this makes it look a bit like brush strokes
     //		float thickness = ofMap(distance, 0, 60, 20, 2, true);
             float thickness = 10;

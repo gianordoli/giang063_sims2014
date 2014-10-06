@@ -10,7 +10,8 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-
+        void exit();
+    
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -21,7 +22,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-    /*------------------ DRAWING ------------------*/    
+    /*------------------ DRAWING ------------------*/
     vector<Ribbon> shapes;
     bool isDrawing;
     int shapeSmoothing;
@@ -33,6 +34,8 @@ class ofApp : public ofBaseApp{
 	ofxUISuperCanvas *gui;
 	void guiEvent(ofxUIEventArgs &e);
 	void setGUI();
+    vector<string> cursorModes;
+    string selectedCursorMode;
     
     /*-------------------- 3D ---------------------*/
     ofEasyCam cam;

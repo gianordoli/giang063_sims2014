@@ -13,6 +13,8 @@
 class Ribbon{
 public:
     void setup(float _x, float _y);
+    // 2 different update functions: wave or physics mode
+    void update();
     void update(float _x, float _y, float _modifierRadius, float _modifierStrength);
     void draw(bool _useCamera, float _thickness, float _zDepth);
     
@@ -20,10 +22,6 @@ public:
     void addPoint(float _x, float _y);
     void applySmoothing(int _shapeSmoothing);
     void resetSmoothing();
-    
-    // Physics
-    void addForce(ofPoint _force);
-    void resetForce();
     
     // ofPolyline is actually ONE line
     // It would be the same as a vector of ofPoint.

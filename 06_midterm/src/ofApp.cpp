@@ -42,18 +42,22 @@ void ofApp::setup(){
     /*----------------- PHYSICS -------------------*/
     modifierRadius = 10;
     modifierStrength = 0.25;
-
     
     /*-------------------- GUI --------------------*/
-    cursorModes.push_back("camera/draw");
-    cursorModes.push_back("modify");
+    modes.push_back("camera/draw");
+    modes.push_back("modify");
+    modes.push_back("wave");    
     setGUI();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    if(selectedCursorMode == "modify"){
+    if(selectedMode == "wave"){
+        for (int i = 0; i < shapes.size(); i++) {
+            shapes[i].update();
+        }
+    }else if(selectedMode == "modify"){
         for (int i = 0; i < shapes.size(); i++) {
             shapes[i].update(mouseX, mouseY, modifierRadius, modifierStrength);
         }
@@ -83,7 +87,7 @@ void ofApp::draw(){
         shapes[i].draw(useCamera, thickness, zDepth);
     }
     
-    if(selectedCursorMode == "modify"){
+    if(selectedMode == "modify"){
         ofNoFill();
         ofSetLineWidth(1);
         ofSetColor(255);
@@ -125,7 +129,7 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
     
-    if(selectedCursorMode != "modify"){
+    if(selectedMode != "modify"){
         // Add new ribbon, only if mouse is within the canvas AND not on 3D mode
         if(!useCamera &&
            x > margins[3] && x < ofGetWidth() - margins[1] &&
@@ -143,7 +147,7 @@ void ofApp::mousePressed(int x, int y, int button){
 void ofApp::mouseMoved(int x, int y ){
     // Camera is only enabled inside the canvas area
     if(useCamera &&
-       selectedCursorMode != "modify" &&
+       selectedMode != "modify" &&
        x > margins[3] && x < ofGetWidth() - margins[1] &&
        y > margins[0] && y < ofGetHeight() - margins[2]){
 
@@ -156,7 +160,7 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    if(selectedCursorMode != "modify"){
+    if(selectedMode != "modify"){
         
         if(!useCamera &&
            isDrawing &&
@@ -211,7 +215,7 @@ void ofApp::setGUI(){
     gui->addSpacer();
     
 	gui->addLabel("CURSOR MODES");
-	gui->addRadio("CURSOR MODE", cursorModes, OFX_UI_ORIENTATION_VERTICAL);
+	gui->addRadio("CURSOR MODE", modes, OFX_UI_ORIENTATION_VERTICAL);
     gui->addSpacer();
     
 	gui->addLabel("MODIFIER CONTROLS");
@@ -285,7 +289,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     // CURSOR -------------------------------------------
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
-        selectedCursorMode = radio->getActiveName();
+        selectedMode = radio->getActiveName();
 
     // MODIFIER -----------------------------------------
     }else if(name == "MODIFIER RADIUS"){

@@ -12,7 +12,22 @@ void Ribbon::setup(float _x, float _y){
     
     ofPoint pos = ofPoint(_x, _y);
     originalLine.addVertex(pos);
+    
 }
+
+//------------------------------------------------------------
+void Ribbon::update(){
+    
+    for (int i = 0; i < myParticles.size(); i++) {
+        float sinOfTime = sin( ofGetElapsedTimef() * i );
+        //    cout << sinOfTime << endl;
+        float sinOfTimeMapped = ofMap( sinOfTime, -1, 1, -10, 10);
+        //    cout << "\t" << sinOfTimeMapped << endl
+        myParticles[i].pos.z += sinOfTimeMapped;
+        currentLine[i].z = myParticles[i].pos.z;
+    }
+}
+
 
 //------------------------------------------------------------
 void Ribbon::update(float _x, float _y, float _modifierRadius, float _modifierStrength){
@@ -59,16 +74,6 @@ void Ribbon::addPoint(float _x, float _y){
     myParticles.push_back(newParticle);
 }
 
-void Ribbon::addForce(ofPoint _force){
-//    for(int i = 0; i < )
-//    acc += _force;
-}
-
-//------------------------------------------------------------
-void Ribbon::resetForce(){
-//    acc.set(0, 0);
-}
-
 
 //------------------------------------------------------------
 void Ribbon::draw(bool _useCamera, float _thickness, float _zDepth){
@@ -86,8 +91,8 @@ void Ribbon::draw(bool _useCamera, float _thickness, float _zDepth){
         for(unsigned int i = 1; i < path.size(); i++){
             
             //find this point and the next point
-            ofVec3f thisPoint = ofPoint(path[i-1].x, path[i-1].y, (i-1) * _zDepth);
-            ofVec3f nextPoint = ofPoint(path[i].x, path[i].y, i * _zDepth);
+            ofVec3f thisPoint = ofPoint(path[i-1].x, path[i-1].y, path[i-1].z + ((i-1) * _zDepth));
+            ofVec3f nextPoint = ofPoint(path[i].x, path[i].y, path[i].z + (i * _zDepth));
             
             //get the direction from one to the next.
             //the ribbon should fan out from this direction

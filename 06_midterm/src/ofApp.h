@@ -34,8 +34,8 @@ class ofApp : public ofBaseApp{
 	ofxUISuperCanvas *gui;
 	void guiEvent(ofxUIEventArgs &e);
 	void setGUI();
-    vector<string> cursorModes;
-    string selectedCursorMode;
+    vector<string> modes;
+    string selectedMode;
     
     /*-------------------- 3D ---------------------*/
     ofEasyCam cam;
@@ -49,4 +49,5 @@ class ofApp : public ofBaseApp{
     /*----------------- PHYSICS -------------------*/
     float modifierRadius;
     float modifierStrength;
+    
 };

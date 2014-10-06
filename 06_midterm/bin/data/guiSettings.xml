@@ -13,7 +13,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>camera/draw</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -23,7 +23,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>3.325123072</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>

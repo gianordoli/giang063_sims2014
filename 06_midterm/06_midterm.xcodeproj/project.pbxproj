@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F4990CF19E3285C00836FD1 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4990CD19E3285C00836FD1 /* Particle.cpp */; };
 		0FBB4BF219E2362800374390 /* ofxUI2DGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB4B9519E2362800374390 /* ofxUI2DGraph.cpp */; };
 		0FBB4BF319E2362800374390 /* ofxUI2DPad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB4B9719E2362800374390 /* ofxUI2DPad.cpp */; };
 		0FBB4BF419E2362800374390 /* ofxUIBaseDraws.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB4B9919E2362800374390 /* ofxUIBaseDraws.cpp */; };
@@ -108,6 +109,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0F4990CD19E3285C00836FD1 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
+		0F4990CE19E3285C00836FD1 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		0FBB4B9419E2362800374390 /* ofxUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxUI.h; sourceTree = "<group>"; };
 		0FBB4B9519E2362800374390 /* ofxUI2DGraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxUI2DGraph.cpp; sourceTree = "<group>"; };
 		0FBB4B9619E2362800374390 /* ofxUI2DGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxUI2DGraph.h; sourceTree = "<group>"; };
@@ -479,6 +482,8 @@
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 				0FF7FA7B19E2043300A3BB3E /* Ribbon.cpp */,
 				0FF7FA7C19E2043300A3BB3E /* Ribbon.h */,
+				0F4990CD19E3285C00836FD1 /* Particle.cpp */,
+				0F4990CE19E3285C00836FD1 /* Particle.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -592,6 +597,7 @@
 				0FBB4C1B19E2362800374390 /* ofxUIWaveform.cpp in Sources */,
 				0FBB4BF719E2362800374390 /* ofxUICanvas.cpp in Sources */,
 				0FBB4BFA19E2362800374390 /* ofxUIDropDownList.cpp in Sources */,
+				0F4990CF19E3285C00836FD1 /* Particle.cpp in Sources */,
 				0FBB4BF819E2362800374390 /* ofxUICircleSlider.cpp in Sources */,
 				0FBB4C1A19E2362800374390 /* ofxUIValuePlotter.cpp in Sources */,
 				0FBB4BF419E2362800374390 /* ofxUIBaseDraws.cpp in Sources */,

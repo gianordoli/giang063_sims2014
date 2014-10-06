@@ -17,8 +17,11 @@ void Ribbon::setup(float _x, float _y){
 }
 
 //------------------------------------------------------------
-void Ribbon::update(int _shapeSmoothing){
-//    originalLine = originalLine.getSmoothed(_shapeSmoothing, 0);
+void Ribbon::update(){
+    for (int i = 0; i < myParticles.size(); i++) {
+        myParticles[i].update();
+        currentLine[i] = myParticles[i].pos;
+    }
 }
 
 //------------------------------------------------------------
@@ -38,6 +41,20 @@ void Ribbon::addPoint(float _x, float _y){
     ofPoint pos = ofPoint(_x, _y);
     originalLine.addVertex(pos);
     currentLine = originalLine;
+    
+    Particle newParticle;
+    newParticle.setup(_x, _y);
+    myParticles.push_back(newParticle);
+}
+
+void Ribbon::addForce(ofPoint _force){
+//    for(int i = 0; i < )
+//    acc += _force;
+}
+
+//------------------------------------------------------------
+void Ribbon::resetForce(){
+//    acc.set(0, 0);
 }
 
 
@@ -74,6 +91,7 @@ void Ribbon::draw(bool _useCamera){
             //find both directions to the left and to the right
             ofVec3f toTheLeft = unitDirection.getRotated(-90, ofVec3f(0,0,1));
             ofVec3f toTheRight = unitDirection.getRotated(90, ofVec3f(0,0,1));
+
             
             //use the map function to determine the distance.
             //the longer the distance, the narrower the originalLine.

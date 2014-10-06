@@ -40,7 +40,11 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    if(selectedCursorMode == "modify"){
+        for (int i = 0; i < shapes.size(); i++) {
+            shapes[i].update();
+        }
+    }
 }
 
 //--------------------------------------------------------------

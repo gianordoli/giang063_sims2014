@@ -14,7 +14,7 @@ class Ribbon{
 public:
     void setup(float _x, float _y);
     void update();
-    void draw(bool _useCamera);
+    void draw(bool _useCamera, float _mouseRadius, float _zDepth);
     
     // Drawing
     void addPoint(float _x, float _y);
@@ -32,7 +32,6 @@ public:
     ofPolyline currentLine;     // this is the smoothed line drawing
                                 // We always draw the CURRENT line
                                 // but we keep the original as an option to reset
-    float depthInterval;
     
     // each vertex from our polyLine will respond to physics
     vector<Particle> myParticles;

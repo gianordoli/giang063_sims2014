@@ -10,8 +10,6 @@
 
 void Ribbon::setup(float _x, float _y){
     
-    depthInterval = -1;
-    
     ofPoint pos = ofPoint(_x, _y);
     originalLine.addVertex(pos);
 }
@@ -59,12 +57,12 @@ void Ribbon::resetForce(){
 
 
 //------------------------------------------------------------
-void Ribbon::draw(bool _useCamera){
+void Ribbon::draw(bool _useCamera, float _mouseRadius, float _zDepth){
     
     if(!_useCamera){
         ofNoFill();
+        ofSetLineWidth(_mouseRadius);
         ofSetColor(255);
-        ofSetLineWidth(20);
         currentLine.draw();
     
     }else{
@@ -74,8 +72,8 @@ void Ribbon::draw(bool _useCamera){
         for(unsigned int i = 1; i < path.size(); i++){
             
             //find this point and the next point
-            ofVec3f thisPoint = ofPoint(path[i-1].x, path[i-1].y, (i-1) * depthInterval);
-            ofVec3f nextPoint = ofPoint(path[i].x, path[i].y, i * depthInterval);
+            ofVec3f thisPoint = ofPoint(path[i-1].x, path[i-1].y, (i-1) * _zDepth);
+            ofVec3f nextPoint = ofPoint(path[i].x, path[i].y, i * _zDepth);
             
             //get the direction from one to the next.
             //the ribbon should fan out from this direction
@@ -97,7 +95,7 @@ void Ribbon::draw(bool _useCamera){
             //the longer the distance, the narrower the originalLine.
             //this makes it look a bit like brush strokes
     //		float thickness = ofMap(distance, 0, 60, 20, 2, true);
-            float thickness = 10;
+            float thickness = _mouseRadius;
             
             //calculate the path to the left and to the right
             //by extending the current point in the direction of left/right by the length

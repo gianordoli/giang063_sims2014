@@ -41,4 +41,9 @@ class ofApp : public ofBaseApp{
     ofEasyCam cam;
     ofLight light;
     bool useCamera;
+    float thickness;
+    float zDepth;
+
+    /*----------------- PHYSICS -------------------*/
+    float mouseRadius;
 };

@@ -6,9 +6,19 @@
     <YPosition>0.000000000</YPosition>
 </Canvas>
 <Widget>
+    <Kind>4</Kind>
+    <Name>RIBBON THICKNESS</Name>
+    <Value>10.000000000</Value>
+</Widget>
+<Widget>
     <Kind>2</Kind>
     <Name>3D</Name>
-    <Value>1</Value>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Z DEPTH</Name>
+    <Value>-1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -18,12 +28,17 @@
 <Widget>
     <Kind>2</Kind>
     <Name>modify</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
     <Value>1.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MOUSE RADIUS</Name>
+    <Value>143.842361450</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>

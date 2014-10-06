@@ -22,6 +22,7 @@ void ofApp::setup(){
     margins[2] = 20;
     margins[3] = 240;
     setCanvas();
+    thickness = 10;
     
     /*-------------------- GUI --------------------*/
     cursorModes.push_back("camera/draw");
@@ -36,10 +37,15 @@ void ofApp::setup(){
     light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 0.0));
     cam.setVFlip(true); // you need this, otherwise the camera starts flipped vertically
                         // I have no idea why
+    zDepth = -1;
+    
+    /*----------------- PHYSICS -------------------*/
+    mouseRadius = 10;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    
     if(selectedCursorMode == "modify"){
         for (int i = 0; i < shapes.size(); i++) {
             shapes[i].update();
@@ -61,17 +67,23 @@ void ofApp::draw(){
         light.enable();
         ofEnableLighting();
         ofEnableDepthTest();
-    }else{
-        // If there's no camera ('drawing mode'), push matrix to center
         ofPushMatrix();
-        ofTranslate(ofGetWidth()*0.5, ofGetHeight()*0.5);
+        ofTranslate(-ofGetWidth()*0.5, -ofGetHeight()*0.5);
     }
     
     for(int i = 0; i < shapes.size(); i++){
-        shapes[i].draw(useCamera);
+        shapes[i].draw(useCamera, thickness, zDepth);
+    }
+    
+    if(selectedCursorMode == "modify"){
+        ofNoFill();
+        ofSetLineWidth(1);
+        ofSetColor(255);
+        ofCircle(mouseX, mouseY, mouseRadius);
     }
     
     if(useCamera){
+        ofPopMatrix();
         ofDisableDepthTest();
         ofDisableLighting();
         light.disable();
@@ -79,8 +91,6 @@ void ofApp::draw(){
         
         ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
                            , 20, ofGetHeight() - 40);
-    }else{
-        ofPopMatrix();
     }
 }
 
@@ -111,9 +121,9 @@ void ofApp::mousePressed(int x, int y, int button){
         if(!useCamera &&
            x > margins[3] && x < ofGetWidth() - margins[1] &&
            y > margins[0] && y < ofGetHeight() - margins[2]){
+
             Ribbon newRibbon;
-            // Save coordinates based on the center
-            newRibbon.setup(x - ofGetWidth()*0.5, y - ofGetHeight()*0.5);
+            newRibbon.setup(x, y);
             shapes.push_back(newRibbon);
             isDrawing = true;
         }
@@ -144,8 +154,7 @@ void ofApp::mouseDragged(int x, int y, int button){
            x > margins[3] && x < ofGetWidth() - margins[1] &&
            y > margins[0] && y < ofGetHeight() - margins[2]){
             
-            // Save coordinates based on the center
-            shapes[shapes.size() - 1].addPoint(x - ofGetWidth()*0.5, y - ofGetHeight()*0.5);
+            shapes[shapes.size() - 1].addPoint(x, y);
 
         }else{
             // this stops drawing when the mouse leave the canvas area
@@ -174,10 +183,15 @@ void ofApp::setGUI(){
     ofColor guiColor = ofColor(0, 150, 200, 100);
     gui->setColorFill(255);
     gui->setColorBack(guiColor);
+    gui->addSpacer();
     
+    gui->addSlider("RIBBON THICKNESS", 2, 50, thickness);
     gui->addSpacer();
     
     gui->addToggle("3D", useCamera);
+    gui->addSpacer();
+    
+    gui->addSlider("Z DEPTH", -1, -50, zDepth);
     gui->addSpacer();
     
 	gui->addRadio("CURSOR MODE", cursorModes, OFX_UI_ORIENTATION_VERTICAL);
@@ -186,8 +200,11 @@ void ofApp::setGUI(){
     gui->addSlider("SMOOTH", 1, 5, shapeSmoothing);
 	gui->addButton("APPLY", false);
 	gui->addButton("RESET", false);
-    
     gui->addSpacer();
+    
+    gui->addSlider("MOUSE RADIUS", 10, 200, mouseRadius);
+    gui->addSpacer();
+    
     gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
@@ -200,11 +217,19 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 	string name = e.widget->getName();
 	int kind = e.widget->getKind();
     
-	if(name == "3D"){
+    if(name == "RIBBON THICKNESS"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        thickness = slider->getScaledValue();
+    
+	}else if(name == "3D"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         useCamera = toggle->getValue();
         cam.reset();
-        cam.enableMouseInput();        
+        cam.enableMouseInput();
+
+    }else if(name == "Z DEPTH"){
+		ofxUISlider *slider = (ofxUISlider *) e.widget;
+		zDepth = slider->getScaledValue();
         
     }else if(name == "SMOOTH"){
 		ofxUISlider *slider = (ofxUISlider *) e.widget;
@@ -217,6 +242,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
                 shapes[i].applySmoothing(shapeSmoothing);
             }
         }
+        
     }else if(name == "RESET"){
         ofxUIButton *button = (ofxUIButton *) e.getButton();
         if(button->getValue()){
@@ -224,11 +250,14 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
                 shapes[i].resetSmoothing();
             }
         }
-        //		bdrawGrid = button->getValue();
+
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
-//        cout << radio->getName() << " value: " << radio->getValue() << " active name: " << radio->getActiveName() << endl;
         selectedCursorMode = radio->getActiveName();
+        
+    }else if(name == "MOUSE RADIUS"){
+		ofxUISlider *slider = (ofxUISlider *) e.widget;
+		mouseRadius = slider->getScaledValue();
         
     }else if(e.getName() == "FULLSCREEN"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;

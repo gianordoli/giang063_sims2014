@@ -51,20 +51,28 @@ void ofApp::setup(){
     /*-------------------- GUI --------------------*/
     modes.push_back("camera/draw");
     modes.push_back("modify");
-    modes.push_back("wave");    
+    modes.push_back("wave");
+    modes.push_back("spring");
+    selectedMode = "camera/draw";
     setGUI();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    if(selectedMode == "wave"){
+    if(selectedMode == "spring"){
         for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].update(amplitude, frequencyInSeconds ,nModifier);
+            shapes[i].updateSpring(mouseX, mouseY, modifierRadius, modifierStrength);
         }
+    
+    }else if(selectedMode == "wave"){
+        for (int i = 0; i < shapes.size(); i++) {
+            shapes[i].updateWave(amplitude, frequencyInSeconds ,nModifier);
+        }
+        
     }else if(selectedMode == "modify"){
         for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].update(mouseX, mouseY, modifierRadius, modifierStrength);
+            shapes[i].updateModify(mouseX, mouseY, modifierRadius, modifierStrength);
         }
     }
 }
@@ -92,7 +100,7 @@ void ofApp::draw(){
         shapes[i].draw(useCamera, thickness, zDepth);
     }
     
-    if(selectedMode == "modify"){
+    if(selectedMode == "modify" || selectedMode == "spring"){
         ofNoFill();
         ofSetLineWidth(1);
         ofSetColor(255);
@@ -134,7 +142,7 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
     
-    if(selectedMode != "modify"){
+    if(selectedMode == "camera/draw"){
         // Add new ribbon, only if mouse is within the canvas AND not on 3D mode
         if(!useCamera &&
            x > margins[3] && x < ofGetWidth() - margins[1] &&
@@ -152,7 +160,7 @@ void ofApp::mousePressed(int x, int y, int button){
 void ofApp::mouseMoved(int x, int y ){
     // Camera is only enabled inside the canvas area
     if(useCamera &&
-       selectedMode != "modify" &&
+       selectedMode == "camera/draw" &&
        x > margins[3] && x < ofGetWidth() - margins[1] &&
        y > margins[0] && y < ofGetHeight() - margins[2]){
 
@@ -165,7 +173,7 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    if(selectedMode != "modify"){
+    if(selectedMode == "camera/draw"){
         
         if(!useCamera &&
            isDrawing &&
@@ -177,15 +185,17 @@ void ofApp::mouseDragged(int x, int y, int button){
         }else{
             // this stops drawing when the mouse leave the canvas area
             isDrawing = false;
+            shapes[shapes.size() - 1].connectSpring();  // make a spring out of the last one!
         }
         
-    }else{
-
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
+    if(isDrawing){
+        shapes[shapes.size() - 1].connectSpring();
+    }
     // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
     isDrawing = false;
 }

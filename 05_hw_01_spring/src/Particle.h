@@ -13,11 +13,11 @@ class Particle{
 public:
     
     void setup(float _x, float _y);
-    void update();                                                      // spring
-    void update(ofPoint _posOfForce, float _radius, float _strength);   // modify
+    void update();
+    void draw();
     void addForce(ofPoint _force);
     void resetForce();
-
+    
     ofPoint pos;
     ofPoint vel;
     ofPoint acc;

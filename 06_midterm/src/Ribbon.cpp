@@ -12,8 +12,41 @@ void Ribbon::setup(float _x, float _y){
     addPoint(_x, _y);
 }
 
-//------------------------------------------------------------
-void Ribbon::update(float _amplitude, int _frequencyInSeconds, int _nModifier){
+void Ribbon::connectSpring(){
+    // Connect
+    for(int i = 0; i < myParticles.size() - 1; i++){
+        ofPoint dist = myParticles[i].pos - myParticles[i + 1].pos;
+        float len = dist.length();
+        Spring newSpring;
+        newSpring.set( &myParticles[i], &myParticles[i + 1], 0.05, len);
+        springList.push_back( newSpring );
+    }
+}
+
+// SPRING ------------------------------------------------------------
+void Ribbon::updateSpring(float _x, float _y, float _modifierRadius, float _modifierStrength){
+    cout << "called spring" << endl;
+    ofPoint mouse = ofPoint(_x, _y);
+
+    for( int i = 0; i < myParticles.size(); i++ ){
+        ofPoint force = mouse - myParticles[i].pos;
+        if (force.length() < _modifierRadius) {
+            force.normalize();
+//            force /= len;
+            
+            myParticles[i].addForce(force);
+            myParticles[i].update();
+            currentLine[i] = myParticles[i].pos;
+        }
+    }
+    
+    for( int i=0; i<springList.size(); i++ ){
+        springList[i].update();
+    }
+}
+
+// WAVE ------------------------------------------------------------
+void Ribbon::updateWave(float _amplitude, int _frequencyInSeconds, int _nModifier){
     
     float amplitude = _amplitude;
     int frequencyInSeconds = _frequencyInSeconds;
@@ -31,8 +64,8 @@ void Ribbon::update(float _amplitude, int _frequencyInSeconds, int _nModifier){
 }
 
 
-//------------------------------------------------------------
-void Ribbon::update(float _x, float _y, float _modifierRadius, float _modifierStrength){
+// MODIFY ------------------------------------------------------------
+void Ribbon::updateModify(float _x, float _y, float _modifierRadius, float _modifierStrength){
     ofPoint mousePos = ofPoint(_x, _y);
     for (int i = 0; i < myParticles.size(); i++) {
         myParticles[i].update(mousePos, _modifierRadius, _modifierStrength);
@@ -74,15 +107,6 @@ void Ribbon::addPoint(float _x, float _y){
     Particle newParticle;
     newParticle.setup(_x, _y);
     myParticles.push_back(newParticle);
-    
-    if(myParticles.size() % 2 == 0){
-		Spring mySpring;
-		mySpring.distance		= 25;
-		mySpring.springiness	= 0.4f;
-		mySpring.particleA = & (myParticles[myParticles.size() - 2]);
-		mySpring.particleB = & (myParticles[myParticles.size() - 1]);
-		springList.push_back(mySpring);
-    }
 }
 
 

@@ -9,6 +9,7 @@
 #pragma once
 #include "ofMain.h"
 #include "Particle.h"
+#include "Spring.h"
 
 class Ribbon{
 public:
@@ -33,4 +34,6 @@ public:
     
     // each vertex from our polyLine will respond to physics
     vector<Particle> myParticles;
+    
+    vector<Spring> springList;
 };

@@ -9,10 +9,7 @@
 #include "Ribbon.h"
 
 void Ribbon::setup(float _x, float _y){
-    
-    ofPoint pos = ofPoint(_x, _y);
-    originalLine.addVertex(pos);
-    
+    addPoint(_x, _y);
 }
 
 //------------------------------------------------------------
@@ -77,6 +74,15 @@ void Ribbon::addPoint(float _x, float _y){
     Particle newParticle;
     newParticle.setup(_x, _y);
     myParticles.push_back(newParticle);
+    
+    if(myParticles.size() % 2 == 0){
+		Spring mySpring;
+		mySpring.distance		= 25;
+		mySpring.springiness	= 0.4f;
+		mySpring.particleA = & (myParticles[myParticles.size() - 2]);
+		mySpring.particleB = & (myParticles[myParticles.size() - 1]);
+		springList.push_back(mySpring);
+    }
 }
 
 

@@ -14,7 +14,7 @@ class Ribbon{
 public:
     void setup(float _x, float _y);
     // 2 different update functions: wave or physics mode
-    void update();
+    void update(float _amplitude, int _frequencyInSeconds, int _nModifier);
     void update(float _x, float _y, float _modifierRadius, float _modifierStrength);
     void draw(bool _useCamera, float _thickness, float _zDepth);
     

@@ -50,4 +50,9 @@ class ofApp : public ofBaseApp{
     float modifierRadius;
     float modifierStrength;
     
+    /*------------------- WAVE --------------------*/
+    float amplitude;
+    int frequencyInSeconds;
+    int nModifier;
+    
 };

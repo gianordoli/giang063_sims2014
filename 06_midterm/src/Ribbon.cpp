@@ -16,15 +16,21 @@ void Ribbon::setup(float _x, float _y){
 }
 
 //------------------------------------------------------------
-void Ribbon::update(){
+void Ribbon::update(float _amplitude, int _frequencyInSeconds, int _nModifier){
+    
+    float amplitude = _amplitude;
+    int frequencyInSeconds = _frequencyInSeconds;
+    float frameRate = 60.0f;
+    int nModifier = _nModifier;
     
     for (int i = 0; i < myParticles.size(); i++) {
-        float sinOfTime = sin( ofGetElapsedTimef() * i );
-        //    cout << sinOfTime << endl;
-        float sinOfTimeMapped = ofMap( sinOfTime, -1, 1, -10, 10);
-        //    cout << "\t" << sinOfTimeMapped << endl
-        myParticles[i].pos.z += sinOfTimeMapped;
-        currentLine[i].z = myParticles[i].pos.z;
+
+        float frequency = (ofGetElapsedTimeMillis() + (i * nModifier) )/(frameRate * frequencyInSeconds);
+        float z = sin(frequency) * amplitude;
+        
+        myParticles[i].pos.z = z;
+        currentLine[i].z = z;
+        // This function doesn't change the Particles
     }
 }
 

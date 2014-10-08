@@ -43,6 +43,11 @@ void ofApp::setup(){
     modifierRadius = 10;
     modifierStrength = 0.25;
     
+    /*------------------- WAVE --------------------*/
+    amplitude = 50.0f;
+    frequencyInSeconds = 10.0f;
+    nModifier = 100;
+    
     /*-------------------- GUI --------------------*/
     modes.push_back("camera/draw");
     modes.push_back("modify");
@@ -55,7 +60,7 @@ void ofApp::update(){
     
     if(selectedMode == "wave"){
         for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].update();
+            shapes[i].update(amplitude, frequencyInSeconds ,nModifier);
         }
     }else if(selectedMode == "modify"){
         for (int i = 0; i < shapes.size(); i++) {
@@ -222,6 +227,12 @@ void ofApp::setGUI(){
     gui->addSlider("MODIFIER RADIUS", 10, 200, modifierRadius);
     gui->addSlider("MODIFIER STRENGTH", 0.1, 1, modifierStrength);
     gui->addSpacer();
+
+	gui->addLabel("WAVE CONTROLS");
+    gui->addSlider("AMPLITUDE", 2, 200, amplitude);
+    gui->addSlider("FREQUENCY IN SECONDS", 1, 10, frequencyInSeconds);
+    gui->addSlider("N MODIFIER", 0, 200, nModifier);
+    gui->addSpacer();
     
     gui->addToggle("FULLSCREEN", false);
     
@@ -304,6 +315,19 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         ofSetFullscreen(toggle->getValue());
         setCanvas();
+
+    // WAVE -----------------------------------------
+    }else if(name == "AMPLITUDE"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        amplitude = slider->getScaledValue();
+        
+    }else if(name == "FREQUENCY IN SECONDS"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        frequencyInSeconds = slider->getScaledValue();
+        
+    }else if(e.getName() == "N MODIFIER"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        nModifier = slider->getScaledValue();
     }
 }
 

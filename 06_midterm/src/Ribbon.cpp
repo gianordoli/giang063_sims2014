@@ -25,19 +25,16 @@ void Ribbon::connectSpring(){
 
 // SPRING ------------------------------------------------------------
 void Ribbon::updateSpring(float _x, float _y, float _modifierRadius, float _modifierStrength){
-    cout << "called spring" << endl;
     ofPoint mouse = ofPoint(_x, _y);
 
     for( int i = 0; i < myParticles.size(); i++ ){
         ofPoint force = mouse - myParticles[i].pos;
         if (force.length() < _modifierRadius) {
             force.normalize();
-//            force /= len;
-            
-            myParticles[i].addForce(force);
-            myParticles[i].update();
-            currentLine[i] = myParticles[i].pos;
+            myParticles[i].addForce(-force);
         }
+        myParticles[i].update();
+        currentLine[i] = myParticles[i].pos;
     }
     
     for( int i=0; i<springList.size(); i++ ){

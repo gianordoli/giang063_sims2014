@@ -29,8 +29,7 @@ void Ribbon::update(float _amplitude, int _frequencyInSeconds, int _nModifier){
         float z = sin(frequency) * amplitude;
         
         myParticles[i].pos.z = z;
-        currentLine[i].z = z;
-        // This function doesn't change the Particles
+        currentLine[i] = myParticles[i].pos;
     }
 }
 

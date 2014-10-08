@@ -8,22 +8,22 @@
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>1.000000000</Value>
+    <Value>2.674876690</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>3D</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>RIBBON THICKNESS</Name>
-    <Value>10.000000000</Value>
+    <Value>23.044334412</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Z DEPTH</Name>
-    <Value>-1.000000000</Value>
+    <Value>-50.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -48,17 +48,17 @@
 <Widget>
     <Kind>2</Kind>
     <Name>modify</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>wave</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>MODIFIER RADIUS</Name>
-    <Value>89.556648254</Value>
+    <Value>93.300491333</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

@@ -13,6 +13,10 @@
 
 class Ribbon{
 public:
+    Ribbon();
+    
+    ~Ribbon();  // Deconstructor
+    
     void setup(float _x, float _y);
 
     // spring
@@ -42,7 +46,8 @@ public:
                                 // but we keep the original as an option to reset
     
     // each vertex from our polyLine will respond to physics
-    vector<Particle> myParticles;
+    vector<Particle *> myParticles;
+//    vector<Particle> myParticles;
     
     vector<Spring> springList;
 };

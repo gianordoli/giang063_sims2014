@@ -128,10 +128,11 @@ void ofApp::keyPressed(int key){
         
     // Erase lines
     }else if(key == 'e'){
-        while(shapes.size() > 0){
-            int i = shapes.size() - 1;
-            shapes.erase(shapes.begin() + i);
-        }
+        shapes.clear(); // Calls the deconstructor!
+//        while(shapes.size() > 0){
+//            int i = shapes.size() - 1;
+//            shapes.erase(shapes.begin() + i);
+//        }
 
     }else if(key == 'g'){
         gui->toggleVisible();        

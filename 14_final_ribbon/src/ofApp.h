@@ -42,17 +42,7 @@ public:
     ofLight light;
     ofMaterial material;
     ofFloatColor lightColor;
-    bool useCamera;
     float thickness;
     float zDepth;
-    
-    /*----------------- PHYSICS -------------------*/
-    float modifierRadius;
-    float modifierStrength;
-    
-    /*------------------- WAVE --------------------*/
-    float amplitude;
-    int frequencyInSeconds;
-    int nModifier;
     
 };

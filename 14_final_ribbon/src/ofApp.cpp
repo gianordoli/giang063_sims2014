@@ -24,57 +24,18 @@ void ofApp::setup(){
     setCanvas();
     thickness = 10;
     
-    /*-------------------- 3D ---------------------*/
-    useCamera = false;
-    lightColor.set(1.0, 0.0, 0.0);
-    //    ofSetSmoothLighting(true);
-    light.setDiffuseColor(lightColor);
-    //    light.setSpecularColor( ofFloatColor(1.f, 1.f, 1.f));
-    light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 10.0));
-    cam.setVFlip(true); // you need this, otherwise the camera starts flipped vertically
-    // I have no idea why
-    zDepth = -1;
-    material.setShininess( 120 );
-    // the light highlight of the material //
-    material.setSpecularColor(ofColor(255, 255, 255, 255));
-    
-    
-    /*----------------- PHYSICS -------------------*/
-    modifierRadius = 10;
-    modifierStrength = 0.25;
-    
-    /*------------------- WAVE --------------------*/
-    amplitude = 50.0f;
-    frequencyInSeconds = 10.0f;
-    nModifier = 100;
     
     /*-------------------- GUI --------------------*/
-    modes.push_back("camera/draw");
-    modes.push_back("modify");
-    modes.push_back("wave");
-    modes.push_back("spring");
-    selectedMode = "camera/draw";
+    modes.push_back("camera");
+    modes.push_back("draw");
+    selectedMode = "draw";
     setGUI();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    if(selectedMode == "spring"){
-        for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].updateSpring(mouseX, mouseY, modifierRadius, modifierStrength);
-        }
-        
-    }else if(selectedMode == "wave"){
-        for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].updateWave(amplitude, frequencyInSeconds ,nModifier);
-        }
-        
-    }else if(selectedMode == "modify"){
-        for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].updateModify(mouseX, mouseY, modifierRadius, modifierStrength);
-        }
-    }
+
 }
 
 //--------------------------------------------------------------
@@ -86,7 +47,7 @@ void ofApp::draw(){
     ofSetLineWidth(1);
     ofRect(canvasPos, canvasSize.x, canvasSize.y);
     
-    if(useCamera){
+    if(selectedMode == "camera"){
         cam.begin();
         light.enable();
         ofEnableLighting();
@@ -97,17 +58,10 @@ void ofApp::draw(){
     }
     
     for(int i = 0; i < shapes.size(); i++){
-        shapes[i].draw(useCamera, thickness, zDepth);
+        shapes[i].draw(selectedMode, thickness, zDepth);
     }
     
-    if(selectedMode == "modify" || selectedMode == "spring"){
-        ofNoFill();
-        ofSetLineWidth(1);
-        ofSetColor(255);
-        ofCircle(mouseX, mouseY, modifierRadius);
-    }
-    
-    if(useCamera){
+    if(selectedMode == "camera"){
         ofPopMatrix();
         material.end();
         ofDisableDepthTest();
@@ -122,12 +76,8 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    // Activate camera
-    if(key == 32){
-        
-        
-        // Erase lines
-    }else if(key == 'e'){
+    // Erase lines
+    if(key == 'e'){
         while(shapes.size() > 0){
             int i = shapes.size() - 1;
             shapes.erase(shapes.begin() + i);
@@ -141,26 +91,13 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    
-    if(selectedMode == "camera/draw"){
-        // Add new ribbon, only if mouse is within the canvas AND not on 3D mode
-        if(!useCamera &&
-           x > margins[3] && x < ofGetWidth() - margins[1] &&
-           y > margins[0] && y < ofGetHeight() - margins[2]){
-            
-            Ribbon newRibbon;
-            newRibbon.setup(x, y);
-            shapes.push_back(newRibbon);
-            isDrawing = true;
-        }
-    }
+
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
     // Camera is only enabled inside the canvas area
-    if(useCamera &&
-       selectedMode == "camera/draw" &&
+    if(selectedMode == "camera" &&
        x > margins[3] && x < ofGetWidth() - margins[1] &&
        y > margins[0] && y < ofGetHeight() - margins[2]){
         
@@ -173,28 +110,41 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    if(selectedMode == "camera/draw"){
+    
+    // Create new ribbon or add new point
+    // Conditions: drawing mode AND mouse within canvas
+    if(selectedMode == "draw" &&
+       x > margins[3] && x < ofGetWidth() - margins[1] &&
+       y > margins[0] && y < ofGetHeight() - margins[2]){
         
-        if(!useCamera &&
-           isDrawing &&
-           x > margins[3] && x < ofGetWidth() - margins[1] &&
-           y > margins[0] && y < ofGetHeight() - margins[2]){
-            
+        // First point
+        // Conditions: mouse is moving (compare with previous coordinates)
+        // The app starts with the mouse at 0, 0
+        if(!isDrawing &&
+           ofGetPreviousMouseX() != x && ofGetPreviousMouseX() != 0 &&
+           ofGetPreviousMouseY() != y && ofGetPreviousMouseY() != 0){
+            cout << "add" << endl;
+            Ribbon newRibbon;
+            newRibbon.setup(ofGetPreviousMouseX(), ofGetPreviousMouseY());
+            shapes.push_back(newRibbon);
+            isDrawing = true; // SWITCH
+
+        // Current point (if at least one ribbon has been created)
+        }else if(shapes.size() > 0 && isDrawing){
             shapes[shapes.size() - 1].addPoint(x, y);
-            
-        }else{
-            // this stops drawing when the mouse leave the canvas area
-            isDrawing = false;
-            shapes[shapes.size() - 1].connectSpring();  // make a spring out of the last one!
         }
-        
+
+    // this stops drawing when the mouse leave the canvas area
+    }else{
+        isDrawing = false;
+//            shapes[shapes.size() - 1].connectSpring();  // make a spring out of the last one!
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
     if(isDrawing){
-        shapes[shapes.size() - 1].connectSpring();
+//        shapes[shapes.size() - 1].connectSpring();
     }
     // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
     isDrawing = false;
@@ -220,7 +170,6 @@ void ofApp::setGUI(){
     gui->addSpacer();
     
     gui->addLabel("3D CONTROLS");
-    gui->addToggle("3D", useCamera);
     gui->addSlider("RIBBON THICKNESS", 2, 50, thickness);
     gui->addSlider("Z DEPTH", -1, -50, zDepth);
     gui->addLabel("LIGHT COLOR");
@@ -233,22 +182,11 @@ void ofApp::setGUI(){
     gui->addRadio("CURSOR MODE", modes, OFX_UI_ORIENTATION_VERTICAL);
     gui->addSpacer();
     
-    gui->addLabel("MODIFIER CONTROLS");
-    gui->addSlider("MODIFIER RADIUS", 10, 200, modifierRadius);
-    gui->addSlider("MODIFIER STRENGTH", 0.1, 1, modifierStrength);
-    gui->addSpacer();
-    
-    gui->addLabel("WAVE CONTROLS");
-    gui->addSlider("AMPLITUDE", 2, 200, amplitude);
-    gui->addSlider("FREQUENCY IN SECONDS", 1, 10, frequencyInSeconds);
-    gui->addSlider("N MODIFIER", 0, 200, nModifier);
-    gui->addSpacer();
-    
     gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
-    //    gui->loadSettings("guiSettings.xml");
+    gui->loadSettings("guiSettings.xml");
 }
 
 void ofApp::guiEvent(ofxUIEventArgs &e){
@@ -277,13 +215,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             }
         }
         
-        // 3D -----------------------------------------------
-    }else if(name == "3D"){
-        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        useCamera = toggle->getValue();
-        cam.reset();
-        cam.enableMouseInput();
-        
+    // 3D -----------------------------------------------
     }else if(name == "RIBBON THICKNESS"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         thickness = slider->getScaledValue();
@@ -311,33 +243,15 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
         selectedMode = radio->getActiveName();
-        
-        // MODIFIER -----------------------------------------
-    }else if(name == "MODIFIER RADIUS"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        modifierRadius = slider->getScaledValue();
-        
-    }else if(name == "MODIFIER STRENGTH"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        modifierStrength = slider->getScaledValue();
+        if(selectedMode == "camera"){
+            cam.reset();
+            cam.enableMouseInput();
+        }
         
     }else if(e.getName() == "FULLSCREEN"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         ofSetFullscreen(toggle->getValue());
         setCanvas();
-        
-        // WAVE -----------------------------------------
-    }else if(name == "AMPLITUDE"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        amplitude = slider->getScaledValue();
-        
-    }else if(name == "FREQUENCY IN SECONDS"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        frequencyInSeconds = slider->getScaledValue();
-        
-    }else if(e.getName() == "N MODIFIER"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        nModifier = slider->getScaledValue();
     }
 }
 

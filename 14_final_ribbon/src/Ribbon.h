@@ -14,20 +14,9 @@
 class Ribbon{
 public:
     void setup(float _x, float _y);
+    
+    void draw(string _selectedMode, float _thickness, float _zDepth);
 
-    // spring
-    void updateSpring(float _x, float _y, float _modifierRadius, float _modifierStrength);
-
-    // wave
-    void updateWave(float _amplitude, int _frequencyInSeconds, int _nModifier);
-    
-    // modify
-    void updateModify(float _x, float _y, float _modifierRadius, float _modifierStrength);
-    
-    void draw(bool _useCamera, float _thickness, float _zDepth);
-    
-    void connectSpring();
-    
     // Drawing
     void addPoint(float _x, float _y);
     void applySmoothing(int _shapeSmoothing);

@@ -28,14 +28,16 @@ void ofApp::setup(){
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
     modes.push_back("draw");
+    modes.push_back("modify");    
     selectedMode = "draw";
     setGUI();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
-
+    for (int i = 0; i < shapes.size(); i++) {
+        shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), 50, 50);
+    }
 }
 
 //--------------------------------------------------------------
@@ -58,7 +60,7 @@ void ofApp::draw(){
     }
     
     for(int i = 0; i < shapes.size(); i++){
-        shapes[i].draw(selectedMode, thickness, zDepth);
+        shapes[i].draw(selectedMode);
     }
     
     if(selectedMode == "camera"){
@@ -137,14 +139,14 @@ void ofApp::mouseDragged(int x, int y, int button){
     // this stops drawing when the mouse leave the canvas area
     }else{
         isDrawing = false;
-//            shapes[shapes.size() - 1].connectSpring();  // make a spring out of the last one!
+        shapes[shapes.size() - 1].connectSprings();  // make a spring out of the last one!
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
     if(isDrawing){
-//        shapes[shapes.size() - 1].connectSpring();
+        shapes[shapes.size() - 1].connectSprings();
     }
     // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
     isDrawing = false;

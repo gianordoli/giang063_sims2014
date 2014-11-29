@@ -14,13 +14,17 @@
 class Ribbon{
 public:
     void setup(float _x, float _y);
-    
-    void draw(string _selectedMode, float _thickness, float _zDepth);
+    void update(string _selectedMode, ofPoint _mousePos, float _radius, float _strength);
+    void draw(string _selectedMode);
 
     // Drawing
     void addPoint(float _x, float _y);
     void applySmoothing(int _shapeSmoothing);
     void resetSmoothing();
+
+    // Springs
+    void connectSprings();
+    
     
     // ofPolyline is actually ONE line
     // It would be the same as a vector of ofPoint.
@@ -32,6 +36,5 @@ public:
     
     // each vertex from our polyLine will respond to physics
     vector<Particle> myParticles;
-    
     vector<Spring> springList;
 };

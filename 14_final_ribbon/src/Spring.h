@@ -2,7 +2,8 @@
 //  Spring.h
 //  Springs
 //
-//  Created by Charlie Whitney on 11/11/13.
+//  Created by Gabriel Gianordoli
+//  Based on original example by Charlie Whitney
 //
 //
 
@@ -13,13 +14,10 @@
 
 class Spring {
 public:
-    void set( Particle *_s1, Particle *_s2, float _k, float _restLength );
+    void set( float _k, float _restLength );
     void applyForce( ofPoint force );
-    void update();
-    void draw();
+    void update(Particle & s1, Particle & s2);
     
-    void connect( Spring *s );
-    
-    Particle *s1, *s2;
-    float   k, restLength;
+    float k;
+    float restLength;
 };

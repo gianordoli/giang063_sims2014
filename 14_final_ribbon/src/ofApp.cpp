@@ -28,6 +28,20 @@ void ofApp::setup(){
     modifierRadius = 10;
     modifierStrength = 0.25;
     
+    /*-------------------- 3D ---------------------*/
+    lightColor.set(1.0, 0.0, 0.0);
+    //    ofSetSmoothLighting(true);
+    light.setDiffuseColor(lightColor);
+    //    light.setSpecularColor( ofFloatColor(1.f, 1.f, 1.f));
+    light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 10.0));
+    cam.setVFlip(true); // you need this, otherwise the camera starts flipped vertically
+    // I have no idea why
+//    zDepth = -1;
+    material.setShininess( 120 );
+    // the light highlight of the material //
+    material.setSpecularColor(ofColor(255, 255, 255, 255));
+    
+    
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
     modes.push_back("draw");
@@ -94,21 +108,18 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+    // Camera is only enabled inside the canvas area
+    if(selectedMode == "camera" &&
+       (x < margins[3] || x > ofGetWidth() - margins[1] ||
+       y < margins[0] || y > ofGetHeight() - margins[2])){
+        
+        cam.disableMouseInput();
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    // Camera is only enabled inside the canvas area
-    if(selectedMode == "camera" &&
-       x > margins[3] && x < ofGetWidth() - margins[1] &&
-       y > margins[0] && y < ofGetHeight() - margins[2]){
-        
-        cam.enableMouseInput();
-        
-    }else{
-        cam.disableMouseInput();
-    }
+
 }
 
 //--------------------------------------------------------------
@@ -155,6 +166,8 @@ void ofApp::mouseReleased(int x, int y, int button){
     }
     // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
     isDrawing = false;
+    
+    cam.enableMouseInput();    
 }
 
 void ofApp::setCanvas(){
@@ -277,7 +290,6 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         selectedMode = radio->getActiveName();
         if(selectedMode == "camera"){
             cam.reset();
-            cam.enableMouseInput();
         }
     
     // MODIFIER -----------------------------------------

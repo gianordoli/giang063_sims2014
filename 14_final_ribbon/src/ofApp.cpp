@@ -52,8 +52,10 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    for (int i = 0; i < shapes.size(); i++) {
-        shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), modifierRadius, modifierStrength);
+    if(shapes.size() > 0){
+        for (int i = 0; i < shapes.size(); i++) {
+            shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), modifierRadius, modifierStrength);
+        }
     }
 }
 
@@ -66,7 +68,7 @@ void ofApp::draw(){
     ofSetLineWidth(1);
     ofRect(canvasPos, canvasSize.x, canvasSize.y);
     
-    if(selectedMode == "camera"){
+    if(selectedMode != "draw"){
         cam.begin();
         light.enable();
         ofEnableLighting();
@@ -80,7 +82,7 @@ void ofApp::draw(){
         shapes[i].draw(selectedMode);
     }
     
-    if(selectedMode == "camera"){
+    if(selectedMode != "draw"){
         ofPopMatrix();
         material.end();
         ofDisableDepthTest();
@@ -91,11 +93,12 @@ void ofApp::draw(){
         ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
                            , 20, ofGetHeight() - 40);
 
-    }else if(selectedMode == "modify"){
-        ofNoFill();
-        ofSetLineWidth(1);
-        ofSetColor(255);
-        ofCircle(mouseX, mouseY, modifierRadius);
+        if(selectedMode == "modify"){
+            ofNoFill();
+            ofSetLineWidth(1);
+            ofSetColor(255);
+            ofCircle(mouseX, mouseY, modifierRadius);
+        }
     }
 }
 
@@ -109,7 +112,7 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
     // Camera is only enabled inside the canvas area
-    if(selectedMode == "camera" &&
+    if(selectedMode != "draw" &&
        (x < margins[3] || x > ofGetWidth() - margins[1] ||
        y < margins[0] || y > ofGetHeight() - margins[2])){
         
@@ -201,6 +204,7 @@ void ofApp::setGUI(){
     
     gui->addLabel("CURSOR MODES");
     gui->addRadio("CURSOR MODE", modes, OFX_UI_ORIENTATION_VERTICAL);
+    ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
     gui->addSpacer();
     
     gui->addLabel("MODIFIER CONTROLS");
@@ -228,6 +232,11 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(name == "APPLY SMOOTHING"){
         ofxUIButton *button = (ofxUIButton *) e.getButton();
         if(button->getValue()){
+            
+            // "Freeze" the particles update by changing the current mode to draw
+            selectedMode = "draw";
+            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+            
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].applySmoothing(shapeSmoothing);
             }
@@ -236,6 +245,11 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(name == "RESET SMOOTHING"){
         ofxUIButton *button = (ofxUIButton *) e.getButton();
         if(button->getValue()){
+            
+            // "Freeze" the particles update by changing the current mode to draw
+            selectedMode = "draw";
+            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+            
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].resetSmoothing();
             }
@@ -246,8 +260,8 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         if(button->getValue()){
             
             // "Freeze" the particles update by changing the current mode to draw
-            string currSelectedMode = selectedMode;
             selectedMode = "draw";
+            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
             
             while(shapes.size() > 0){
                 int i = shapes.size() - 1;
@@ -255,9 +269,6 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
                 shapes[i].eraseSprings();
                 shapes.erase(shapes.begin() + i);
             }
-            
-            // Set the selectedMode back to what it was
-            selectedMode = currSelectedMode;
         }
         
     // 3D -----------------------------------------------
@@ -288,7 +299,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
         selectedMode = radio->getActiveName();
-        if(selectedMode == "camera"){
+        if(selectedMode != "draw"){
             cam.reset();
         }
     

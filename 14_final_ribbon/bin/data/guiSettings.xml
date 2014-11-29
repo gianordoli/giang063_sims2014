@@ -8,12 +8,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>2.871921062</Value>
+    <Value>2.733990192</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>RIBBON THICKNESS</Name>
-    <Value>14.532020569</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -23,22 +23,22 @@
 <Widget>
     <Kind>4</Kind>
     <Name>RED</Name>
-    <Value>0.000000000</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>GREEN</Name>
-    <Value>1.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>BLUE</Name>
-    <Value>1.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>camera</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -48,17 +48,17 @@
 <Widget>
     <Kind>2</Kind>
     <Name>modify</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>MODIFIER RADIUS</Name>
-    <Value>10.000000000</Value>
+    <Value>85.812805176</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>MODIFIER STRENGTH</Name>
-    <Value>0.250000000</Value>
+    <Value>0.490147799</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>

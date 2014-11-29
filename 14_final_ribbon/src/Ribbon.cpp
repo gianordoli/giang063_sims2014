@@ -168,7 +168,7 @@ void Ribbon::connectSprings(){
         ofPoint dist = myParticles[i].pos - myParticles[i + 1].pos;
         float len = dist.length();
         Spring newSpring;
-        newSpring.set(0.01, len);
+        newSpring.set(1, len);
         springList.push_back(newSpring);
     }
     

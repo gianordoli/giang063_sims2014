@@ -13,23 +13,22 @@ void Ribbon::setup(float _x, float _y){
 }
 
 void Ribbon::update(string _selectedMode, ofPoint _mousePos, float _radius, float _strength){
-    if(_selectedMode == "modify"){
 
-        // Update particle
-        for (int i = 0; i < myParticles.size(); i++) {
-            myParticles[i].update(_mousePos, _radius, _strength);
-        }
-        
-        // Update springs
-        for (int i = 0; i < myParticles.size() - 1; i++) {
-            springList[i].update(myParticles[i], myParticles[i + 1]);
-        }
-
-        // Set the updated values back to the line
-        for (int i = 0; i < myParticles.size(); i++) {
-            currentLine[i] = myParticles[i].pos;
-        }
+    // Update particle
+    for (int i = 0; i < myParticles.size(); i++) {
+        myParticles[i].update(_mousePos, _radius, _strength);
     }
+    
+    // Update springs
+    for (int i = 0; i < myParticles.size() - 1; i++) {
+        springList[i].update(myParticles[i], myParticles[i + 1]);
+    }
+
+    // Set the updated values back to the line
+    for (int i = 0; i < myParticles.size(); i++) {
+        currentLine[i] = myParticles[i].pos;
+    }
+
 }
 
 //------------------------------------------------------------
@@ -121,11 +120,14 @@ void Ribbon::addPoint(float _x, float _y){
 }
 
 void Ribbon::eraseParticles(){
+
     // Erase particles vector
     while(myParticles.size() > 0){
         int i = myParticles.size() - 1;
         myParticles.erase(myParticles.begin() + i);
     }
+
+    myParticles.clear();
 }
 
 void Ribbon::createParticles(){
@@ -147,11 +149,13 @@ void Ribbon::createParticles(){
 }
 
 void Ribbon::eraseSprings(){
+
     // Erase springs vector
     while(springList.size() > 0){
         int i = springList.size() - 1;
         springList.erase(springList.begin() + i);
     }
+    springList.clear();
 }
 
 void Ribbon::connectSprings(){
@@ -165,7 +169,7 @@ void Ribbon::connectSprings(){
         ofPoint dist = myParticles[i].pos - myParticles[i + 1].pos;
         float len = dist.length();
         Spring newSpring;
-        newSpring.set(0.99f, len);
+        newSpring.set(0.5f, len);
         springList.push_back(newSpring);
     }
     

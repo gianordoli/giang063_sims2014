@@ -29,6 +29,8 @@ public:
     int margins[4];
     ofPoint canvasPos, canvasSize;
     void setCanvas();
+    bool isErasing;
+    void eraseShapes();
     
     /*-------------------- GUI --------------------*/
     ofxUISuperCanvas *gui;

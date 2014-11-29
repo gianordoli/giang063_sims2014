@@ -23,6 +23,7 @@ void ofApp::setup(){
     margins[3] = 240;
     setCanvas();
     thickness = 10;
+    isErasing = false;
     
     /*----------------- PHYSICS -------------------*/
     modifierRadius = 10;
@@ -30,8 +31,8 @@ void ofApp::setup(){
     
     /*-------------------- 3D ---------------------*/
     
-    zDepth = -1;
-    thickness = 10;
+    zDepth = -1.0;
+    thickness = 10.0;
     
     lightColor.set(1.0, 0.0, 0.0);
     //    ofSetSmoothLighting(true);
@@ -56,7 +57,8 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if(shapes.size() > 0){
+    
+    if(shapes.size() > 0 && selectedMode != "draw"){
         for (int i = 0; i < shapes.size(); i++) {
             shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), modifierRadius, modifierStrength);
         }
@@ -103,6 +105,8 @@ void ofApp::draw(){
             ofSetColor(255);
             ofCircle(mouseX, mouseY, modifierRadius);
         }
+    }else{
+        cam.reset();
     }
 }
 
@@ -159,9 +163,11 @@ void ofApp::mouseDragged(int x, int y, int button){
     // this stops drawing when the mouse leave the canvas area
     }else{
         isDrawing = false;
-        shapes[shapes.size() - 1].createParticles();
-        shapes[shapes.size() - 1].connectSprings();
-        cout << shapes[shapes.size() - 1].myParticles.size();        
+        if(shapes.size() > 0){
+            shapes[shapes.size() - 1].createParticles();
+            shapes[shapes.size() - 1].connectSprings();
+            cout << shapes[shapes.size() - 1].myParticles.size();        
+        }
     }
 }
 
@@ -182,6 +188,20 @@ void ofApp::setCanvas(){
     canvasSize.set(ofGetWidth() - margins[1] - margins[3], ofGetHeight() - margins[0] - margins[2]);
 }
 
+void ofApp::eraseShapes(){
+    // "Freeze" the particles update by changing the current mode to draw
+    selectedMode = "draw";
+    ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+    
+    while(shapes.size() > 0){
+        int i = shapes.size() - 1;
+        shapes[i].eraseParticles();
+        shapes[i].eraseSprings();
+        shapes.erase(shapes.begin() + i);
+    }
+    shapes.clear();    
+}
+
 void ofApp::setGUI(){
     
     gui = new ofxUISuperCanvas("SHAPE");
@@ -198,8 +218,8 @@ void ofApp::setGUI(){
     gui->addSpacer();
     
     gui->addLabel("3D CONTROLS");
-    gui->addSlider("RIBBON THICKNESS", 2, 50, thickness);
-    gui->addSlider("Z DEPTH", -1, -50, zDepth);
+    gui->addSlider("RIBBON THICKNESS", 2.0, 50.0, thickness);
+    gui->addSlider("Z DEPTH", -1.0, -20.0, zDepth);
     gui->addLabel("LIGHT COLOR");
     gui->addSlider("RED", 0.0, 1.0, lightColor.r);
     gui->addSlider("GREEN", 0.0, 1.0, lightColor.g);
@@ -212,8 +232,8 @@ void ofApp::setGUI(){
     gui->addSpacer();
     
     gui->addLabel("MODIFIER CONTROLS");
-    gui->addSlider("MODIFIER RADIUS", 10, 200, modifierRadius);
-    gui->addSlider("MODIFIER STRENGTH", 0.1, 1, modifierStrength);
+    gui->addSlider("MODIFIER RADIUS", 10.0, 200.0, modifierRadius);
+    gui->addSlider("MODIFIER STRENGTH", 0.1, 1.0, modifierStrength);
     gui->addSpacer();
     
     gui->addToggle("FULLSCREEN", false);
@@ -267,12 +287,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             selectedMode = "draw";
             ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
             
-            while(shapes.size() > 0){
-                int i = shapes.size() - 1;
-                shapes[i].eraseParticles();
-                shapes[i].eraseSprings();
-                shapes.erase(shapes.begin() + i);
-            }
+            eraseShapes();
         }
         
     // 3D -----------------------------------------------
@@ -304,11 +319,6 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
         selectedMode = radio->getActiveName();
-        if(selectedMode == "draw"){
-            cam.begin();
-            cam.reset();
-            cam.end();
-        }
     
         
     // MODIFIER -----------------------------------------
@@ -319,7 +329,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(name == "MODIFIER STRENGTH"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         modifierStrength = slider->getScaledValue();
-    
+
         
     // FULLSCREEN -----------------------------------------
     }else if(e.getName() == "FULLSCREEN"){

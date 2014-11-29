@@ -18,13 +18,15 @@ void Ribbon::update(string _selectedMode, ofPoint _mousePos, float _radius, floa
         // Update particle
         for (int i = 0; i < myParticles.size(); i++) {
             myParticles[i].update(_mousePos, _radius, _strength);
-            
-            // Update springs
-            if(i > 0){
-                springList[i].update(myParticles[i - 1], myParticles[i]);
-            }
-            
-            // Set the value back to the line
+        }
+        
+        // Update springs
+        for (int i = 0; i < myParticles.size() - 1; i++) {
+            springList[i].update(myParticles[i], myParticles[i + 1]);
+        }
+
+        // Set the updated values back to the line
+        for (int i = 0; i < myParticles.size(); i++) {
             currentLine[i] = myParticles[i].pos;
         }
     }
@@ -66,6 +68,10 @@ void Ribbon::addPoint(float _x, float _y){
 }
 
 void Ribbon::createParticles(){
+    
+    cout << "Called createParticles()" << endl;
+    cout << "Line has " << currentLine.size() << " points." << endl;
+    
     // Erase particles vector
     while(myParticles.size() > 0){
         int i = myParticles.size() - 1;
@@ -79,9 +85,14 @@ void Ribbon::createParticles(){
         newParticle.setup(p.x, p.y);
         myParticles.push_back(newParticle);
     }
+    
+    cout << "Created " << myParticles.size() << " particles." << endl;
 }
 
 void Ribbon::connectSprings(){
+
+    cout << "Called connectSprings()." << endl;
+
     // Erase springs vector
     while(springList.size() > 0){
         int i = springList.size() - 1;
@@ -96,4 +107,6 @@ void Ribbon::connectSprings(){
         newSpring.set(0.01, len);
         springList.push_back(newSpring);
     }
+    
+    cout << "Created " << springList.size() << " springs." << endl;
 }

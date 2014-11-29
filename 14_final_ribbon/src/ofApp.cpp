@@ -35,10 +35,8 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if(shapes.size() > 0){
-        for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), 50, 5);
-        }
+    for (int i = 0; i < shapes.size(); i++) {
+        shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), 50, 5);
     }
 }
 
@@ -127,7 +125,7 @@ void ofApp::mouseDragged(int x, int y, int button){
         if(!isDrawing &&
            ofGetPreviousMouseX() != x && ofGetPreviousMouseX() != 0 &&
            ofGetPreviousMouseY() != y && ofGetPreviousMouseY() != 0){
-            cout << "add" << endl;
+            cout << "Added new line" << endl;
             Ribbon newRibbon;
             newRibbon.setup(ofGetPreviousMouseX(), ofGetPreviousMouseY());
             newRibbon.addPoint(x, y);
@@ -153,7 +151,6 @@ void ofApp::mouseReleased(int x, int y, int button){
     if(isDrawing){
         shapes[shapes.size() - 1].createParticles();
         shapes[shapes.size() - 1].connectSprings();
-        cout << shapes[shapes.size() - 1].myParticles.size();
     }
     // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
     isDrawing = false;

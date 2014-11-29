@@ -22,8 +22,10 @@ public:
     void applySmoothing(int _shapeSmoothing);
     void resetSmoothing();
 
-    // Springs
+    // Particles and Springs
+    void eraseParticles();
     void createParticles();
+    void eraseSprings();
     void connectSprings();
     
     

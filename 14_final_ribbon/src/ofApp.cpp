@@ -87,16 +87,8 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    // Erase lines
-    if(key == 'e'){
-        while(shapes.size() > 0){
-            int i = shapes.size() - 1;
-            shapes.erase(shapes.begin() + i);
-        }
-        
-    }else if(key == 'g'){
+    if(key == 'g'){
         gui->toggleVisible();
-        
     }
 }
 
@@ -178,10 +170,11 @@ void ofApp::setGUI(){
     gui->setColorBack(guiColor);
     gui->addSpacer();
     
-    gui->addLabel("DRAWING CONTROLS");
+    gui->addLabel("SHAPES");
     gui->addSlider("SMOOTH", 1, 5, shapeSmoothing);
-    gui->addButton("APPLY", false);
-    gui->addButton("RESET", false);
+    gui->addButton("APPLY SMOOTHING", false);
+    gui->addButton("RESET SMOOTHING", false);
+    gui->addButton("ERASE SHAPES", false);
     gui->addSpacer();
     
     gui->addLabel("3D CONTROLS");
@@ -219,7 +212,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         shapeSmoothing = round(slider->getScaledValue());
         
-    }else if(name == "APPLY"){
+    }else if(name == "APPLY SMOOTHING"){
         ofxUIButton *button = (ofxUIButton *) e.getButton();
         if(button->getValue()){
             for (int i = 0; i < shapes.size(); i++) {
@@ -227,12 +220,31 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             }
         }
         
-    }else if(name == "RESET"){
+    }else if(name == "RESET SMOOTHING"){
         ofxUIButton *button = (ofxUIButton *) e.getButton();
         if(button->getValue()){
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].resetSmoothing();
             }
+        }
+
+    }else if(name == "ERASE SHAPES"){
+        ofxUIButton *button = (ofxUIButton *) e.getButton();
+        if(button->getValue()){
+            
+            // "Freeze" the particles update by changing the current mode to draw
+            string currSelectedMode = selectedMode;
+            selectedMode = "draw";
+            
+            while(shapes.size() > 0){
+                int i = shapes.size() - 1;
+                shapes[i].eraseParticles();
+                shapes[i].eraseSprings();
+                shapes.erase(shapes.begin() + i);
+            }
+            
+            // Set the selectedMode back to what it was
+            selectedMode = currSelectedMode;
         }
         
     // 3D -----------------------------------------------

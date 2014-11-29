@@ -48,16 +48,23 @@ void Ribbon::applySmoothing(int _shapeSmoothing){
     // Update line
     currentLine = currentLine.getSmoothed(_shapeSmoothing, 0);
     
-    // Update particles vector
+    // Erase and update particles vector
     createParticles();
     
-    // Update springs vector
+    // Erase and update springs vector
     connectSprings();
 }
 
 //------------------------------------------------------------
 void Ribbon::resetSmoothing(){
+    // Reset line
     currentLine = originalLine;
+    
+    // Erase and update particles vector
+    createParticles();
+    
+    // Erase and update springs vector
+    connectSprings();
 }
 
 //------------------------------------------------------------
@@ -67,16 +74,20 @@ void Ribbon::addPoint(float _x, float _y){
     currentLine = originalLine;
 }
 
-void Ribbon::createParticles(){
-    
-    cout << "Called createParticles()" << endl;
-    cout << "Line has " << currentLine.size() << " points." << endl;
-    
+void Ribbon::eraseParticles(){
     // Erase particles vector
     while(myParticles.size() > 0){
         int i = myParticles.size() - 1;
         myParticles.erase(myParticles.begin() + i);
     }
+}
+
+void Ribbon::createParticles(){
+    
+    cout << "Called createParticles()" << endl;
+    cout << "Line has " << currentLine.size() << " points." << endl;
+    
+    eraseParticles();
     
     // Update particles vector
     vector<ofPoint> path = currentLine.getVertices();
@@ -89,15 +100,19 @@ void Ribbon::createParticles(){
     cout << "Created " << myParticles.size() << " particles." << endl;
 }
 
-void Ribbon::connectSprings(){
-
-    cout << "Called connectSprings()." << endl;
-
+void Ribbon::eraseSprings(){
     // Erase springs vector
     while(springList.size() > 0){
         int i = springList.size() - 1;
         springList.erase(springList.begin() + i);
     }
+}
+
+void Ribbon::connectSprings(){
+
+    cout << "Called connectSprings()." << endl;
+    
+    eraseSprings();
     
     // Connect
     for(int i = 0; i < myParticles.size() - 1; i++){

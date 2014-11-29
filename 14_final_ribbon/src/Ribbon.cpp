@@ -33,10 +33,7 @@ void Ribbon::update(string _selectedMode, ofPoint _mousePos, float _radius, floa
 }
 
 //------------------------------------------------------------
-void Ribbon::draw(string _selectedMode){
-
-    float _zDepth = -1;
-    float _thickness = 10;
+void Ribbon::draw(string _selectedMode, float _thickness, float _zDepth){
 
     if(_selectedMode == "draw"){
 
@@ -168,7 +165,7 @@ void Ribbon::connectSprings(){
         ofPoint dist = myParticles[i].pos - myParticles[i + 1].pos;
         float len = dist.length();
         Spring newSpring;
-        newSpring.set(1, len);
+        newSpring.set(0.99f, len);
         springList.push_back(newSpring);
     }
     

@@ -29,6 +29,10 @@ void ofApp::setup(){
     modifierStrength = 0.25;
     
     /*-------------------- 3D ---------------------*/
+    
+    zDepth = -1;
+    thickness = 10;
+    
     lightColor.set(1.0, 0.0, 0.0);
     //    ofSetSmoothLighting(true);
     light.setDiffuseColor(lightColor);
@@ -79,7 +83,7 @@ void ofApp::draw(){
     }
     
     for(int i = 0; i < shapes.size(); i++){
-        shapes[i].draw(selectedMode);
+        shapes[i].draw(selectedMode, thickness, zDepth);
     }
     
     if(selectedMode != "draw"){
@@ -189,7 +193,7 @@ void ofApp::setGUI(){
     gui->addLabel("SHAPES");
     gui->addSlider("SMOOTH", 1, 5, shapeSmoothing);
     gui->addButton("APPLY SMOOTHING", false);
-    gui->addButton("RESET SMOOTHING", false);
+    gui->addButton("RESET SHAPES", false);
     gui->addButton("ERASE SHAPES", false);
     gui->addSpacer();
     
@@ -242,7 +246,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             }
         }
         
-    }else if(name == "RESET SMOOTHING"){
+    }else if(name == "RESET SHAPES"){
         ofxUIButton *button = (ofxUIButton *) e.getButton();
         if(button->getValue()){
             
@@ -295,14 +299,18 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         lightColor.b = slider->getScaledValue();
         light.setDiffuseColor(lightColor);
         
+        
     // CURSOR -------------------------------------------
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
         selectedMode = radio->getActiveName();
-        if(selectedMode != "draw"){
+        if(selectedMode == "draw"){
+            cam.begin();
             cam.reset();
+            cam.end();
         }
     
+        
     // MODIFIER -----------------------------------------
     }else if(name == "MODIFIER RADIUS"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
@@ -312,6 +320,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         modifierStrength = slider->getScaledValue();
     
+        
     // FULLSCREEN -----------------------------------------
     }else if(e.getName() == "FULLSCREEN"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;

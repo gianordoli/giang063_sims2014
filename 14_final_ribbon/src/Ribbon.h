@@ -15,7 +15,7 @@ class Ribbon{
 public:
     void setup(float _x, float _y);
     void update(string _selectedMode, ofPoint _mousePos, float _radius, float _strength);
-    void draw(string _selectedMode);
+    void draw(string _selectedMode, float _thickness, float _zDepth);
 
     // Drawing
     void addPoint(float _x, float _y);

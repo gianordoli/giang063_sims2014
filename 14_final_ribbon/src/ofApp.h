@@ -45,4 +45,8 @@ public:
     float thickness;
     float zDepth;
     
+    /*----------------- PHYSICS -------------------*/
+    float modifierRadius;
+    float modifierStrength;
+    
 };

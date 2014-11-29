@@ -24,6 +24,9 @@ void ofApp::setup(){
     setCanvas();
     thickness = 10;
     
+    /*----------------- PHYSICS -------------------*/
+    modifierRadius = 10;
+    modifierStrength = 0.25;
     
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
@@ -36,7 +39,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     for (int i = 0; i < shapes.size(); i++) {
-        shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), 50, 5);
+        shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), modifierRadius, modifierStrength);
     }
 }
 
@@ -73,6 +76,12 @@ void ofApp::draw(){
         
         ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
                            , 20, ofGetHeight() - 40);
+
+    }else if(selectedMode == "modify"){
+        ofNoFill();
+        ofSetLineWidth(1);
+        ofSetColor(255);
+        ofCircle(mouseX, mouseY, modifierRadius);
     }
 }
 
@@ -188,6 +197,11 @@ void ofApp::setGUI(){
     gui->addRadio("CURSOR MODE", modes, OFX_UI_ORIENTATION_VERTICAL);
     gui->addSpacer();
     
+    gui->addLabel("MODIFIER CONTROLS");
+    gui->addSlider("MODIFIER RADIUS", 10, 200, modifierRadius);
+    gui->addSlider("MODIFIER STRENGTH", 0.1, 1, modifierStrength);
+    gui->addSpacer();
+    
     gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
@@ -245,7 +259,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         lightColor.b = slider->getScaledValue();
         light.setDiffuseColor(lightColor);
         
-        // CURSOR -------------------------------------------
+    // CURSOR -------------------------------------------
     }else if(name == "CURSOR MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
         selectedMode = radio->getActiveName();
@@ -253,7 +267,17 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             cam.reset();
             cam.enableMouseInput();
         }
+    
+    // MODIFIER -----------------------------------------
+    }else if(name == "MODIFIER RADIUS"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        modifierRadius = slider->getScaledValue();
         
+    }else if(name == "MODIFIER STRENGTH"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        modifierStrength = slider->getScaledValue();
+    
+    // FULLSCREEN -----------------------------------------
     }else if(e.getName() == "FULLSCREEN"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         ofSetFullscreen(toggle->getValue());

@@ -2,13 +2,13 @@
     <Kind>40</Kind>
     <Name>OFX_UI_WIDGET_CANVAS</Name>
     <IsMinified>0</IsMinified>
-    <XPosition>0.000000000</XPosition>
-    <YPosition>0.000000000</YPosition>
+    <XPosition>6.000000000</XPosition>
+    <YPosition>8.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>1.000000000</Value>
+    <Value>2.024630547</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -38,7 +38,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>camera</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -48,10 +48,20 @@
 <Widget>
     <Kind>2</Kind>
     <Name>modify</Name>
-    <Value>0</Value>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MODIFIER RADIUS</Name>
+    <Value>83.940887451</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MODIFIER STRENGTH</Name>
+    <Value>0.122167490</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>FULLSCREEN</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>

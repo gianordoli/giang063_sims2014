@@ -28,15 +28,17 @@ void ofApp::setup(){
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
     modes.push_back("draw");
-    modes.push_back("modify");    
+    modes.push_back("modify");
     selectedMode = "draw";
     setGUI();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    for (int i = 0; i < shapes.size(); i++) {
-        shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), 50, 50);
+    if(shapes.size() > 0){
+        for (int i = 0; i < shapes.size(); i++) {
+            shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), 50, 5);
+        }
     }
 }
 
@@ -128,6 +130,7 @@ void ofApp::mouseDragged(int x, int y, int button){
             cout << "add" << endl;
             Ribbon newRibbon;
             newRibbon.setup(ofGetPreviousMouseX(), ofGetPreviousMouseY());
+            newRibbon.addPoint(x, y);
             shapes.push_back(newRibbon);
             isDrawing = true; // SWITCH
 
@@ -139,14 +142,18 @@ void ofApp::mouseDragged(int x, int y, int button){
     // this stops drawing when the mouse leave the canvas area
     }else{
         isDrawing = false;
-        shapes[shapes.size() - 1].connectSprings();  // make a spring out of the last one!
+        shapes[shapes.size() - 1].createParticles();
+        shapes[shapes.size() - 1].connectSprings();
+        cout << shapes[shapes.size() - 1].myParticles.size();        
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
     if(isDrawing){
+        shapes[shapes.size() - 1].createParticles();
         shapes[shapes.size() - 1].connectSprings();
+        cout << shapes[shapes.size() - 1].myParticles.size();
     }
     // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
     isDrawing = false;
@@ -188,7 +195,7 @@ void ofApp::setGUI(){
     
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
-    gui->loadSettings("guiSettings.xml");
+//    gui->loadSettings("guiSettings.xml");
 }
 
 void ofApp::guiEvent(ofxUIEventArgs &e){

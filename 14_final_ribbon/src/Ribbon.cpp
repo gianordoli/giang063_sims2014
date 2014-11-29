@@ -46,6 +46,26 @@ void Ribbon::applySmoothing(int _shapeSmoothing){
     // Update line
     currentLine = currentLine.getSmoothed(_shapeSmoothing, 0);
     
+    // Update particles vector
+    createParticles();
+    
+    // Update springs vector
+    connectSprings();
+}
+
+//------------------------------------------------------------
+void Ribbon::resetSmoothing(){
+    currentLine = originalLine;
+}
+
+//------------------------------------------------------------
+void Ribbon::addPoint(float _x, float _y){
+    ofPoint pos = ofPoint(_x, _y);
+    originalLine.addVertex(pos);
+    currentLine = originalLine;
+}
+
+void Ribbon::createParticles(){
     // Erase particles vector
     while(myParticles.size() > 0){
         int i = myParticles.size() - 1;
@@ -61,23 +81,13 @@ void Ribbon::applySmoothing(int _shapeSmoothing){
     }
 }
 
-//------------------------------------------------------------
-void Ribbon::resetSmoothing(){
-    currentLine = originalLine;
-}
-
-//------------------------------------------------------------
-void Ribbon::addPoint(float _x, float _y){
-    ofPoint pos = ofPoint(_x, _y);
-    originalLine.addVertex(pos);
-    currentLine = originalLine;
-    
-    Particle newParticle;
-    newParticle.setup(_x, _y);
-    myParticles.push_back(newParticle);
-}
-
 void Ribbon::connectSprings(){
+    // Erase springs vector
+    while(springList.size() > 0){
+        int i = springList.size() - 1;
+        springList.erase(springList.begin() + i);
+    }
+    
     // Connect
     for(int i = 0; i < myParticles.size() - 1; i++){
         ofPoint dist = myParticles[i].pos - myParticles[i + 1].pos;

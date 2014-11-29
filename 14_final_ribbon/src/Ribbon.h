@@ -23,6 +23,7 @@ public:
     void resetSmoothing();
 
     // Springs
+    void createParticles();
     void connectSprings();
     
     

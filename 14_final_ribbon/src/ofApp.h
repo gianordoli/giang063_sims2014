@@ -47,7 +47,8 @@ public:
     int snapCounter;
     ofImage	img;
     bool isRecording;
-    ofFbo fbo;    
+    ofFbo fbo;
+    ofPixels pixels; 
     
     
     /*-------------------- 3D ---------------------*/

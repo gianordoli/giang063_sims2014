@@ -62,8 +62,8 @@ void ofApp::setup(){
     fbo.begin();
     ofClear(0);
     fbo.end();
+    pixels.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR_ALPHA);
 
-    
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
     modes.push_back("draw");
@@ -94,7 +94,7 @@ void ofApp::update(){
     
     fbo.begin();
     
-        ofBackground(0);
+        ofClear(0);
     
         if(selectedMode != "draw"){
             cam.begin();
@@ -124,9 +124,6 @@ void ofApp::update(){
             light.disable();
             cam.end();
             
-            ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
-                               , 20, ofGetHeight() - 40);
-            
         }else{
             cam.reset();
         }
@@ -137,27 +134,43 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    ofBackground(0);
+    
+    // Drawing
     ofSetColor(255, 255);
     ofEnableAlphaBlending();
     fbo.draw(0, 0);
 
+    // Canvas
     ofNoFill();
     ofSetColor(255);
     ofSetLineWidth(1);
     ofRect(canvasPos, canvasSize.x, canvasSize.y);
     
-    if(selectedMode == "modify"){
-        ofNoFill();
-        ofSetLineWidth(1);
-        ofSetColor(255);
-        ofCircle(mouseX, mouseY, addForceRadius);
+    if(selectedMode != "draw"){
+        // Camera controls
+        ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
+                           , 20, ofGetHeight() - 40);
+        
+        // Mouse modifier
+        if(selectedMode == "modify"){
+            ofNoFill();
+            ofSetLineWidth(1);
+            ofSetColor(255);
+            ofCircle(mouseX, mouseY, addForceRadius);
+        }
     }
     
+    // Save frames
     if(isRecording){
-        img.grabScreen(canvasPos.x, canvasPos.y, canvasSize.x, canvasSize.y);
-        string fileName = "snapshot_"+ofToString(10000+snapCounter)+".png";
-        img.saveImage(fileName);
+        
+        //get the frame buffer pixels
+        fbo.readToPixels(pixels);
+        
+        //save
+        ofSaveImage(pixels,  "snapshot_"+ofToString(10000+snapCounter)+".png", OF_IMAGE_QUALITY_BEST);
         snapCounter++;
+
     }
 
 }

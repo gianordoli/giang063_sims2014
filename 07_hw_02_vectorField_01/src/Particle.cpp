@@ -24,24 +24,20 @@ void Particle::update(){
     resetForce();
 }
 
-// ------------------------------------------------------------
-void Particle::addRepulsion(ofPoint _posOfForce, float _radius, float _strength){
+// MODIFY ------------------------------------------------------------
+void Particle::update(ofPoint _posOfForce, float _radius, float _strength){
+    
     ofPoint diff = pos - _posOfForce;
     if(diff.length() < _radius){
         diff.normalize();
         diff *= _strength;
         addForce(diff);
     }
-}
-
-// ------------------------------------------------------------
-void Particle::addAttraction(ofPoint _posOfForce, float _radius, float _strength){
-    ofPoint diff = _posOfForce - pos;
-    if(diff.length() < _radius){
-        diff.normalize();
-        diff *= _strength;
-        addForce(diff);
-    }
+    
+	vel += acc;
+    vel *= (1.0-damping);
+	pos += vel;
+    resetForce();
 }
 
 //------------------------------------------------------------

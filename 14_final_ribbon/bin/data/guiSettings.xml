@@ -13,17 +13,17 @@
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>3.266009808</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>RIBBON THICKNESS</Name>
-    <Value>26.827585220</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Z DEPTH</Name>
-    <Value>-4.743842125</Value>
+    <Value>-15.320197105</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -38,12 +38,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>BLUE</Name>
-    <Value>0.724137902</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>camera</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -52,8 +52,13 @@
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>modify</Name>
+    <Name>repulsion</Name>
     <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>attraction</Name>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -63,7 +68,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>ADD FORCE RADIUS</Name>
-    <Value>10.000000000</Value>
+    <Value>77.389160156</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

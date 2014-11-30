@@ -16,7 +16,12 @@ void Ribbon::updatePhysics(string _selectedMode, ofPoint _mousePos, float _radiu
 
     // Update particle
     for (int i = 0; i < myParticles.size(); i++) {
-        myParticles[i].update(_mousePos, _radius, _strength);
+        if(_selectedMode == "repulsion"){
+            myParticles[i].addRepulsion(_mousePos, _radius, _strength);
+        }else if(_selectedMode == "attraction"){
+            myParticles[i].addAttraction(_mousePos, _radius, _strength);
+        }
+        myParticles[i].update();
     }
     
     // Update springs

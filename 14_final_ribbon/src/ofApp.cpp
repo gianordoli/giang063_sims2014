@@ -68,7 +68,8 @@ void ofApp::setup(){
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
     modes.push_back("draw");
-    modes.push_back("modify");
+    modes.push_back("repulsion");
+    modes.push_back("attraction");    
     modes.push_back("oscillate");
     selectedMode = "draw";
     setGUI();
@@ -80,15 +81,14 @@ void ofApp::update(){
     totalVertices = getTotalVertices();
     
     if(shapes.size() > 0 && selectedMode != "draw"){
-        
-        if(selectedMode == "camera" || selectedMode == "modify"){
-            for (int i = 0; i < shapes.size(); i++) {
-                shapes[i].updatePhysics(selectedMode, ofPoint(mouseX, mouseY), addForceRadius, addForceStrength);
-            }
-        }
+
         if(selectedMode == "oscillate"){
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].updateOscillation(amplitude, frequencyInSeconds ,nModifier);
+            }
+        }else{
+            for (int i = 0; i < shapes.size(); i++) {
+                shapes[i].updatePhysics(selectedMode, ofPoint(mouseX, mouseY), addForceRadius, addForceStrength);
             }
         }
     }
@@ -154,7 +154,7 @@ void ofApp::draw(){
                            , 20, ofGetHeight() - 40);
         
         // Mouse modifier
-        if(selectedMode == "modify"){
+        if(selectedMode == "repulsion" || selectedMode == "attraction"){
             ofNoFill();
             ofSetLineWidth(1);
             ofSetColor(255);

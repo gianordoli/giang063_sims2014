@@ -14,8 +14,7 @@ public:
     
     void setup(float _x, float _y);
     void update();
-    void addRepulsion(ofPoint _posOfForce, float _radius, float _strength);
-    void addAttraction(ofPoint _posOfForce, float _radius, float _strength);
+    void update(ofPoint _posOfForce, float _radius, float _strength);
     void addForce(ofPoint _force);
     void resetForce();
 

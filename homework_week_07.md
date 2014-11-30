@@ -12,4 +12,5 @@ I only cleaned up a few things to improve performance, and added a switch to sta
 	* Reading pixels from camera and changing direction of vector field based on their brightness. Video [here](https://vimeo.com/113207468).
 	![Vector Field #1](_images/07_hw_03_vectorField_02.png)
 
-3. Implement a 3D vector field and apply on it a 3D Perlin noise
+3. 3D vector field with Perlin noise implemented. The skecth is pretty buggy, though. I wasn't able to add a camera nor particles. Any simple change makes it crash.
+	![Vector Field #1](_images/07_hw_04_3d_vectorField.png)

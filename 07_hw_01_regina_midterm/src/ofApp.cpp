@@ -1,7 +1,7 @@
 /* Changes to Regina Flores original midterm project:
  https://github.com/reginaflores/florr422_sims2014/tree/master/06_midterm_4
  
- I only cleaned up a few things to increase performance,
+ I only cleaned up a few things to improve performance,
  and added a switch to start/stop recording.
 
  Also, added a NICE gradient background! :)

@@ -16,12 +16,13 @@ class FlowField {
     void setup( int width, int height, int res );
     void setRandom( const float &strength = 10.0f);
     void setPerlin();
-    void setDirection(ofVec2f _dir);
+    void addDirection(ofVec2f _dir);
     
     void update();
     void draw();
     
     ofVec2f getForceAtPosition( ofVec2f pos );
+    void addForceAtPosition(ofVec2f _force, ofVec2f pos);
     
     void drawVector( const ofVec3f &start, const ofVec3f &end, float headLength = 0.2f, float headRadius = 0.05f );
     void drawVectorAt( const ofVec2f &vec, const ofVec2f &pos, const float &strength = 10.0 );

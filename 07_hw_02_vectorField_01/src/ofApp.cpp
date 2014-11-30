@@ -9,7 +9,7 @@
 void ofApp::setup(){
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
-    ofSetFullscreen(true);
+//    ofSetFullscreen(true);
     
     myField.setup( ofGetWindowWidth(), ofGetWindowHeight(), 20 );
     

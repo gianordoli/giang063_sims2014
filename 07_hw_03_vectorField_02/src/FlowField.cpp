@@ -22,12 +22,12 @@ void FlowField::setup( int width, int height, int res ) {
     
     for( int y=0; y<rows; y++){
         vector<ofVec2f> myList;
-        flowList.push_back( myList );
         
         for( int x=0; x<cols; x++){
             ofVec2f dir(0, 0);
-            flowList[y].push_back( dir );
+            myList.push_back( dir );
         }
+        flowList.push_back( myList );
     }
 }
 
@@ -77,13 +77,35 @@ ofVec2f FlowField::getForceAtPosition(ofVec2f pos) {
     return newPos;
 }
 
-void FlowField::setDirection(ofVec2f _dir) {
+void FlowField::addDirection(ofVec2f _dir) {
     _dir.normalize();
     for( int y=0; y<flowList.size(); y++){
         for( int x=0; x<flowList[y].size(); x++){
             flowList[y][x] += _dir;
         }
     }
+}
+
+void FlowField::addForceAtPosition(ofVec2f _force, ofVec2f pos) {
+//    cout << _force << endl;
+    _force.normalize();
+    
+    float pctX = pos.x / fieldWidth;
+    float pctY = pos.y / fieldHeight;
+    
+    int cols = fieldWidth / resolution;
+    int rows = fieldHeight / resolution;
+    
+    int xVal = ofClamp( pctX * cols, 0, cols-1 );
+    int yVal = ofClamp( pctY * rows, 0, rows-1 );
+    
+//    ofVec2f newPos;
+//    newPos.set(  );
+//    newPos += _force;
+    
+    flowList[yVal][xVal] += _force;
+    
+//    return newPos;
 }
 
 void FlowField::addRepelForce(float x, float y, float radius, float strength) {

@@ -12,7 +12,9 @@
 class Particle{
 public:
     
-    void setup(float _x, float _y);
+    Particle();
+    
+    void setup(float _x, float _y, float _z);
     void update();
     void draw();
     

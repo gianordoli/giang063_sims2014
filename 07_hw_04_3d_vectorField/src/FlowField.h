@@ -18,18 +18,20 @@ class FlowField {
     
     void setup( int width, int height, int depth, int res );
 //    void setRandom( const float &strength = 10.0f);
-//    void setPerlin();
+    void setPerlin();
 //    void addDirection(ofVec2f _dir);
 //    
 //    void update();
-//    void draw();
-//    
+    void draw();
+    void drawVectorAt( const ofVec3f &vec, const ofVec3f &pos, const float &strength = 10.0 );
+    void drawVector( const ofVec3f &start, const ofVec3f &end, float headLength = 0.2f, float headRadius = 0.05f );
+
+    
 //    ofVec2f getForceAtPosition( ofVec2f pos );
 //    void addForceAtPosition(ofVec2f _force, ofVec2f pos);
 //    
-//    void drawVector( const ofVec3f &start, const ofVec3f &end, float headLength = 0.2f, float headRadius = 0.05f );
-//    void drawVectorAt( const ofVec2f &vec, const ofVec2f &pos, const float &strength = 10.0 );
-//    
+    
+//
 //    void addRepelForce( float x, float y, float radius, float strength );
 //    void addAttractForce( float x, float y, float radius, float strength );
 //    void addCircularForce( float x, float y, float radius, float strength );

@@ -8,11 +8,15 @@
 
 #include "Particle.h"
 
+Particle::Particle() {
+    
+}
+
 //------------------------------------------------------------
-void Particle::setup(float _x, float _y){
-    pos.set(_x, _y);
-    vel.set(0.0, 0.0);
-    acc.set(0.0, 0.0);
+void Particle::setup(float _x, float _y, float _z){
+    pos.set(_x, _y, _z);
+    vel.set(0.0, 0.0, 0.0);
+    acc.set(0.0, 0.0, 0.0);
     damping = ofRandom(0.01, 0.05);
     hue = ofRandom(30);
 }

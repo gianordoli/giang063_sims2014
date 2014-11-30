@@ -12,6 +12,7 @@ void ofApp::setup(){
     ofSetFrameRate(60);
     ofSetVerticalSync(true);
     ofSetWindowShape(1280, 720);
+    ofToggleFullscreen();
     
     /*------------------ DRAWING ------------------*/
     isDrawing = false;
@@ -21,7 +22,7 @@ void ofApp::setup(){
     margins[1] = 20;
     margins[2] = 20;
     margins[3] = 240;
-    setCanvas();
+    setCanvas(ofGetWidth(), ofGetHeight());
     thickness = 10;
     isErasing = false;
     
@@ -55,7 +56,13 @@ void ofApp::setup(){
     /*----------------- PLAYBACK -------------------*/
     int totalVertices = 0;
     playbackSlider = 1;
-    
+    int snapCounter = 0;
+    bool isRecoding = false;
+    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+    fbo.begin();
+    ofClear(0);
+    fbo.end();
+
     
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
@@ -84,63 +91,83 @@ void ofApp::update(){
             }
         }
     }
+    
+    fbo.begin();
+    
+        ofBackground(0);
+    
+        if(selectedMode != "draw"){
+            cam.begin();
+            light.enable();
+            ofEnableLighting();
+            ofEnableDepthTest();
+            material.begin();
+            ofPushMatrix();
+            ofTranslate(-ofGetWidth()*0.5, -ofGetHeight()*0.5);
+        }
+        
+        //    cout << totalVertices << endl;
+        int v = ofMap(playbackSlider, 0, 1, 0, totalVertices);
+        //    cout << v << endl;
+        for(int i = 0; i < shapes.size(); i++){
+            if(v > 0){
+                shapes[i].draw(selectedMode, v, thickness, zDepth);
+            }
+            v -= shapes[i].currentLine.size();
+        }
+        
+        if(selectedMode != "draw"){
+            ofPopMatrix();
+            material.end();
+            ofDisableDepthTest();
+            ofDisableLighting();
+            light.disable();
+            cam.end();
+            
+            ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
+                               , 20, ofGetHeight() - 40);
+            
+        }else{
+            cam.reset();
+        }
+    
+    fbo.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(0);
     
+    ofSetColor(255, 255);
+    ofEnableAlphaBlending();
+    fbo.draw(0, 0);
+
     ofNoFill();
     ofSetColor(255);
     ofSetLineWidth(1);
     ofRect(canvasPos, canvasSize.x, canvasSize.y);
     
-    if(selectedMode != "draw"){
-        cam.begin();
-        light.enable();
-        ofEnableLighting();
-        ofEnableDepthTest();
-        material.begin();
-        ofPushMatrix();
-        ofTranslate(-ofGetWidth()*0.5, -ofGetHeight()*0.5);
-    }
-//    cout << totalVertices << endl;
-    int v = ofMap(playbackSlider, 0, 1, 0, totalVertices);
-    cout << v << endl;
-    for(int i = 0; i < shapes.size(); i++){
-        if(v > 0){
-            shapes[i].draw(selectedMode, v, thickness, zDepth);
-        }
-        v -= shapes[i].currentLine.size();
+    if(selectedMode == "modify"){
+        ofNoFill();
+        ofSetLineWidth(1);
+        ofSetColor(255);
+        ofCircle(mouseX, mouseY, addForceRadius);
     }
     
-    if(selectedMode != "draw"){
-        ofPopMatrix();
-        material.end();
-        ofDisableDepthTest();
-        ofDisableLighting();
-        light.disable();
-        cam.end();
-        
-        ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
-                           , 20, ofGetHeight() - 40);
-
-        if(selectedMode == "modify"){
-            ofNoFill();
-            ofSetLineWidth(1);
-            ofSetColor(255);
-            ofCircle(mouseX, mouseY, addForceRadius);
-        }
-        
-    }else{
-        cam.reset();
+    if(isRecording){
+        img.grabScreen(canvasPos.x, canvasPos.y, canvasSize.x, canvasSize.y);
+        string fileName = "snapshot_"+ofToString(10000+snapCounter)+".png";
+        img.saveImage(fileName);
+        snapCounter++;
     }
+
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if(key == 'g'){
         gui->toggleVisible();
+    }else if(key == ' '){
+        isRecording = (isRecording) ? (false) : (true);
     }
 }
 
@@ -148,8 +175,8 @@ void ofApp::keyPressed(int key){
 void ofApp::mousePressed(int x, int y, int button){
     // Camera is only enabled inside the canvas area
     if(selectedMode != "draw" &&
-       (x < margins[3] || x > ofGetWidth() - margins[1] ||
-       y < margins[0] || y > ofGetHeight() - margins[2])){
+       (x < canvasPos.x || x > canvasPos.x + canvasSize.x ||
+       y < canvasPos.y || y > canvasPos.y + canvasSize.y)){
         
         cam.disableMouseInput();
     }
@@ -166,8 +193,8 @@ void ofApp::mouseDragged(int x, int y, int button){
     // Create new ribbon or add new point
     // Conditions: drawing mode AND mouse within canvas
     if(selectedMode == "draw" &&
-       x > margins[3] && x < ofGetWidth() - margins[1] &&
-       y > margins[0] && y < ofGetHeight() - margins[2]){
+       x > canvasPos.x && x < canvasPos.x + canvasSize.x &&
+       y > canvasPos.y && y < canvasPos.y + canvasSize.y){
         
         // First point
         // Conditions: mouse is moving (compare with previous coordinates)
@@ -193,7 +220,7 @@ void ofApp::mouseDragged(int x, int y, int button){
         if(shapes.size() > 0){
             shapes[shapes.size() - 1].createParticles();
             shapes[shapes.size() - 1].connectSprings();
-            cout << shapes[shapes.size() - 1].myParticles.size();
+//            cout << shapes[shapes.size() - 1].myParticles.size();
         }
     }
 }
@@ -210,9 +237,9 @@ void ofApp::mouseReleased(int x, int y, int button){
     cam.enableMouseInput();    
 }
 
-void ofApp::setCanvas(){
+void ofApp::setCanvas(int _w, int _h){
     canvasPos.set(margins[3], margins[0]);
-    canvasSize.set(ofGetWidth() - margins[1] - margins[3], ofGetHeight() - margins[0] - margins[2]);
+    canvasSize.set(_w - margins[1] - margins[3], _h - margins[0] - margins[2]);
 }
 
 void ofApp::eraseShapes(){
@@ -281,7 +308,7 @@ void ofApp::setGUI(){
     gui->addSlider("N MODIFIER", 0, 200, nModifier);
     gui->addSpacer();
     
-    gui->addToggle("FULLSCREEN", false);
+//    gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
@@ -386,14 +413,13 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(e.getName() == "N MODIFIER"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         nModifier = slider->getScaledValue();
-        
-        
-    // FULLSCREEN -----------------------------------------
-    }else if(e.getName() == "FULLSCREEN"){
-        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        ofSetFullscreen(toggle->getValue());
-        setCanvas();
     }
+        
+//    // FULLSCREEN -----------------------------------------
+//    }else if(e.getName() == "FULLSCREEN"){
+//        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+//        ofSetFullscreen(toggle->getValue());
+//    }
 }
 
 void ofApp::exit(){
@@ -408,7 +434,8 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-    
+//    setCanvas(w, h);
+//    cout << "resized" << endl;
 }
 
 //--------------------------------------------------------------

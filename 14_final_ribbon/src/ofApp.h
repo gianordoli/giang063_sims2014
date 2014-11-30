@@ -28,7 +28,7 @@ public:
     int shapeSmoothing;
     int margins[4];
     ofPoint canvasPos, canvasSize;
-    void setCanvas();
+    void setCanvas(int _w, int _h);
     bool isErasing;
     void eraseShapes();
     
@@ -44,6 +44,10 @@ public:
     int totalVertices;
     float playbackSlider;
     int getTotalVertices();
+    int snapCounter;
+    ofImage	img;
+    bool isRecording;
+    ofFbo fbo;    
     
     
     /*-------------------- 3D ---------------------*/

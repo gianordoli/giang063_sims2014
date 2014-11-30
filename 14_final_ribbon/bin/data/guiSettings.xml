@@ -73,20 +73,15 @@
 <Widget>
     <Kind>4</Kind>
     <Name>AMPLITUDE</Name>
-    <Value>15.655172348</Value>
+    <Value>50.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>FREQUENCY IN SECONDS</Name>
-    <Value>5.300492764</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>N MODIFIER</Name>
-    <Value>35.467979431</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>FULLSCREEN</Name>
-    <Value>1</Value>
+    <Value>100.000000000</Value>
 </Widget>

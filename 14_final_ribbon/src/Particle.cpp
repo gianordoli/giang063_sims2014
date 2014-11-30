@@ -16,13 +16,19 @@ void Particle::setup(float _x, float _y){
 	damping = ofRandom(0.01, 0.05);
 }
 
-// SPRING ------------------------------------------------------------
+// ------------------------------------------------------------
 void Particle::update(){
 	vel += acc;
     vel *= (1.0-damping);
 	pos += vel;
     resetForce();
 }
+
+// ------------------------------------------------------------
+void Particle::draw(){
+    ofCircle(pos, 4);
+}
+
 
 // ------------------------------------------------------------
 void Particle::addRepulsion(ofPoint _posOfForce, float _radius, float _strength){

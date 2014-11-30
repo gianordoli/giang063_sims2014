@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------
  Based on Charlie Whitney's Flow Field.
  Added function to set flow field direction with the mouse.
---------------------------------------------------------------*/
+ --------------------------------------------------------------*/
 
 #include "ofApp.h"
 
@@ -18,6 +18,8 @@ void ofApp::setup(){
         newParticle.setup(ofRandomWidth(), ofRandomHeight());
         myParticles.push_back(newParticle);
     }
+    
+    cam.initGrabber(640, 480);    
 }
 
 //--------------------------------------------------------------
@@ -40,8 +42,8 @@ void ofApp::draw(){
     color2.set(115, 40, 50);
     ofBackgroundGradient(color1, color2, OF_GRADIENT_LINEAR);
     
-//    ofSetColor(255, 50);
-//    myField.draw();
+    //    ofSetColor(255, 50);
+    //    myField.draw();
     
     for( int i = 0; i < myParticles.size(); i++ ){
         myParticles[i].draw();
@@ -50,12 +52,12 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+    
 }
 
 //--------------------------------------------------------------
@@ -66,30 +68,30 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
-
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+void ofApp::dragEvent(ofDragInfo dragInfo){
+    
 }

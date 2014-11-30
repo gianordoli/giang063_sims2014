@@ -9,7 +9,7 @@
 void ofApp::setup(){
     /*----------------- OF SETUP ------------------*/
     ofEnableSmoothing();
-    ofSetFrameRate(60);
+    ofSetFrameRate(30);
     ofSetVerticalSync(true);
     ofSetWindowShape(1280, 720);
     ofToggleFullscreen();
@@ -63,6 +63,7 @@ void ofApp::setup(){
     ofClear(0);
     fbo.end();
     pixels.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR_ALPHA);
+    
 
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
@@ -168,9 +169,8 @@ void ofApp::draw(){
         fbo.readToPixels(pixels);
         
         //save
-        ofSaveImage(pixels,  "snapshot_"+ofToString(10000+snapCounter)+".png", OF_IMAGE_QUALITY_BEST);
+        ofSaveImage(pixels,  "snapshot_"+ofToString(10000+snapCounter)+".png");
         snapCounter++;
-
     }
 
 }

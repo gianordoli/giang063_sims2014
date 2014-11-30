@@ -45,7 +45,6 @@ public:
     float playbackSlider;
     int getTotalVertices();
     int snapCounter;
-    ofImage	img;
     bool isRecording;
     ofFbo fbo;
     ofPixels pixels; 

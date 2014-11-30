@@ -34,7 +34,7 @@ void Ribbon::updatePhysics(string _selectedMode, ofPoint _mousePos, float _radiu
 void Ribbon::updateOscillation(float _amplitude, int _frequencyInSeconds, int _nModifier){
     float amplitude = _amplitude;
     int frequencyInSeconds = _frequencyInSeconds;
-    float frameRate = 60.0f;
+    float frameRate = 30.0f;
     int nModifier = _nModifier;
     
     for (int i = 0; i < myParticles.size(); i++) {

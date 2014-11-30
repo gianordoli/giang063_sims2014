@@ -71,43 +71,54 @@ void FlowField::setPerlin() {
     }
 }
 //
-//void FlowField::update() {
-//    for( int y=0; y<flowList.size(); y++){
-//        for( int x=0; x<flowList[y].size(); x++){
-//            flowList[y][x] *= 0.99;
-//            
-//            if( flowList[y][x].length() < 1.0){
-//                flowList[y][x].normalize();
-//            }
-//            
-//        }
-//    }
-//}
+void FlowField::update() {
+    
+    for( int z=0; z<flowList.size(); z++){
+        vector<vector<ofVec3f> > myPlane = flowList[z];
+        for( int y = 0; y < myPlane.size(); y++){
+            vector<ofVec3f> myList = myPlane[y];
+            for( int x=0; x < myList.size(); x++){
+                flowList[z][y][x] *= 0.99;
+                
+                if( flowList[z][y][x].length() < 1.0){
+                    flowList[z][y][x].normalize();
+                }
+            }
+        }
+    }
+}
 //
-//ofVec2f FlowField::getForceAtPosition(ofVec2f pos) {
-//    float pctX = pos.x / fieldWidth;
-//    float pctY = pos.y / fieldHeight;
-//    
-//    int cols = fieldWidth / resolution;
-//    int rows = fieldHeight / resolution;
-//    
-//    int xVal = ofClamp( pctX * cols, 0, cols-1 );
-//    int yVal = ofClamp( pctY * rows, 0, rows-1 );
-//    
-//    ofVec2f newPos;
-//    newPos.set( flowList[yVal][xVal] );
-//    
-//    return newPos;
-//}
+ofVec3f FlowField::getForceAtPosition(ofVec3f pos) {
+    float pctX = pos.x / fieldWidth;
+    float pctY = pos.y / fieldHeight;
+    float pctZ = pos.z / fieldDepth;
+    
+    int cols = fieldWidth / resolution;
+    int rows = fieldHeight / resolution;
+    int zRows = fieldDepth / resolution;
+    
+    int xVal = ofClamp( pctX * cols, 0, cols-1 );
+    int yVal = ofClamp( pctY * rows, 0, rows-1 );
+    int zVal = ofClamp( pctZ * zRows, 0, zRows-1 );
+    
+    ofVec3f newPos;
+    newPos.set( flowList[zVal][yVal][xVal] );
+    
+    return newPos;
+}
 //
-//void FlowField::addDirection(ofVec2f _dir) {
-//    _dir.normalize();
-//    for( int y=0; y<flowList.size(); y++){
-//        for( int x=0; x<flowList[y].size(); x++){
-//            flowList[y][x] += _dir;
-//        }
-//    }
-//}
+void FlowField::addDirection(ofVec3f _dir) {
+    _dir.normalize();
+    for( int z=0; z<flowList.size(); z++){
+        vector<vector<ofVec3f> > myPlane = flowList[z];
+        for( int y = 0; y < myPlane.size(); y++){
+            vector<ofVec3f> myList = myPlane[y];
+            for( int x=0; x < myList.size(); x++){
+                flowList[z][y][x] += _dir;
+            }
+        }
+    }
+}
 //
 //void FlowField::addForceAtPosition(ofVec2f _force, ofVec2f pos) {
 ////    cout << _force << endl;

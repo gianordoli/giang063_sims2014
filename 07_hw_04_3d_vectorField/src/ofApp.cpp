@@ -9,55 +9,44 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetVerticalSync(true);
-    ofSetFrameRate(60);
-    //    ofSetFullscreen(true);
     
     int size = ofGetWindowWidth()*0.5;
     degrees = 0.0;
     
-    myField.setup( size, size, size, 20 );
-    myField.setPerlin();
+//    for(int i = 0; i < 5; i++){
+//        p.setup(200, 200, 200);
+//        myParticles[i] = p;
+//    }
     
-    myParticles.clear();
-    for(int i = 0; i < NUM_PARTICLES; i++){
-        Particle newParticle;
-        newParticle.setup(ofRandom(ofGetWidth()*0.25, ofGetWidth()*0.75),
-                          ofRandom(ofGetWidth()*0.25, ofGetWidth()*0.75),
-                          ofRandom(ofGetWidth()*0.25, ofGetWidth()*0.75));
-        myParticles.push_back(newParticle);
-    }
+    myField.setup( size*2, size, size, 20 );
+    myField.setPerlin();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-//    for( int i = 0; i < myParticles.size(); i++ ){
-//        ofVec2f forceAtPos = myField.getForceAtPosition(myParticles[i].pos) * 0.005;
-//        myParticles[i].addForce( forceAtPos );
-//        myParticles[i].update();
-//    }
+//    cout << p.pos << endl;
+//    ofVec3f forceAtPos = myField.getForceAtPosition(p.pos) * 0.005;
+//    p.addForce( forceAtPos );
+//    p.update();
     
-//    myField.update();
-
-    
+    myField.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
-    ofBackground(0);
+    ofColor color1, color2;
+    color1.setHsb(180, 255, 200);
+    color2.setHsb(200, 255, 180);
+    ofBackgroundGradient(color1, color2);
     
     ofPushMatrix();
-        ofTranslate(ofGetWidth()*0.25, ofGetWidth()*0.125, -ofGetWidth()*0.25);
+        ofTranslate(0, ofGetWidth()*0.125, -ofGetWidth()*0.25);
         ofRotateY(degrees);
             ofSetColor(255, 50);
             myField.draw();
+    
+//            p.draw();
     ofPopMatrix();
-    
-    
-//    for( int i = 0; i < myParticles.size(); i++ ){
-//        myParticles[i].draw();
-//    }
 }
 
 //--------------------------------------------------------------
@@ -72,7 +61,8 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+//    ofVec3f dir = ofVec3f(x, y, 0.0) - ofVec3f(ofGetPreviousMouseX(), ofGetPreviousMouseY(), 0.0);
+//    myField.addDirection(dir);
 }
 
 //--------------------------------------------------------------

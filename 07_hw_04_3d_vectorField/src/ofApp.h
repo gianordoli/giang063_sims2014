@@ -1,9 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Particle.h"
 #include "FlowField.h"
-#define NUM_PARTICLES 200
+#include "Particle.h"
 
 class ofApp : public ofBaseApp{
     
@@ -23,6 +22,7 @@ public:
     void gotMessage(ofMessage msg);
     
     FlowField myField;
-    vector<Particle> myParticles;
     float degrees;
+//    Particle p;    
+//    Particle myParticles[5];
 };

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0F70D9C71A2BA4D7009467B0 /* FlowField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F70D9C31A2BA4D7009467B0 /* FlowField.cpp */; };
-		0F70D9C81A2BA4D7009467B0 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F70D9C51A2BA4D7009467B0 /* Particle.cpp */; };
+		0FF0394D1A2BBF930031E9D8 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FF0394B1A2BBF930031E9D8 /* Particle.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -63,8 +63,8 @@
 /* Begin PBXFileReference section */
 		0F70D9C31A2BA4D7009467B0 /* FlowField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlowField.cpp; sourceTree = "<group>"; };
 		0F70D9C41A2BA4D7009467B0 /* FlowField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlowField.h; sourceTree = "<group>"; };
-		0F70D9C51A2BA4D7009467B0 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
-		0F70D9C61A2BA4D7009467B0 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		0FF0394B1A2BBF930031E9D8 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
+		0FF0394C1A2BBF930031E9D8 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -191,8 +191,8 @@
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 				0F70D9C31A2BA4D7009467B0 /* FlowField.cpp */,
 				0F70D9C41A2BA4D7009467B0 /* FlowField.h */,
-				0F70D9C51A2BA4D7009467B0 /* Particle.cpp */,
-				0F70D9C61A2BA4D7009467B0 /* Particle.h */,
+				0FF0394B1A2BBF930031E9D8 /* Particle.cpp */,
+				0FF0394C1A2BBF930031E9D8 /* Particle.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -294,7 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F70D9C71A2BA4D7009467B0 /* FlowField.cpp in Sources */,
-				0F70D9C81A2BA4D7009467B0 /* Particle.cpp in Sources */,
+				0FF0394D1A2BBF930031E9D8 /* Particle.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 			);

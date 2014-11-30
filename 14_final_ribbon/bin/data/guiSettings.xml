@@ -13,17 +13,17 @@
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>2.438423634</Value>
+    <Value>3.266009808</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>RIBBON THICKNESS</Name>
-    <Value>10.000000000</Value>
+    <Value>26.827585220</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>Z DEPTH</Name>
-    <Value>-1.000000000</Value>
+    <Value>-4.743842125</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -38,12 +38,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>BLUE</Name>
-    <Value>0.000000000</Value>
+    <Value>0.724137902</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>camera</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -58,7 +58,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>oscillate</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

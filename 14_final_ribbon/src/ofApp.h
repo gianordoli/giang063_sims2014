@@ -39,6 +39,13 @@ public:
     vector<string> modes;
     string selectedMode;
     
+    
+    /*----------------- PLAYBACK -------------------*/
+    int totalVertices;
+    float playbackSlider;
+    int getTotalVertices();
+    
+    
     /*-------------------- 3D ---------------------*/
     ofEasyCam cam;
     ofLight light;
@@ -48,7 +55,13 @@ public:
     float zDepth;
     
     /*----------------- PHYSICS -------------------*/
-    float modifierRadius;
-    float modifierStrength;
+    float addForceRadius;
+    float addForceStrength;
+
     
+    /*----------------- OSCILLATE -------------------*/    
+    float amplitude;
+    int frequencyInSeconds;
+    int nModifier;
+
 };

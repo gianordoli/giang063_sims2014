@@ -12,7 +12,7 @@ void Ribbon::setup(float _x, float _y){
     addPoint(_x, _y);
 }
 
-void Ribbon::update(string _selectedMode, ofPoint _mousePos, float _radius, float _strength){
+void Ribbon::updatePhysics(string _selectedMode, ofPoint _mousePos, float _radius, float _strength){
 
     // Update particle
     for (int i = 0; i < myParticles.size(); i++) {
@@ -31,9 +31,25 @@ void Ribbon::update(string _selectedMode, ofPoint _mousePos, float _radius, floa
 
 }
 
-//------------------------------------------------------------
-void Ribbon::draw(string _selectedMode, float _thickness, float _zDepth){
+void Ribbon::updateOscillation(float _amplitude, int _frequencyInSeconds, int _nModifier){
+    float amplitude = _amplitude;
+    int frequencyInSeconds = _frequencyInSeconds;
+    float frameRate = 60.0f;
+    int nModifier = _nModifier;
+    
+    for (int i = 0; i < myParticles.size(); i++) {
+        
+        float frequency = (ofGetElapsedTimeMillis() + (i * nModifier) )/(frameRate * frequencyInSeconds);
+        float z = sin(frequency) * amplitude;
+        
+        myParticles[i].pos.z = z;
+        currentLine[i] = myParticles[i].pos;
+    }
+}
 
+//------------------------------------------------------------
+void Ribbon::draw(string _selectedMode, float _nVertices, float _thickness, float _zDepth){
+    
     if(_selectedMode == "draw"){
 
         ofNoFill();
@@ -43,10 +59,13 @@ void Ribbon::draw(string _selectedMode, float _thickness, float _zDepth){
         
     }else{
         vector<ofPoint> path = currentLine.getVertices();
+        int n = (_nVertices > path.size()) ? (path.size()) : (_nVertices);
+
         ofMesh mesh;
         mesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
-        for(unsigned int i = 1; i < path.size(); i++){
-            
+        for(unsigned int i = 1; i < n; i++){
+//        for(unsigned int i = 1; i < path.size(); i++){
+        
             //find this point and the next point
             ofVec3f thisPoint = ofPoint(path[i-1].x, path[i-1].y, path[i-1].z + ((i-1) * _zDepth));
             ofVec3f nextPoint = ofPoint(path[i].x, path[i].y, path[i].z + (i * _zDepth));
@@ -169,7 +188,7 @@ void Ribbon::connectSprings(){
         ofPoint dist = myParticles[i].pos - myParticles[i + 1].pos;
         float len = dist.length();
         Spring newSpring;
-        newSpring.set(0.5f, len);
+        newSpring.set(0.9f, len);
         springList.push_back(newSpring);
     }
     

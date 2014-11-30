@@ -7,8 +7,13 @@
 </Canvas>
 <Widget>
     <Kind>4</Kind>
+    <Name>PLAYBACK</Name>
+    <Value>1.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>3.384236336</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -28,12 +33,12 @@
 <Widget>
     <Kind>4</Kind>
     <Name>GREEN</Name>
-    <Value>0.364532024</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>BLUE</Name>
-    <Value>1.000000000</Value>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -43,7 +48,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>draw</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -51,17 +56,37 @@
     <Value>0</Value>
 </Widget>
 <Widget>
-    <Kind>4</Kind>
-    <Name>MODIFIER RADIUS</Name>
-    <Value>151.330047607</Value>
+    <Kind>2</Kind>
+    <Name>oscillate</Name>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>MODIFIER STRENGTH</Name>
-    <Value>0.295073897</Value>
+    <Name>ADD FORCE RADIUS</Name>
+    <Value>10.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>ADD FORCE STRENGTH</Name>
+    <Value>0.250000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>AMPLITUDE</Name>
+    <Value>15.655172348</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>FREQUENCY IN SECONDS</Name>
+    <Value>5.300492764</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>N MODIFIER</Name>
+    <Value>35.467979431</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>FULLSCREEN</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>

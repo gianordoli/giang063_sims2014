@@ -26,8 +26,13 @@ void ofApp::setup(){
     isErasing = false;
     
     /*----------------- PHYSICS -------------------*/
-    modifierRadius = 10;
-    modifierStrength = 0.25;
+    addForceRadius = 10.0;
+    addForceStrength = 0.25;
+
+    /*----------------- OSCILLATE -------------------*/
+    amplitude = 50.0f;
+    frequencyInSeconds = 10.0f;
+    nModifier = 100;
     
     /*-------------------- 3D ---------------------*/
     
@@ -47,10 +52,16 @@ void ofApp::setup(){
     material.setSpecularColor(ofColor(255, 255, 255, 255));
     
     
+    /*----------------- PLAYBACK -------------------*/
+    int totalVertices = 0;
+    playbackSlider = 1;
+    
+    
     /*-------------------- GUI --------------------*/
     modes.push_back("camera");
     modes.push_back("draw");
     modes.push_back("modify");
+    modes.push_back("oscillate");
     selectedMode = "draw";
     setGUI();
 }
@@ -58,9 +69,19 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    totalVertices = getTotalVertices();
+    
     if(shapes.size() > 0 && selectedMode != "draw"){
-        for (int i = 0; i < shapes.size(); i++) {
-            shapes[i].update(selectedMode, ofPoint(mouseX, mouseY), modifierRadius, modifierStrength);
+        
+        if(selectedMode == "camera" || selectedMode == "modify"){
+            for (int i = 0; i < shapes.size(); i++) {
+                shapes[i].updatePhysics(selectedMode, ofPoint(mouseX, mouseY), addForceRadius, addForceStrength);
+            }
+        }
+        if(selectedMode == "oscillate"){
+            for (int i = 0; i < shapes.size(); i++) {
+                shapes[i].updateOscillation(amplitude, frequencyInSeconds ,nModifier);
+            }
         }
     }
 }
@@ -83,9 +104,14 @@ void ofApp::draw(){
         ofPushMatrix();
         ofTranslate(-ofGetWidth()*0.5, -ofGetHeight()*0.5);
     }
-    
+//    cout << totalVertices << endl;
+    int v = ofMap(playbackSlider, 0, 1, 0, totalVertices);
+    cout << v << endl;
     for(int i = 0; i < shapes.size(); i++){
-        shapes[i].draw(selectedMode, thickness, zDepth);
+        if(v > 0){
+            shapes[i].draw(selectedMode, v, thickness, zDepth);
+        }
+        v -= shapes[i].currentLine.size();
     }
     
     if(selectedMode != "draw"){
@@ -103,8 +129,9 @@ void ofApp::draw(){
             ofNoFill();
             ofSetLineWidth(1);
             ofSetColor(255);
-            ofCircle(mouseX, mouseY, modifierRadius);
+            ofCircle(mouseX, mouseY, addForceRadius);
         }
+        
     }else{
         cam.reset();
     }
@@ -166,7 +193,7 @@ void ofApp::mouseDragged(int x, int y, int button){
         if(shapes.size() > 0){
             shapes[shapes.size() - 1].createParticles();
             shapes[shapes.size() - 1].connectSprings();
-            cout << shapes[shapes.size() - 1].myParticles.size();        
+            cout << shapes[shapes.size() - 1].myParticles.size();
         }
     }
 }
@@ -202,12 +229,24 @@ void ofApp::eraseShapes(){
     shapes.clear();    
 }
 
+int ofApp::getTotalVertices(){
+    int total = 0;
+    for (int i = 0; i < shapes.size(); i++) {
+        total += shapes[i].currentLine.size();
+    }
+    return total;
+}
+
 void ofApp::setGUI(){
     
     gui = new ofxUISuperCanvas("SHAPE");
     ofColor guiColor = ofColor(0, 150, 200, 100);
     gui->setColorFill(255);
     gui->setColorBack(guiColor);
+    gui->addSpacer();
+
+    gui->addLabel("VIDEO");
+    gui->addSlider("PLAYBACK", 0, 1, playbackSlider);
     gui->addSpacer();
     
     gui->addLabel("SHAPES");
@@ -231,9 +270,15 @@ void ofApp::setGUI(){
     ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
     gui->addSpacer();
     
-    gui->addLabel("MODIFIER CONTROLS");
-    gui->addSlider("MODIFIER RADIUS", 10.0, 200.0, modifierRadius);
-    gui->addSlider("MODIFIER STRENGTH", 0.1, 1.0, modifierStrength);
+    gui->addLabel("PHYSICS");
+    gui->addSlider("ADD FORCE RADIUS", 10.0, 200.0, addForceRadius);
+    gui->addSlider("ADD FORCE STRENGTH", 0.1, 1.0, addForceStrength);
+    gui->addSpacer();
+    
+    gui->addLabel("OSCILLATION");
+    gui->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
+    gui->addSlider("FREQUENCY IN SECONDS", 1, 10, frequencyInSeconds);
+    gui->addSlider("N MODIFIER", 0, 200, nModifier);
     gui->addSpacer();
     
     gui->addToggle("FULLSCREEN", false);
@@ -247,49 +292,47 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     
     string name = e.widget->getName();
     int kind = e.widget->getKind();
+
+    // VIDEO ------------------------------------------
+    if(name == "PLAYBACK"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        playbackSlider = slider->getScaledValue();
     
     // DRAWING ------------------------------------------
-    if(name == "SMOOTH"){
+    }else if(name == "SMOOTH"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         shapeSmoothing = round(slider->getScaledValue());
-        
-    }else if(name == "APPLY SMOOTHING"){
-        ofxUIButton *button = (ofxUIButton *) e.getButton();
-        if(button->getValue()){
-            
-            // "Freeze" the particles update by changing the current mode to draw
-            selectedMode = "draw";
-            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
-            
-            for (int i = 0; i < shapes.size(); i++) {
-                shapes[i].applySmoothing(shapeSmoothing);
-            }
-        }
-        
-    }else if(name == "RESET SHAPES"){
-        ofxUIButton *button = (ofxUIButton *) e.getButton();
-        if(button->getValue()){
-            
-            // "Freeze" the particles update by changing the current mode to draw
-            selectedMode = "draw";
-            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
-            
-            for (int i = 0; i < shapes.size(); i++) {
-                shapes[i].resetSmoothing();
-            }
-        }
 
-    }else if(name == "ERASE SHAPES"){
-        ofxUIButton *button = (ofxUIButton *) e.getButton();
-        if(button->getValue()){
-            
-            // "Freeze" the particles update by changing the current mode to draw
-            selectedMode = "draw";
-            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
-            
-            eraseShapes();
-        }
+    }else if(name == "APPLY SMOOTHING" || name == "RESET SHAPES" || name == "ERASE SHAPES"){
+
+        // "Freeze" the particles update by changing the current mode to draw
+        selectedMode = "draw";
+        ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
         
+        if(name == "APPLY SMOOTHING"){
+            ofxUIButton *button = (ofxUIButton *) e.getButton();
+            if(button->getValue()){
+                for (int i = 0; i < shapes.size(); i++) {
+                    shapes[i].applySmoothing(shapeSmoothing);
+                }
+            }
+            
+        }else if(name == "RESET SHAPES"){
+            ofxUIButton *button = (ofxUIButton *) e.getButton();
+            if(button->getValue()){
+                    for (int i = 0; i < shapes.size(); i++) {
+                    shapes[i].resetSmoothing();
+                }
+            }
+            
+        }else if(name == "ERASE SHAPES"){
+            ofxUIButton *button = (ofxUIButton *) e.getButton();
+            if(button->getValue()){
+                eraseShapes();
+            }
+            
+    }
+    
     // 3D -----------------------------------------------
     }else if(name == "RIBBON THICKNESS"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
@@ -321,15 +364,29 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         selectedMode = radio->getActiveName();
     
         
-    // MODIFIER -----------------------------------------
-    }else if(name == "MODIFIER RADIUS"){
+    // PHYSICS -----------------------------------------
+    }else if(name == "ADD FORCE RADIUS"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
-        modifierRadius = slider->getScaledValue();
+        addForceRadius = slider->getScaledValue();
         
-    }else if(name == "MODIFIER STRENGTH"){
+    }else if(name == "ADD FORCE STRENGTH"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
-        modifierStrength = slider->getScaledValue();
+        addForceStrength = slider->getScaledValue();
 
+        
+    // OSCILLATION -----------------------------------------
+    }else if(name == "AMPLITUDE"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        amplitude = slider->getScaledValue();
+        
+    }else if(name == "FREQUENCY IN SECONDS"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        frequencyInSeconds = slider->getScaledValue();
+        
+    }else if(e.getName() == "N MODIFIER"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        nModifier = slider->getScaledValue();
+        
         
     // FULLSCREEN -----------------------------------------
     }else if(e.getName() == "FULLSCREEN"){

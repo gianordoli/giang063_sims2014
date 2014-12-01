@@ -4,6 +4,9 @@
 //
 //  Created by Gabriel Gianordoli on 10/5/14.
 //
+//  Ribbon mesh code adapted from:
+//  oF > examples > 3d > cameraRibbonExample, by James George
+//
 //
 
 #include "Ribbon.h"

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		04C82720B149CE576B8CBB06 /* ofxUIToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48CCCEA0C681DE8B4945111B /* ofxUIToggle.cpp */; };
 		084025DA517D8329301FE1B6 /* ofxUIEventArgs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8896AC3BECAAA504E3828F4 /* ofxUIEventArgs.cpp */; };
+		0F05D6EC1A2D07800061732D /* FlowField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F05D6EA1A2D07800061732D /* FlowField.cpp */; };
 		0F16CD391A292724000414C2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F16CD331A292724000414C2 /* Particle.cpp */; };
 		0F16CD3A1A292724000414C2 /* Ribbon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F16CD351A292724000414C2 /* Ribbon.cpp */; };
 		0F16CD3B1A292724000414C2 /* Spring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F16CD371A292724000414C2 /* Spring.cpp */; };
@@ -117,6 +118,8 @@
 		08A9C84B3CA68561BE01FF37 /* ofxUIWidget.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxUIWidget.cpp; path = ../../../addons/ofxUI/src/ofxUIWidget.cpp; sourceTree = SOURCE_ROOT; };
 		0D6768C572B6CA49227C29EA /* ofxUINumberDialer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxUINumberDialer.cpp; path = ../../../addons/ofxUI/src/ofxUINumberDialer.cpp; sourceTree = SOURCE_ROOT; };
 		0DE8B77977749C1835A9472B /* ofxUISlider.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxUISlider.cpp; path = ../../../addons/ofxUI/src/ofxUISlider.cpp; sourceTree = SOURCE_ROOT; };
+		0F05D6EA1A2D07800061732D /* FlowField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlowField.cpp; path = ../../07_hw_02_vectorField_01/src/FlowField.cpp; sourceTree = "<group>"; };
+		0F05D6EB1A2D07800061732D /* FlowField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlowField.h; path = ../../07_hw_02_vectorField_01/src/FlowField.h; sourceTree = "<group>"; };
 		0F16CD331A292724000414C2 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
 		0F16CD341A292724000414C2 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		0F16CD351A292724000414C2 /* Ribbon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ribbon.cpp; sourceTree = "<group>"; };
@@ -486,6 +489,8 @@
 				0F16CD381A292724000414C2 /* Spring.h */,
 				0F16CD331A292724000414C2 /* Particle.cpp */,
 				0F16CD341A292724000414C2 /* Particle.h */,
+				0F05D6EA1A2D07800061732D /* FlowField.cpp */,
+				0F05D6EB1A2D07800061732D /* FlowField.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -610,6 +615,7 @@
 				FBD0CD0AFE3849C14E829CAF /* ofxUIImageSampler.cpp in Sources */,
 				26874B150C8535AEA0F24C8C /* ofxUIImageSlider.cpp in Sources */,
 				FB8AA9FA6535767BE31806BC /* ofxUIImageToggle.cpp in Sources */,
+				0F05D6EC1A2D07800061732D /* FlowField.cpp in Sources */,
 				7C3DC84C9BFCBD2866DB2B6C /* ofxUILabel.cpp in Sources */,
 				FFD1EBFCA24DFB4E4427B4FE /* ofxUILabelButton.cpp in Sources */,
 				C30B3A2A37F8F32EE7318718 /* ofxUILabelToggle.cpp in Sources */,

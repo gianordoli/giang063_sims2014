@@ -1,8 +1,6 @@
 //
-//  FlowField.cpp
-//  VectorField
-//
-//  Created by Charlie Whitney on 10/7/13.
+//  Created by Gabriel Gianordoli
+//  Based on original example by Charlie Whitney
 //
 //
 
@@ -82,98 +80,6 @@ void FlowField::setDirection(ofVec2f _dir) {
     for( int y=0; y<flowList.size(); y++){
         for( int x=0; x<flowList[y].size(); x++){
             flowList[y][x] += _dir;
-        }
-    }
-}
-
-void FlowField::addRepelForce(float x, float y, float radius, float strength) {
-    
-    float pctX = x / fieldWidth;
-    float pctY = y / fieldWidth;
-    
-    int cols = fieldWidth / resolution;
-    int rows = fieldHeight / resolution;
-    
-    int xVal = pctX * cols;
-    int yVal = pctY * rows;
-    
-    
-    ofVec2f mousePos(x, y);
-    
-    for( int y=0; y<flowList.size(); y++){
-        for( int x=0; x<flowList[y].size(); x++){
-            ofVec2f np( x*resolution, y*resolution );
-            
-            if( np.distance(mousePos) < radius ){
-                float pct = 1 - (np.distance(mousePos) / radius);
-                
-                // add strength in the direction it's already moving in
-//                flowList[y][x] += flowList[y][x].normalized() * strength;
-                
-                // add strength away from the mouse
-                ofVec2f dir = (np - mousePos);
-                flowList[y][x] += dir.normalized() * strength;
-            }
-        }
-    }
-}
-
-void FlowField::addAttractForce(float x, float y, float radius, float strength) {
-    
-    float pctX = x / fieldWidth;
-    float pctY = y / fieldWidth;
-    
-    int cols = fieldWidth / resolution;
-    int rows = fieldHeight / resolution;
-    
-    int xVal = pctX * cols;
-    int yVal = pctY * rows;
-    
-    ofVec2f mousePos(x, y);
-    
-    for( int y=0; y<flowList.size(); y++){
-        for( int x=0; x<flowList[y].size(); x++){
-            ofVec2f np( x*resolution, y*resolution );
-            
-            if( np.distance(mousePos) < radius ){
-                float pct = 1 - (np.distance(mousePos) / radius);
-                
-                // add strength against the direction it's already moving in
-//                flowList[y][x] -= flowList[y][x].normalized() * strength;
-                
-                // add strength towards the mouse
-                ofVec2f dir = (np - mousePos);
-                flowList[y][x] -= dir.normalized() * strength;
-            }
-        }
-    }
-}
-
-void FlowField::addCircularForce(float x, float y, float radius, float strength) {
-    
-    float pctX = x / fieldWidth;
-    float pctY = y / fieldWidth;
-    
-    int cols = fieldWidth / resolution;
-    int rows = fieldHeight / resolution;
-    
-    int xVal = pctX * cols;
-    int yVal = pctY * rows;
-    
-    ofVec2f mousePos(x, y);
-    
-    for( int y=0; y<flowList.size(); y++){
-        for( int x=0; x<flowList[y].size(); x++){
-            ofVec2f np( x*resolution, y*resolution );
-            
-            if( np.distance(mousePos) < radius ){
-                float pct = 1 - (np.distance(mousePos) / radius);
-                
-                // add strength towards the mouse
-                ofVec2f dir = (np - mousePos);
-                flowList[y][x].x -= dir.normalized().y * strength;
-                flowList[y][x].y += dir.normalized().x * strength;
-            }
         }
     }
 }

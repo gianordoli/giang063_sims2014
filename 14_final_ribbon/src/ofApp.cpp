@@ -1,7 +1,16 @@
-/*--------------------------------------------------------------
+/* ---------------------------------------------------------------------
+ Created by Gabriel Gianordoli on November, 2014
+ Repo: https://github.com/gianordoli/giang063_sims2014
+ 
+ MFA Design and Technology, Parsons The New School for Design
+ Creative Coding: Simulation Studio, Professor Patricio Gonzalez Vivo
+ Class repo: github.com/patriciogonzalezvivo/sims2014
+ 
  Ribbon mesh code adapted from:
  oF > examples > 3d > cameraRibbonExample, by James George
- --------------------------------------------------------------*/
+ 
+ Spring and Vector Field code adapted from Charlie Whitney's examples
+ ---------------------------------------------------------------------*/
 
 #include "ofApp.h"
 

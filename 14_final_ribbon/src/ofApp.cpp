@@ -72,10 +72,11 @@ void ofApp::setup(){
     
     
     /*----------------- PLAYBACK -------------------*/
-    int totalVertices = 0;
+    totalVertices = 0;
     playbackSlider = 1;
-    int snapCounter = 0;
-    bool isRecoding = false;
+    snapCounter = 0;
+    isRecording = false;
+    isSnapshoting = false;
     fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
     fbo.begin();
     ofClear(0);
@@ -245,7 +246,7 @@ void ofApp::draw(){
     }
     
     // Save frames
-    if(isRecording){
+    if(isRecording || isSnapshoting){
         
         //get the frame buffer pixels
         fbo.readToPixels(pixels);
@@ -253,6 +254,10 @@ void ofApp::draw(){
         //save
         ofSaveImage(pixels,  "snapshot_"+ofToString(10000+snapCounter)+".png");
         snapCounter++;
+        
+        if (isSnapshoting) {
+            isSnapshoting = false;
+        }
     }
 
 }
@@ -261,8 +266,6 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     if(key == 'g'){
         gui->toggleVisible();
-    }else if(key == ' '){
-        isRecording = (isRecording) ? (false) : (true);
     }
 }
 
@@ -377,6 +380,8 @@ void ofApp::setGUI(){
 
     gui->addLabel("VIDEO");
     gui->addSlider("PLAYBACK", 0, 1, playbackSlider);
+    gui->addButton("TAKE SNAPSHOT", false);
+    gui->addToggle("RECORD SEQUENCE", isRecording);
     gui->addSpacer();
     
     gui->addLabel("SHAPES");
@@ -428,6 +433,17 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     if(name == "PLAYBACK"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         playbackSlider = slider->getScaledValue();
+        
+    }else if(name == "TAKE SNAPSHOT"){
+        ofxUIButton *button = (ofxUIButton *) e.getButton();
+        if(button->getValue()){
+            isSnapshoting = true;
+        }
+        
+    }else if(name == "RECORD SEQUENCE"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        isRecording = toggle->getValue();
+        
     
     // DRAWING ------------------------------------------
     }else if(name == "SMOOTH"){

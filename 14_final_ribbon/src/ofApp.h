@@ -47,6 +47,7 @@ public:
     int getTotalVertices();
     int snapCounter;
     bool isRecording;
+    bool isSnapshoting;
     ofFbo fbo;
     ofPixels pixels; 
     

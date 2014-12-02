@@ -50,6 +50,7 @@ void ofApp::setup(){
     amplitude = 50.0f;
     frequencyInSeconds = 10.0f;
     nModifier = 100;
+    isOscillating = false;
     
     
     /*-------------------- 3D ---------------------*/
@@ -87,10 +88,11 @@ void ofApp::setup(){
     modes.push_back("draw");
     modes.push_back("repulsion");
     modes.push_back("attraction");
-    modes.push_back("oscillate");
     modes.push_back("wind");
     selectedMode = "draw";
     setGUI();
+    
+
 }
 
 //--------------------------------------------------------------
@@ -105,37 +107,39 @@ void ofApp::update(){
     // Any physics simulation mode (repulsion, oscillate, wind...)
     // only takes place if te user is not drawing
     if(shapes.size() > 0 && selectedMode != "draw"){
+        
+        // Update physics (doesn't depend on wind)
+        for (int i = 0; i < shapes.size(); i++) {
+            shapes[i].updatePhysics(selectedMode, ofPoint(mouseX, mouseY), addForceRadius, addForceStrength);
+        }
 
         // For every mode besides oscillation, update physics
         // This is because oscillation look weird with the springs simulation
-        if(selectedMode != "oscillate"){
-            
-            // Wind?
-            if(selectedMode == "wind"){
-                // Only changes direction if user is dragging the mouse
-                if (isWinding) {
-                    ofVec2f dir = ofVec2f(mouseX, mouseY) - initMouse;
-                    myField.setDirection(dir);
-                }
-                // Sending the field to each ribbon
-                for (int i = 0; i < shapes.size(); i++) {
-                    shapes[i].updateWind(myField);
-                }
-                // Damping
-                myField.update();
-            }
-            
-            // Update physics (doesn't depend on wind)
-            for (int i = 0; i < shapes.size(); i++) {
-                shapes[i].updatePhysics(selectedMode, ofPoint(mouseX, mouseY), addForceRadius, addForceStrength);
-            }
-            
-        }else{
+        if(isOscillating){
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].updateOscillation(amplitude, frequencyInSeconds ,nModifier);
             }
         }
+            
+        // Wind?
+        if(selectedMode == "wind"){
+            // Only changes direction if user is dragging the mouse
+            if (isWinding) {
+                ofVec2f dir = ofVec2f(mouseX, mouseY) - initMouse;
+                myField.setDirection(dir);
+            }
+            // Sending the field to each ribbon
+            for (int i = 0; i < shapes.size(); i++) {
+                shapes[i].updateWind(myField);
+            }
+            // Damping
+            myField.update();
+        }
     }
+//    else{
+//
+//        }
+//    }
     
     
     // Draw the whole scene in an FBO
@@ -158,7 +162,7 @@ void ofApp::update(){
         //    cout << v << endl;
         for(int i = 0; i < shapes.size(); i++){
             if(nVertices > 0){
-                shapes[i].draw(selectedMode, nVertices, thickness, zDepth);
+                shapes[i].draw(selectedMode, isOscillating, nVertices, thickness, zDepth);
             }
             nVertices -= shapes[i].currentLine.size();
         }
@@ -402,6 +406,7 @@ void ofApp::setGUI(){
     gui->addSpacer();
     
     gui->addLabel("OSCILLATION");
+    gui->addToggle("OSCILLATE", isOscillating);
     gui->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
     gui->addSlider("FREQUENCY IN SECONDS", 1, 10, frequencyInSeconds);
     gui->addSlider("N MODIFIER", 0, 200, nModifier);
@@ -501,6 +506,14 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 
         
     // OSCILLATION -----------------------------------------
+    }else if(e.getName() == "OSCILLATE"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        isOscillating = toggle->getValue();
+        if(selectedMode == "draw"){
+            selectedMode = "camera";
+            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+        }
+
     }else if(name == "AMPLITUDE"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         amplitude = slider->getScaledValue();

@@ -19,21 +19,25 @@ class Ribbon{
 public:
     void setup(float _x, float _y);
     void updatePhysics(string _selectedMode, ofPoint _mousePos, float _radius, float _strength);
-    void updateOscillation(float _amplitude, int _frequencyInSeconds, int _nModifier);
-    void updateWind(FlowField & myField);
-    void draw(string _selectedMode, float _nVertices, float _thickness, float _zDepth);
+    void draw(string _selectedMode, bool _isOscillating, float _nVertices, float _thickness, float _zDepth);
 
     // Drawing
     void addPoint(float _x, float _y);
     void applySmoothing(int _shapeSmoothing);
     void resetSmoothing();
-
+    
     // Particles and Springs
     void eraseParticles();
     void createParticles();
     void eraseSprings();
     void connectSprings();
     
+    // Oscillation
+    void updateOscillation(float _amplitude, int _frequencyInSeconds, int _nModifier);
+    float amplitude, frequencyInSeconds, nModifier;
+    
+    // Wind
+    void updateWind(FlowField & myField);
     
     // ofPolyline is actually ONE line
     // It would be the same as a vector of ofPoint.

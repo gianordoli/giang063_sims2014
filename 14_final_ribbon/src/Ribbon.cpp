@@ -40,19 +40,9 @@ void Ribbon::updatePhysics(string _selectedMode, ofPoint _mousePos, float _radiu
 }
 
 void Ribbon::updateOscillation(float _amplitude, int _frequencyInSeconds, int _nModifier){
-    float amplitude = _amplitude;
-    int frequencyInSeconds = _frequencyInSeconds;
-    float frameRate = 30.0f;
-    int nModifier = _nModifier;
-    
-    for (int i = 0; i < myParticles.size(); i++) {
-        
-        float frequency = (ofGetElapsedTimeMillis() + (i * nModifier) )/(frameRate * frequencyInSeconds);
-        float z = sin(frequency) * amplitude;
-        
-        myParticles[i].pos.z = z;
-        currentLine[i] = myParticles[i].pos;
-    }
+    amplitude = _amplitude;
+    frequencyInSeconds = _frequencyInSeconds;
+    nModifier = _nModifier;
 }
 
 void Ribbon::updateWind(FlowField & myField){
@@ -63,7 +53,7 @@ void Ribbon::updateWind(FlowField & myField){
 }
 
 //------------------------------------------------------------
-void Ribbon::draw(string _selectedMode, float _nVertices, float _thickness, float _zDepth){
+void Ribbon::draw(string _selectedMode, bool _isOscillating, float _nVertices, float _thickness, float _zDepth){
     
     if(_selectedMode == "draw"){
 
@@ -73,6 +63,22 @@ void Ribbon::draw(string _selectedMode, float _nVertices, float _thickness, floa
         currentLine.draw();
         
     }else{
+        
+        // We'll create a 'fake' z for each particle to oscillate.
+        // Fake because we use it to draw, only.
+        // The particles themselves never actually change z
+        vector<float> zOffset;
+        for (int i = 0; i < myParticles.size(); i++) {
+            if(_isOscillating){
+                float frameRate = 30.0f;
+                float frequency = (ofGetElapsedTimeMillis() + (i * nModifier) )/(frameRate * frequencyInSeconds);
+                float z = sin(frequency) * amplitude;
+                zOffset.push_back(z);
+            }else{
+                zOffset.push_back(0.0);
+            }
+        }
+        
         vector<ofPoint> path = currentLine.getVertices();
         int n = (_nVertices > path.size()) ? (path.size()) : (_nVertices);
 
@@ -82,8 +88,12 @@ void Ribbon::draw(string _selectedMode, float _nVertices, float _thickness, floa
 //        for(unsigned int i = 1; i < path.size(); i++){
         
             //find this point and the next point
-            ofVec3f thisPoint = ofPoint(path[i-1].x, path[i-1].y, path[i-1].z + ((i-1) * _zDepth));
-            ofVec3f nextPoint = ofPoint(path[i].x, path[i].y, path[i].z + (i * _zDepth));
+            ofVec3f thisPoint = ofPoint(path[i-1].x,
+                                        path[i-1].y,
+                                        path[i-1].z + ((i-1) * _zDepth) + zOffset[i - 1]);
+            ofVec3f nextPoint = ofPoint(path[i].x,
+                                        path[i].y,
+                                        path[i].z + (i * _zDepth) + zOffset[i]);
             
             //get the direction from one to the next.
             //the ribbon should fan out from this direction

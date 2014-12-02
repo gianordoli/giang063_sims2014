@@ -74,5 +74,6 @@ public:
     float amplitude;
     int frequencyInSeconds;
     int nModifier;
+    bool isOscillating;    
 
 };

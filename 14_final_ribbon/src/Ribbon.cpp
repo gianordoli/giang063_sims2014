@@ -12,7 +12,7 @@
 #include "Ribbon.h"
 
 void Ribbon::setup(float _x, float _y){
-    addPoint(_x, _y);
+    addPoint(_x, _y);    
 }
 
 void Ribbon::updatePhysics(string _selectedMode, ofPoint _mousePos, float _radius, float _strength){

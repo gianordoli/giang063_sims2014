@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "Ribbon.h"
 #include "ofxUI.h"
+#include "FlowField.h"
 
 class ofApp : public ofBaseApp{
     
@@ -59,8 +60,14 @@ public:
     float zDepth;
     
     /*----------------- PHYSICS -------------------*/
+    // Modifier controls
     float addForceRadius;
     float addForceStrength;
+    
+    // "Wind" controls
+    FlowField myField;
+    bool isWinding;
+    ofVec2f initMouse;
 
     
     /*----------------- OSCILLATE -------------------*/    

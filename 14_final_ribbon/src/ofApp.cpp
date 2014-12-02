@@ -3,7 +3,7 @@
  Repo: https://github.com/gianordoli/giang063_sims2014
  
  MFA Design and Technology, Parsons The New School for Design
- Creative Coding: Simulation Studio, Professor Patricio Gonzalez Vivo
+ [Creative Coding: Simulation Studio] Professor Patricio Gonzalez Vivo
  Class repo: github.com/patriciogonzalezvivo/sims2014
  
  Ribbon mesh code adapted from:
@@ -20,7 +20,7 @@ void ofApp::setup(){
     ofEnableSmoothing();
     ofSetFrameRate(30);
     ofSetVerticalSync(true);
-    ofSetWindowShape(1280, 720);
+//    ofSetWindowShape(1280, 720);
     ofToggleFullscreen();
     
     /*------------------ DRAWING ------------------*/
@@ -35,14 +35,22 @@ void ofApp::setup(){
     thickness = 10;
     isErasing = false;
     
+    
     /*----------------- PHYSICS -------------------*/
     addForceRadius = 10.0;
     addForceStrength = 0.25;
-
+    
+    // "Wind" controls
+    myField.setup( ofGetWindowWidth(), ofGetWindowHeight(), 20 );
+//    myField.setPerlin();
+    initMouse.set(0.0, 0.0);
+    
+    
     /*----------------- OSCILLATE -------------------*/
     amplitude = 50.0f;
     frequencyInSeconds = 10.0f;
     nModifier = 100;
+    
     
     /*-------------------- 3D ---------------------*/
     
@@ -78,8 +86,9 @@ void ofApp::setup(){
     modes.push_back("camera");
     modes.push_back("draw");
     modes.push_back("repulsion");
-    modes.push_back("attraction");    
+    modes.push_back("attraction");
     modes.push_back("oscillate");
+    modes.push_back("wind");
     selectedMode = "draw";
     setGUI();
 }
@@ -87,6 +96,8 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    // This variable controls the ribbons drawing playback
+    // (see nVerices inside the FBO below)
     totalVertices = getTotalVertices();
     
     if(shapes.size() > 0 && selectedMode != "draw"){
@@ -95,6 +106,14 @@ void ofApp::update(){
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].updateOscillation(amplitude, frequencyInSeconds ,nModifier);
             }
+
+        }else if(selectedMode == "wind"){
+            if (isWinding) {
+                ofVec2f dir = ofVec2f(mouseX, mouseY) - initMouse;
+                myField.setDirection(dir);
+            }
+            myField.update();
+        
         }else{
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].updatePhysics(selectedMode, ofPoint(mouseX, mouseY), addForceRadius, addForceStrength);
@@ -102,6 +121,8 @@ void ofApp::update(){
         }
     }
     
+    
+    // Draw the whole scene in an FBO
     fbo.begin();
     
         ofClear(0);
@@ -117,13 +138,13 @@ void ofApp::update(){
         }
         
         //    cout << totalVertices << endl;
-        int v = ofMap(playbackSlider, 0, 1, 0, totalVertices);
+        int nVertices = ofMap(playbackSlider, 0, 1, 0, totalVertices);
         //    cout << v << endl;
         for(int i = 0; i < shapes.size(); i++){
-            if(v > 0){
-                shapes[i].draw(selectedMode, v, thickness, zDepth);
+            if(nVertices > 0){
+                shapes[i].draw(selectedMode, nVertices, thickness, zDepth);
             }
-            v -= shapes[i].currentLine.size();
+            nVertices -= shapes[i].currentLine.size();
         }
         
         if(selectedMode != "draw"){
@@ -157,10 +178,13 @@ void ofApp::draw(){
     ofSetLineWidth(1);
     ofRect(canvasPos, canvasSize.x, canvasSize.y);
     
+//    ofSetColor(255, 50);
+    myField.draw();
+    
     if(selectedMode != "draw"){
         // Camera controls
-        ofDrawBitmapString("Drag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
-                           , 20, ofGetHeight() - 40);
+        ofDrawBitmapString("CAMERA CONTROLS\n---------------\nDrag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
+                           , 20, ofGetHeight() - 80);
         
         // Mouse modifier
         if(selectedMode == "repulsion" || selectedMode == "attraction"){
@@ -168,6 +192,26 @@ void ofApp::draw(){
             ofSetLineWidth(1);
             ofSetColor(255);
             ofCircle(mouseX, mouseY, addForceRadius);
+            
+        }else if(selectedMode == "wind" && isWinding){
+            ofPushMatrix();
+                ofTranslate(initMouse.x, initMouse.y);
+            
+                    ofVec2f mouseDir(mouseX - initMouse.x, mouseY - initMouse.y);
+                    ofRotate(ofRadToDeg(atan2(mouseDir.y, mouseDir.x)) - 90);
+            
+                    // Line
+                    ofNoFill();
+                    ofSetLineWidth(1);
+                    ofSetColor(255, 0, 0);
+                    ofLine(0, 0, 0, mouseDir.length());
+            
+                    // Cap
+                    ofTranslate(0, mouseDir.length());
+                    ofFill();
+                    ofTriangle(0, 0, - 5, - 5, 5, - 5);
+            
+            ofPopMatrix();
         }
     }
     
@@ -195,11 +239,16 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    // Camera is only enabled inside the canvas area
-    if(selectedMode != "draw" &&
-       (x < canvasPos.x || x > canvasPos.x + canvasSize.x ||
-       y < canvasPos.y || y > canvasPos.y + canvasSize.y)){
-        
+    // Whatever mode we're at, the camera controls
+    // are only enabled inside the canvas area
+    if((x < canvasPos.x || x > canvasPos.x + canvasSize.x ||
+        y < canvasPos.y || y > canvasPos.y + canvasSize.y)){
+        cam.disableMouseInput();
+
+    // Wind, on the other hand, is only enabled inside
+    }else if(selectedMode == "wind"){
+        isWinding = true;
+        initMouse.set(x, y);
         cam.disableMouseInput();
     }
 }
@@ -212,37 +261,40 @@ void ofApp::mouseMoved(int x, int y ){
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
     
+    /*------------------ DRAWING MODE ------------------*/
+    
     // Create new ribbon or add new point
     // Conditions: drawing mode AND mouse within canvas
-    if(selectedMode == "draw" &&
-       x > canvasPos.x && x < canvasPos.x + canvasSize.x &&
-       y > canvasPos.y && y < canvasPos.y + canvasSize.y){
+    if(selectedMode == "draw"){
+        if(x > canvasPos.x && x < canvasPos.x + canvasSize.x &&
+           y > canvasPos.y && y < canvasPos.y + canvasSize.y){
         
-        // First point
-        // Conditions: mouse is moving (compare with previous coordinates)
-        // The app starts with the mouse at 0, 0
-        if(!isDrawing &&
-           ofGetPreviousMouseX() != x && ofGetPreviousMouseX() != 0 &&
-           ofGetPreviousMouseY() != y && ofGetPreviousMouseY() != 0){
-            cout << "Added new line" << endl;
-            Ribbon newRibbon;
-            newRibbon.setup(ofGetPreviousMouseX(), ofGetPreviousMouseY());
-            newRibbon.addPoint(x, y);
-            shapes.push_back(newRibbon);
-            isDrawing = true; // SWITCH
+            // First point
+            // Conditions: mouse is moving (compare with previous coordinates)
+            // The app starts with the mouse at 0, 0
+            if(!isDrawing &&
+               ofGetPreviousMouseX() != x && ofGetPreviousMouseX() != 0 &&
+               ofGetPreviousMouseY() != y && ofGetPreviousMouseY() != 0){
+                cout << "Added new line" << endl;
+                Ribbon newRibbon;
+                newRibbon.setup(ofGetPreviousMouseX(), ofGetPreviousMouseY());
+                newRibbon.addPoint(x, y);
+                shapes.push_back(newRibbon);
+                isDrawing = true; // SWITCH
 
-        // Current point (if at least one ribbon has been created)
-        }else if(shapes.size() > 0 && isDrawing){
-            shapes[shapes.size() - 1].addPoint(x, y);
-        }
+            // Current point (if at least one ribbon has been created)
+            }else if(shapes.size() > 0 && isDrawing){
+                shapes[shapes.size() - 1].addPoint(x, y);
+            }
 
-    // this stops drawing when the mouse leave the canvas area
-    }else{
-        isDrawing = false;
-        if(shapes.size() > 0){
-            shapes[shapes.size() - 1].createParticles();
-            shapes[shapes.size() - 1].connectSprings();
-//            cout << shapes[shapes.size() - 1].myParticles.size();
+        // this stops drawing when the mouse leave the canvas area
+        }else{
+            isDrawing = false;
+            if(shapes.size() > 0){
+                shapes[shapes.size() - 1].createParticles();
+                shapes[shapes.size() - 1].connectSprings();
+    //            cout << shapes[shapes.size() - 1].myParticles.size();
+            }
         }
     }
 }
@@ -253,9 +305,9 @@ void ofApp::mouseReleased(int x, int y, int button){
         shapes[shapes.size() - 1].createParticles();
         shapes[shapes.size() - 1].connectSprings();
     }
-    // Whatever mode we're in (modify, camera, drawing...), releasing the mouse stops drawing
+    // Whatever mode we're at, releasing the mouse stops:
     isDrawing = false;
-    
+    isWinding = false;
     cam.enableMouseInput();    
 }
 
@@ -328,8 +380,8 @@ void ofApp::setGUI(){
     gui->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
     gui->addSlider("FREQUENCY IN SECONDS", 1, 10, frequencyInSeconds);
     gui->addSlider("N MODIFIER", 0, 200, nModifier);
-    gui->addSpacer();
-    
+
+//    gui->addSpacer();
 //    gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
@@ -451,7 +503,7 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    
+
 }
 
 //--------------------------------------------------------------

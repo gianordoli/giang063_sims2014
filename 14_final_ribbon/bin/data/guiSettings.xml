@@ -13,7 +13,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>SMOOTH</Name>
-    <Value>4.133005142</Value>
+    <Value>1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -23,7 +23,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>Z DEPTH</Name>
-    <Value>-15.226600647</Value>
+    <Value>-1.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -58,7 +58,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>attraction</Name>
-    <Value>1</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -66,9 +66,14 @@
     <Value>0</Value>
 </Widget>
 <Widget>
+    <Kind>2</Kind>
+    <Name>wind</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
     <Kind>4</Kind>
     <Name>ADD FORCE RADIUS</Name>
-    <Value>134.482757568</Value>
+    <Value>10.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

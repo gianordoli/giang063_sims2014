@@ -487,10 +487,10 @@
 				0F16CD361A292724000414C2 /* Ribbon.h */,
 				0F16CD371A292724000414C2 /* Spring.cpp */,
 				0F16CD381A292724000414C2 /* Spring.h */,
-				0F16CD331A292724000414C2 /* Particle.cpp */,
-				0F16CD341A292724000414C2 /* Particle.h */,
 				0F05D6EA1A2D07800061732D /* FlowField.cpp */,
 				0F05D6EB1A2D07800061732D /* FlowField.h */,
+				0F16CD331A292724000414C2 /* Particle.cpp */,
+				0F16CD341A292724000414C2 /* Particle.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

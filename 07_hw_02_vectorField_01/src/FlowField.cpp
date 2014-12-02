@@ -23,8 +23,33 @@ void FlowField::setup( int width, int height, int res ) {
         flowList.push_back( myList );
         
         for( int x=0; x<cols; x++){
-            ofVec2f dir(0, 0);
+            ofVec2f dir(0.0, 0.0);
             flowList[y].push_back( dir );
+        }
+    }
+    
+    cout << "Created vector field with " << cols*rows << " points." << endl;
+}
+
+void FlowField::update() {
+    for( int y=0; y<flowList.size(); y++){
+        for( int x=0; x<flowList[y].size(); x++){
+            flowList[y][x] *= 0.99;
+            
+            if( flowList[y][x].length() < 1.0){
+                flowList[y][x].normalize();
+            }
+            
+        }
+    }
+}
+
+void FlowField::draw() {
+    for( int y=0; y<flowList.size(); y++){
+        for( int x=0; x<flowList[y].size(); x++){
+            ofVec2f np( x*resolution, y*resolution );
+            drawVectorAt( flowList[y][x], np, flowList[y][x].length() );
+            ofVec2f tmpPos(x*resolution, y*resolution);
         }
     }
 }
@@ -46,15 +71,11 @@ void FlowField::setPerlin() {
     }
 }
 
-void FlowField::update() {
+void FlowField::setDirection(ofVec2f _dir) {
+    _dir.normalize();
     for( int y=0; y<flowList.size(); y++){
         for( int x=0; x<flowList[y].size(); x++){
-            flowList[y][x] *= 0.99;
-            
-            if( flowList[y][x].length() < 1.0){
-                flowList[y][x].normalize();
-            }
-            
+            flowList[y][x] += _dir;
         }
     }
 }
@@ -73,26 +94,6 @@ ofVec2f FlowField::getForceAtPosition(ofVec2f pos) {
     newPos.set( flowList[yVal][xVal] );
     
     return newPos;
-}
-
-void FlowField::setDirection(ofVec2f _dir) {
-    _dir.normalize();
-    for( int y=0; y<flowList.size(); y++){
-        for( int x=0; x<flowList[y].size(); x++){
-            flowList[y][x] += _dir;
-        }
-    }
-}
-
-void FlowField::draw() {
-    for( int y=0; y<flowList.size(); y++){
-        for( int x=0; x<flowList[y].size(); x++){
-            ofVec2f np( x*resolution, y*resolution );
-            drawVectorAt( flowList[y][x], np, flowList[y][x].length() );
-            
-            ofVec2f tmpPos(x*resolution, y*resolution);
-        }
-    }
 }
 
 void FlowField::drawVectorAt( const ofVec2f &vec, const ofVec2f &pos, const float &strength ) {

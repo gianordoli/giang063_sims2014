@@ -55,6 +55,13 @@ void Ribbon::updateOscillation(float _amplitude, int _frequencyInSeconds, int _n
     }
 }
 
+void Ribbon::updateWind(FlowField & myField){
+    for (int i = 0; i < myParticles.size(); i++) {
+        ofVec2f forceAtPos = myField.getForceAtPosition(myParticles[i].pos) * 0.005;
+        myParticles[i].addForce( forceAtPos );
+    }
+}
+
 //------------------------------------------------------------
 void Ribbon::draw(string _selectedMode, float _nVertices, float _thickness, float _zDepth){
     
@@ -196,7 +203,7 @@ void Ribbon::connectSprings(){
         ofPoint dist = myParticles[i].pos - myParticles[i + 1].pos;
         float len = dist.length();
         Spring newSpring;
-        newSpring.set(0.9f, len);
+        newSpring.set(0.8f, len);
         springList.push_back(newSpring);
     }
     

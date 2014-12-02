@@ -98,25 +98,41 @@ void ofApp::update(){
     
     // This variable controls the ribbons drawing playback
     // (see nVerices inside the FBO below)
+    // Because the number of vertices might change inside the Ribbon class,
+    // we need to keep track of the total during every frame.
     totalVertices = getTotalVertices();
     
+    // Any physics simulation mode (repulsion, oscillate, wind...)
+    // only takes place if te user is not drawing
     if(shapes.size() > 0 && selectedMode != "draw"){
 
-        if(selectedMode == "oscillate"){
-            for (int i = 0; i < shapes.size(); i++) {
-                shapes[i].updateOscillation(amplitude, frequencyInSeconds ,nModifier);
+        // For every mode besides oscillation, update physics
+        // This is because oscillation look weird with the springs simulation
+        if(selectedMode != "oscillate"){
+            
+            // Wind?
+            if(selectedMode == "wind"){
+                // Only changes direction if user is dragging the mouse
+                if (isWinding) {
+                    ofVec2f dir = ofVec2f(mouseX, mouseY) - initMouse;
+                    myField.setDirection(dir);
+                }
+                // Sending the field to each ribbon
+                for (int i = 0; i < shapes.size(); i++) {
+                    shapes[i].updateWind(myField);
+                }
+                // Damping
+                myField.update();
             }
-
-        }else if(selectedMode == "wind"){
-            if (isWinding) {
-                ofVec2f dir = ofVec2f(mouseX, mouseY) - initMouse;
-                myField.setDirection(dir);
-            }
-            myField.update();
-        
-        }else{
+            
+            // Update physics (doesn't depend on wind)
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].updatePhysics(selectedMode, ofPoint(mouseX, mouseY), addForceRadius, addForceStrength);
+            }
+            
+        }else{
+            for (int i = 0; i < shapes.size(); i++) {
+                shapes[i].updateOscillation(amplitude, frequencyInSeconds ,nModifier);
             }
         }
     }
@@ -179,39 +195,48 @@ void ofApp::draw(){
     ofRect(canvasPos, canvasSize.x, canvasSize.y);
     
 //    ofSetColor(255, 50);
-    myField.draw();
+//    myField.draw();
     
     if(selectedMode != "draw"){
-        // Camera controls
-        ofDrawBitmapString("CAMERA CONTROLS\n---------------\nDrag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan"
-                           , 20, ofGetHeight() - 80);
         
-        // Mouse modifier
-        if(selectedMode == "repulsion" || selectedMode == "attraction"){
-            ofNoFill();
-            ofSetLineWidth(1);
-            ofSetColor(255);
-            ofCircle(mouseX, mouseY, addForceRadius);
+        // Vector Field ("wind")
+        if(selectedMode == "wind"){
             
-        }else if(selectedMode == "wind" && isWinding){
-            ofPushMatrix();
-                ofTranslate(initMouse.x, initMouse.y);
+            ofDrawBitmapString("WIND CONTROLS\n---------------\nClick and drag to set\nspeed and direction", 20, ofGetHeight() - 80);
             
+            if(isWinding){
+                ofPushMatrix();
+                    ofTranslate(initMouse.x, initMouse.y);
+                    
                     ofVec2f mouseDir(mouseX - initMouse.x, mouseY - initMouse.y);
                     ofRotate(ofRadToDeg(atan2(mouseDir.y, mouseDir.x)) - 90);
+                    
+                        // Line
+                        ofNoFill();
+                        ofSetLineWidth(1);
+                        ofSetColor(255);
+                        ofLine(0, 0, 0, mouseDir.length());
+                        
+                        // Cap
+                        ofTranslate(0, mouseDir.length());
+                            ofFill();
+                            ofTriangle(0, 0, - 5, - 5, 5, - 5);
+                
+                ofPopMatrix();
+            }
             
-                    // Line
-                    ofNoFill();
-                    ofSetLineWidth(1);
-                    ofSetColor(255, 0, 0);
-                    ofLine(0, 0, 0, mouseDir.length());
+        }else{
             
-                    // Cap
-                    ofTranslate(0, mouseDir.length());
-                    ofFill();
-                    ofTriangle(0, 0, - 5, - 5, 5, - 5);
+            // Camera controls
+            ofDrawBitmapString("CAMERA CONTROLS\n---------------\nDrag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan", 20, ofGetHeight() - 80);
             
-            ofPopMatrix();
+            // Mouse modifier
+            if(selectedMode == "repulsion" || selectedMode == "attraction"){
+                ofNoFill();
+                ofSetLineWidth(1);
+                ofSetColor(255);
+                ofCircle(mouseX, mouseY, addForceRadius);
+            }
         }
     }
     
@@ -371,7 +396,7 @@ void ofApp::setGUI(){
     ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
     gui->addSpacer();
     
-    gui->addLabel("PHYSICS");
+    gui->addLabel("REPULSION/ATTRACTION");
     gui->addSlider("ADD FORCE RADIUS", 10.0, 200.0, addForceRadius);
     gui->addSlider("ADD FORCE STRENGTH", 0.1, 1.0, addForceStrength);
     gui->addSpacer();

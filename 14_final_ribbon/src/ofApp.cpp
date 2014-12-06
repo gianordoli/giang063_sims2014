@@ -355,7 +355,7 @@ void ofApp::setCanvas(int _w, int _h){
 void ofApp::eraseShapes(){
     // "Freeze" the particles update by changing the current mode to draw
     selectedMode = "draw";
-    ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+    ((ofxUIRadio *)gui->getWidget("MODE"))->activateToggle(selectedMode);
     
     while(shapes.size() > 0){
         int i = shapes.size() - 1;
@@ -404,7 +404,6 @@ void ofApp::setGUI(){
     gui->addLabel("REPULSION/ATTRACTION");
     gui->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
     gui->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
-    gui->addSpacer();
     
     gui->addLabel("OSCILLATION");
     gui->addToggle("OSCILLATE", isOscillating);
@@ -418,8 +417,8 @@ void ofApp::setGUI(){
     gui->addToggle("RECORD SEQUENCE", isRecording);
     gui->addSpacer();
 
-    gui->addSpacer();
-    gui->addToggle("FULLSCREEN", false);
+//    gui->addSpacer();
+//    gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
@@ -443,7 +442,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 
         // "Freeze" the particles update by changing the current mode to draw
         selectedMode = "draw";
-        ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+        ((ofxUIRadio *)gui->getWidget("MODE"))->activateToggle(selectedMode);
         
         if(name == "APPLY SMOOTHING"){
             ofxUIButton *button = (ofxUIButton *) e.getButton();
@@ -462,12 +461,12 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             }
             
         }else if(name == "ERASE SHAPES"){
-            ofxUIButton *button = (ofxUIButton *) e.getButton();
-            if(button->getValue()){
-                eraseShapes();
-            }
+//            ofxUIButton *button = (ofxUIButton *) e.getButton();
+//            if(button->getValue()){
+//                eraseShapes();
+//            }
         }
-            
+        
     // COLOR -----------------------------------------------
     }else if(name == "RED"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;

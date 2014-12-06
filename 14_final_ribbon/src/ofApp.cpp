@@ -93,7 +93,6 @@ void ofApp::setup(){
     selectedMode = "draw";
     setGUI();
     
-
 }
 
 //--------------------------------------------------------------
@@ -163,7 +162,7 @@ void ofApp::update(){
         //    cout << v << endl;
         for(int i = 0; i < shapes.size(); i++){
             if(nVertices > 0){
-                shapes[i].draw(selectedMode, isOscillating, nVertices, thickness, zDepth);
+                shapes[i].draw(selectedMode, isOscillating, nVertices, thickness, zDepth, lightColor);
             }
             nVertices -= shapes[i].currentLine.size();
         }

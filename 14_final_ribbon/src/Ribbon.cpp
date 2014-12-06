@@ -12,7 +12,7 @@
 #include "Ribbon.h"
 
 void Ribbon::setup(float _x, float _y){
-    addPoint(_x, _y);    
+    addPoint(_x, _y);
 }
 
 void Ribbon::updatePhysics(string _selectedMode, ofPoint _mousePos, float _radius, float _strength){
@@ -53,7 +53,7 @@ void Ribbon::updateWind(FlowField & myField){
 }
 
 //------------------------------------------------------------
-void Ribbon::draw(string _selectedMode, bool _isOscillating, float _nVertices, float _thickness, float _zDepth){
+void Ribbon::draw(string _selectedMode, bool _isOscillating, float _nVertices, float _thickness, float _zDepth, ofFloatColor _color){
     
     vector<ofPoint> path = currentLine.getVertices();
     int nVertices = (_nVertices > path.size()) ? (path.size()) : (_nVertices);
@@ -62,7 +62,7 @@ void Ribbon::draw(string _selectedMode, bool _isOscillating, float _nVertices, f
 
         ofNoFill();
         ofSetLineWidth(5);
-        ofSetColor(255);
+        ofSetColor(_color);
 
         for (int i = 0; i < nVertices - 1; i++) {
             ofLine(path[i], path[i+1]);

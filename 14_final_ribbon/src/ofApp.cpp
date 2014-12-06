@@ -195,7 +195,12 @@ void ofApp::draw(){
 
     // Canvas
     ofNoFill();
-    ofSetColor(255);
+    if(isRecording){
+        int flashRed = powf(1 - (sin(ofGetElapsedTimef()*5)*.5 + .5), 2) * 255;
+        ofSetColor(255, 255-flashRed, 255-flashRed);
+    }else{
+        ofSetColor(255);
+    }
     ofSetLineWidth(1);
     ofRect(canvasPos, canvasSize.x, canvasSize.y);
     
@@ -252,7 +257,7 @@ void ofApp::draw(){
         fbo.readToPixels(pixels);
         
         //save
-        ofSaveImage(pixels,  "snapshot_"+ofToString(10000+snapCounter)+".png");
+        ofSaveImage(pixels,  "snapshot_"+ofToString(10000+snapCounter)+".tif");
         snapCounter++;
         
         if (isSnapshoting) {
@@ -372,7 +377,7 @@ int ofApp::getTotalVertices(){
 
 void ofApp::setGUI(){
     
-    gui = new ofxUISuperCanvas("SHAPE");
+    gui = new ofxUISuperCanvas("CONTROLS");
     ofColor guiColor = ofColor(0, 150, 200, 100);
     gui->setColorFill(255);
     gui->setColorBack(guiColor);

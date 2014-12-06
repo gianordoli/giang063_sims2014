@@ -22,3 +22,8 @@ Prototypes:
 * [Prototype 1](https://vimeo.com/108160517) 
 
 The previous version developed for the midterm can be found [here](../06_midterm).
+
+
+## To do
+
+* Create separate GUIs for functions dependent on modes — ATTRACTION/REPULSION, OSCILLATE, etc.

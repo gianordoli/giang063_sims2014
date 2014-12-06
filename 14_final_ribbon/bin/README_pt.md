@@ -1,8 +1,45 @@
-# Ferramentas
+# Ribbons 0.1
 
-## MODES
+Mac OSX 10.6 ou superior
 
-Essas opções alteram a função do mouse e o modo de visualização do desneho. O aplicativo inicia com **DRAW** como default. Exceto por esse modo, todos os outros alteram a visualização para 3D.
+---
+
+Oi! :)
+
+Obrigado por baixar e testar **Ribbons**! Essa ferramenta ainda está em teste, então você pode acabar encontrando bugs pelo caminho... Seria ótimo se você updesse reportá-los pra mim através do email gianordoligabriel@gmail.com. Não deixe de enviar também feedback sobre outras áreas que podem melhorar, como:
+
+* nome das ferramentas
+* interface
+* efeitos
+* ...?
+
+Abs,
+
+Gabriel
+
+
+## Instalação
+
+Simplesmente execute o arquivo *ribbons*, que veio junto nesse zip. Talvez você veja esse alerta: 
+
+![Unindentified Developer 1](README_img/unindentified_developer_0.png)
+
+Desde o Mac OSX 10.8 (Mountain Lion), aplicativos que não foram baixados pela App Store são bloqueados por default. Para executar o app, pressione Control e clique nele:
+
+![Unindentified Developer](README_img/unindentified_developer_1.png)
+
+Mais um alerta deve aparecer. Simplesmente clique em *Open*.
+
+![Unindentified Developer](README_img/unindentified_developer_2.png)
+
+Tudo isso que eu disse pode ser confirmado pela própria Apple [aqui](http://support.apple.com/kb/ph11436)!
+
+
+## Ferramentas
+
+### MODES
+
+Essas opções alteram a função do mouse e o modo de visualização do desenho. O aplicativo inicia com **DRAW** como default. Exceto por esse modo, todos os outros alteram a visualização para 3D.
 
 * **DRAW**: Desenho livre. Formas são exibidas como vetor simples, sem efeitos 3D.
 
@@ -19,7 +56,7 @@ Essas opções alteram a função do mouse e o modo de visualização do desneho
 * **WIND**: Faz o mouse atrair as formas desenhadas. A área e força de repulsão podem ser controladas com as opções **FORCE RADIUS** e **FORCE STRENGTH**.
 
 
-## SHAPES
+### SHAPES
 
 * **APPLY SMOOTHING**: Suaviza as curvas do desenho. Você pode desfazer essa ação usando o botão **RESET SHAPES**.
 
@@ -28,7 +65,7 @@ Essas opções alteram a função do mouse e o modo de visualização do desneho
 * **ERASE SHAPES**: Apaga todas as formas desenhadas. Essa ação não pode ser desfeita.
 
 
-## 3D
+### 3D
 
 As alterações desse menu só são visíveis quando as formas estão sendo visualizadas em 3D — ou seja, quando
 
@@ -39,7 +76,7 @@ As alterações desse menu só são visíveis quando as formas estão sendo visu
 * **COLOR**: Altera a mistura de **RED**, **GREEN** e **BLUE** das formas.
 
 
-## REPULSION/ATTRACTION
+### REPULSION/ATTRACTION
 
 Essas opções são habilitadas apenas nos modos **REPULSION** e **ATRACTION**.
 
@@ -48,7 +85,7 @@ Essas opções são habilitadas apenas nos modos **REPULSION** e **ATRACTION**.
 * **FORCE STRENGTH**: Altera a intensidade da força aplicada.
 
 
-## OSCILLATION
+### OSCILLATION
 
 Essas opções não são visíveis no modo **DRAW**.
 
@@ -62,7 +99,7 @@ Essas opções não são visíveis no modo **DRAW**.
 
 
 
-## VIDEO
+### VIDEO
 
 * **PLAYBACK**: Controla o quanto do desenho é exibido Desenha a forma linha a linha. Só funciona quando fora do modo **DRAW**.
 

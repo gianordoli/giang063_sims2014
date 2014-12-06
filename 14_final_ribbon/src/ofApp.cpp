@@ -25,7 +25,7 @@ void ofApp::setup(){
     
     /*------------------ DRAWING ------------------*/
     isDrawing = false;
-    shapeSmoothing = 1;
+
     // Margins: top, right, bottom, left
     margins[0] = 20;
     margins[1] = 20;
@@ -390,7 +390,6 @@ void ofApp::setGUI(){
     gui->addSpacer();
     
     gui->addLabel("SHAPES");
-    gui->addSlider("SMOOTH", 1, 5, shapeSmoothing);
     gui->addButton("APPLY SMOOTHING", false);
     gui->addButton("RESET SHAPES", false);
     gui->addButton("ERASE SHAPES", false);
@@ -451,9 +450,6 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         
     
     // DRAWING ------------------------------------------
-    }else if(name == "SMOOTH"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        shapeSmoothing = round(slider->getScaledValue());
 
     }else if(name == "APPLY SMOOTHING" || name == "RESET SHAPES" || name == "ERASE SHAPES"){
 
@@ -465,7 +461,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             ofxUIButton *button = (ofxUIButton *) e.getButton();
             if(button->getValue()){
                 for (int i = 0; i < shapes.size(); i++) {
-                    shapes[i].applySmoothing(shapeSmoothing);
+                    shapes[i].applySmoothing();
                 }
             }
             

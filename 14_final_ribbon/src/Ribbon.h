@@ -23,7 +23,7 @@ public:
 
     // Drawing
     void addPoint(float _x, float _y);
-    void applySmoothing(int _shapeSmoothing);
+    void applySmoothing();
     void resetSmoothing();
     
     // Particles and Springs

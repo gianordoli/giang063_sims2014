@@ -13,12 +13,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>RECORD SEQUENCE</Name>
-    <Value>1</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>SMOOTH</Name>
-    <Value>1.000000000</Value>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>

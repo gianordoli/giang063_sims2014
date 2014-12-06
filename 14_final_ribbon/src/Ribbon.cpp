@@ -55,12 +55,18 @@ void Ribbon::updateWind(FlowField & myField){
 //------------------------------------------------------------
 void Ribbon::draw(string _selectedMode, bool _isOscillating, float _nVertices, float _thickness, float _zDepth){
     
+    vector<ofPoint> path = currentLine.getVertices();
+    int nVertices = (_nVertices > path.size()) ? (path.size()) : (_nVertices);
+    
     if(_selectedMode == "draw"){
 
         ofNoFill();
         ofSetLineWidth(5);
         ofSetColor(255);
-        currentLine.draw();
+
+        for (int i = 0; i < nVertices - 1; i++) {
+            ofLine(path[i], path[i+1]);
+        }
         
     }else{
         
@@ -78,13 +84,10 @@ void Ribbon::draw(string _selectedMode, bool _isOscillating, float _nVertices, f
                 zOffset.push_back(0.0);
             }
         }
-        
-        vector<ofPoint> path = currentLine.getVertices();
-        int n = (_nVertices > path.size()) ? (path.size()) : (_nVertices);
 
         ofMesh mesh;
         mesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
-        for(unsigned int i = 1; i < n; i++){
+        for(unsigned int i = 1; i < nVertices; i++){
 //        for(unsigned int i = 1; i < path.size(); i++){
         
             //find this point and the next point
@@ -133,9 +136,10 @@ void Ribbon::draw(string _selectedMode, bool _isOscillating, float _nVertices, f
 }
 
 //------------------------------------------------------------
-void Ribbon::applySmoothing(int _shapeSmoothing){
+void Ribbon::applySmoothing(){
     // Update line
-    currentLine = currentLine.getSmoothed(_shapeSmoothing, 0);
+//    currentLine = currentLine.getSmoothed(_shapeSmoothing, 0);
+    currentLine = currentLine.getSmoothed(2, 0);
     
     // Erase and update particles vector
     createParticles();

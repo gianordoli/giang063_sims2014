@@ -381,45 +381,46 @@ void ofApp::setGUI(){
     gui->setColorFill(255);
     gui->setColorBack(guiColor);
     gui->addSpacer();
-    
-    gui->addLabel("MODES");
-    gui->addRadio("MODE", modes, OFX_UI_ORIENTATION_VERTICAL);
-    ((ofxUIRadio *)gui->getWidget("MODE"))->activateToggle(selectedMode);
-    gui->addSpacer();
 
-    gui->addLabel("SHAPES");
-    gui->addButton("APPLY SMOOTHING", false);
-    gui->addButton("RESET SHAPES", false);
-    gui->addButton("ERASE SHAPES", false);
-    gui->addSlider("RED", 0.0, 1.0, lightColor.r);
-    gui->addSlider("GREEN", 0.0, 1.0, lightColor.g);
-    gui->addSlider("BLUE", 0.0, 1.0, lightColor.b);
-    gui->addSpacer();
-
-    gui->addLabel("3D");
-    gui->addSlider("THICKNESS", 2.0, 50.0, thickness);
-    gui->addSlider("DEPTH", -1.0, -20.0, zDepth);
-    gui->addSpacer();
-    
-    gui->addLabel("REPULSION/ATTRACTION");
-    gui->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
-    gui->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
-    gui->addSpacer();
-    
-    gui->addLabel("OSCILLATION");
-    gui->addToggle("OSCILLATE", isOscillating);
-    gui->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
-    gui->addSlider("FREQUENCY", 1, 10, frequencyInSeconds);
-    gui->addSlider("LENGTH", 0, 200, nModifier);
-    
     gui->addLabel("VIDEO");
     gui->addSlider("PLAYBACK", 0, 1, playbackSlider);
     gui->addButton("TAKE SNAPSHOT", false);
     gui->addToggle("RECORD SEQUENCE", isRecording);
     gui->addSpacer();
-
+    
+    gui->addLabel("SHAPES");
+    gui->addButton("APPLY SMOOTHING", false);
+    gui->addButton("RESET SHAPES", false);
+    gui->addButton("ERASE SHAPES", false);
     gui->addSpacer();
-    gui->addToggle("FULLSCREEN", false);
+    
+    gui->addLabel("3D CONTROLS");
+    gui->addSlider("RIBBON THICKNESS", 2.0, 50.0, thickness);
+    gui->addSlider("Z DEPTH", -1.0, -20.0, zDepth);
+    gui->addLabel("LIGHT COLOR");
+    gui->addSlider("RED", 0.0, 1.0, lightColor.r);
+    gui->addSlider("GREEN", 0.0, 1.0, lightColor.g);
+    gui->addSlider("BLUE", 0.0, 1.0, lightColor.b);
+    gui->addSpacer();
+    
+    gui->addLabel("CURSOR MODES");
+    gui->addRadio("CURSOR MODE", modes, OFX_UI_ORIENTATION_VERTICAL);
+    ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+    gui->addSpacer();
+    
+    gui->addLabel("REPULSION/ATTRACTION");
+    gui->addSlider("ADD FORCE RADIUS", 10.0, 200.0, addForceRadius);
+    gui->addSlider("ADD FORCE STRENGTH", 0.1, 1.0, addForceStrength);
+    gui->addSpacer();
+    
+    gui->addLabel("OSCILLATION");
+    gui->addToggle("OSCILLATE", isOscillating);
+    gui->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
+    gui->addSlider("FREQUENCY IN SECONDS", 1, 10, frequencyInSeconds);
+    gui->addSlider("N MODIFIER", 0, 200, nModifier);
+
+//    gui->addSpacer();
+//    gui->addToggle("FULLSCREEN", false);
     
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
@@ -430,11 +431,21 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     
     string name = e.widget->getName();
     int kind = e.widget->getKind();
-    
-    // CURSOR -------------------------------------------
-    if(name == "MODE"){
-        ofxUIRadio *radio = (ofxUIRadio *) e.widget;
-        selectedMode = radio->getActiveName();
+
+    // VIDEO ------------------------------------------
+    if(name == "PLAYBACK"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        playbackSlider = slider->getScaledValue();
+        
+    }else if(name == "TAKE SNAPSHOT"){
+        ofxUIButton *button = (ofxUIButton *) e.getButton();
+        if(button->getValue()){
+            isSnapshoting = true;
+        }
+        
+    }else if(name == "RECORD SEQUENCE"){
+        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
+        isRecording = toggle->getValue();
         
     
     // DRAWING ------------------------------------------
@@ -466,14 +477,22 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             if(button->getValue()){
                 eraseShapes();
             }
-        }
             
-    // COLOR -----------------------------------------------
+    }
+    
+    // 3D -----------------------------------------------
+    }else if(name == "RIBBON THICKNESS"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        thickness = slider->getScaledValue();
+        
+    }else if(name == "Z DEPTH"){
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        zDepth = slider->getScaledValue();
+        
     }else if(name == "RED"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         lightColor.r = slider->getScaledValue();
         light.setDiffuseColor(lightColor);
-        cout << "changed red" << endl;
         
     }else if(name == "GREEN"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
@@ -484,26 +503,20 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         lightColor.b = slider->getScaledValue();
         light.setDiffuseColor(lightColor);
-            
         
-    
-    // 3D -----------------------------------------------
-    }else if(name == "THICKNESS"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        thickness = slider->getScaledValue();
         
-    }else if(name == "DEPTH"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        zDepth = slider->getScaledValue();
-        
+    // CURSOR -------------------------------------------
+    }else if(name == "CURSOR MODE"){
+        ofxUIRadio *radio = (ofxUIRadio *) e.widget;
+        selectedMode = radio->getActiveName();
     
         
     // PHYSICS -----------------------------------------
-    }else if(name == "FORCE RADIUS"){
+    }else if(name == "ADD FORCE RADIUS"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         addForceRadius = slider->getScaledValue();
         
-    }else if(name == "FORCE STRENGTH"){
+    }else if(name == "ADD FORCE STRENGTH"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         addForceStrength = slider->getScaledValue();
 
@@ -521,29 +534,13 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         amplitude = slider->getScaledValue();
         
-    }else if(name == "FREQUENCY"){
+    }else if(name == "FREQUENCY IN SECONDS"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         frequencyInSeconds = slider->getScaledValue();
         
-    }else if(e.getName() == "LENGTH"){
+    }else if(e.getName() == "N MODIFIER"){
         ofxUISlider *slider = (ofxUISlider *) e.widget;
         nModifier = slider->getScaledValue();
-
-        
-    // VIDEO ------------------------------------------
-    }else if(name == "PLAYBACK"){
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        playbackSlider = slider->getScaledValue();
-        
-    }else if(name == "TAKE SNAPSHOT"){
-        ofxUIButton *button = (ofxUIButton *) e.getButton();
-        if(button->getValue()){
-            isSnapshoting = true;
-        }
-        
-    }else if(name == "RECORD SEQUENCE"){
-        ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        isRecording = toggle->getValue();
     }
         
 //    // FULLSCREEN -----------------------------------------

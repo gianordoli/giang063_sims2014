@@ -12,9 +12,9 @@
 
 class FlowField {
   public:
-    FlowField();
+    FlowField(int width, int height, int res);
     
-    void setup( int width, int height, int res );
+    void setup( );
     void setRandom( const float &strength = 10.0f);
     void setPerlin();
     void setDirection(ofVec2f _dir);

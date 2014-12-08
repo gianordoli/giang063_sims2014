@@ -40,8 +40,12 @@ void ofApp::setup(){
     addForceRadius = 10.0;
     addForceStrength = 0.25;
     
+    int w = ofGetWindowWidth();
+    int h = ofGetHeight();
+    
     // "Wind" controls
-    myField.setup( ofGetWindowWidth(), ofGetWindowHeight(), 20 );
+    myField = new FlowField(w, h, 20);
+    myField->setup();
 //    myField.setPerlin();
     initMouse.set(0.0, 0.0);
     
@@ -126,14 +130,14 @@ void ofApp::update(){
             // Only changes direction if user is dragging the mouse
             if (isWinding) {
                 ofVec2f dir = ofVec2f(mouseX, mouseY) - initMouse;
-                myField.setDirection(dir);
+                myField->setDirection(dir);
             }
             // Sending the field to each ribbon
             for (int i = 0; i < shapes.size(); i++) {
                 shapes[i].updateWind(myField);
             }
             // Damping
-            myField.update();
+            myField->update();
         }
     }
 //    else{

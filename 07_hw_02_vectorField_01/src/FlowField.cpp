@@ -6,14 +6,13 @@
 
 #include "FlowField.h"
 
-FlowField::FlowField() {
-    
-}
-
-void FlowField::setup( int width, int height, int res ) {
+FlowField::FlowField(int width, int height, int res) {
     fieldWidth = width;
     fieldHeight = height;
     resolution = res;
+}
+
+void FlowField::setup(  ) {
     
     int cols = fieldWidth / resolution;
     int rows = fieldHeight / resolution;

@@ -37,7 +37,7 @@ public:
     float amplitude, frequencyInSeconds, nModifier;
     
     // Wind
-    void updateWind(FlowField & myField);
+    void updateWind(FlowField * myField);
     
     // ofPolyline is actually ONE line
     // It would be the same as a vector of ofPoint.

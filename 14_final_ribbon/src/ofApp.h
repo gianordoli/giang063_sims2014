@@ -66,7 +66,7 @@ public:
     float addForceStrength;
     
     // "Wind" controls
-    FlowField myField;
+    FlowField * myField;
     bool isWinding;
     ofVec2f initMouse;
 

@@ -45,9 +45,9 @@ void Ribbon::updateOscillation(float _amplitude, int _frequencyInSeconds, int _n
     nModifier = _nModifier;
 }
 
-void Ribbon::updateWind(FlowField & myField){
+void Ribbon::updateWind(FlowField * myField){
     for (int i = 0; i < myParticles.size(); i++) {
-        ofVec2f forceAtPos = myField.getForceAtPosition(myParticles[i].pos) * 0.005;
+        ofVec2f forceAtPos = myField->getForceAtPosition(myParticles[i].pos) * 0.005;
         myParticles[i].addForce( forceAtPos );
     }
 }

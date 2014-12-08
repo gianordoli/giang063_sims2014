@@ -215,7 +215,7 @@ void ofApp::draw(){
         // Vector Field ("wind")
         if(selectedMode == "wind"){
             
-            ofDrawBitmapString("WIND CONTROLS\n---------------\nClick and drag to set\nspeed and direction", 20, ofGetHeight() - 80);
+            ofDrawBitmapString("WIND CONTROLS\n---------------\nClick and drag to set\nspeed and direction", ofGetWidth() - 210, ofGetHeight() - 90);
             
             if(isWinding){
                 ofPushMatrix();
@@ -241,7 +241,7 @@ void ofApp::draw(){
         }else{
             
             // Camera controls
-            ofDrawBitmapString("CAMERA CONTROLS\n---------------\nDrag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan", 20, ofGetHeight() - 80);
+            ofDrawBitmapString("CAMERA CONTROLS\n---------------\nDrag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan", ofGetWidth() - 210, ofGetHeight() - 100);
             
             // Mouse modifier
             if(selectedMode == "repulsion" || selectedMode == "attraction"){

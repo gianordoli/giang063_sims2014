@@ -35,9 +35,11 @@ public:
     
     /*-------------------- GUI --------------------*/
     ofxUISuperCanvas *gui;
+    ofxUISuperCanvas *guiForce;
     void guiEvent(ofxUIEventArgs &e);
     void setGUI();
-    vector<string> modes;
+    void setGUIForce();
+    vector <string> modes;
     string selectedMode;
     
     

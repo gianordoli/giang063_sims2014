@@ -21,7 +21,9 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofSetVerticalSync(true);
 //    ofSetWindowShape(1280, 720);
-    ofToggleFullscreen();
+//    ofToggleFullscreen();
+    int w = ofGetWindowWidth();
+    int h = ofGetHeight();
     
     /*------------------ DRAWING ------------------*/
     isDrawing = false;
@@ -39,9 +41,6 @@ void ofApp::setup(){
     /*----------------- PHYSICS -------------------*/
     addForceRadius = 10.0;
     addForceStrength = 0.25;
-    
-    int w = ofGetWindowWidth();
-    int h = ofGetHeight();
     
     // "Wind" controls
     myField = new FlowField(w, h, 20);
@@ -63,10 +62,8 @@ void ofApp::setup(){
     thickness = 10.0;
     
     lightColor.set(1.0, 0.0, 0.0);
-    //    ofSetSmoothLighting(true);
     light.setDiffuseColor(lightColor);
-    //    light.setSpecularColor( ofFloatColor(1.f, 1.f, 1.f));
-    light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 10.0));
+//    light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 10.0));
     cam.setVFlip(true); // you need this, otherwise the camera starts flipped vertically
     // I have no idea why
 //    zDepth = -1;
@@ -81,11 +78,11 @@ void ofApp::setup(){
     snapCounter = 0;
     isRecording = false;
     isSnapshoting = false;
-    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+    fbo.allocate(w, h, GL_RGBA);
     fbo.begin();
     ofClear(0);
     fbo.end();
-    pixels.allocate(ofGetWidth(), ofGetHeight(), OF_IMAGE_COLOR_ALPHA);
+    pixels.allocate(w, h, OF_IMAGE_COLOR_ALPHA);
     
 
     /*-------------------- GUI --------------------*/
@@ -96,7 +93,7 @@ void ofApp::setup(){
     modes.push_back("wind");
     selectedMode = "draw";
     setGUI();
-    
+    setGUIForce();
 }
 
 //--------------------------------------------------------------
@@ -405,10 +402,6 @@ void ofApp::setGUI(){
     gui->addSlider("DEPTH", -1.0, -20.0, zDepth);
     gui->addSpacer();
     
-    gui->addLabel("REPULSION/ATTRACTION");
-    gui->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
-    gui->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
-    
     gui->addLabel("OSCILLATION");
     gui->addToggle("OSCILLATE", isOscillating);
     gui->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
@@ -427,6 +420,23 @@ void ofApp::setGUI(){
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
 //    gui->loadSettings("guiSettings.xml");
+}
+
+void ofApp::setGUIForce(){
+    
+    guiForce = new ofxUISuperCanvas("CONTROLS");
+    ofColor guiForceColor = ofColor(0, 150, 200, 100);
+    guiForce->setColorFill(255);
+    guiForce->setColorBack(guiForceColor);
+    guiForce->addSpacer();
+    
+    guiForce->addLabel("REPULSION/ATTRACTION");
+    guiForce->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
+    guiForce->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
+    
+    guiForce->autoSizeToFitWidgets();
+    ofAddListener(guiForce->newGUIEvent,this,&ofApp::guiEvent);
+    //    gui->loadSettings("guiSettings.xml");
 }
 
 void ofApp::guiEvent(ofxUIEventArgs &e){

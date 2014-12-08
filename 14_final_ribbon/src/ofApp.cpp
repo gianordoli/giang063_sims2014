@@ -21,7 +21,7 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofSetVerticalSync(true);
 //    ofSetWindowShape(1280, 720);
-//    ofToggleFullscreen();
+    ofToggleFullscreen();
     int w = ofGetWindowWidth();
     int h = ofGetHeight();
     
@@ -94,6 +94,7 @@ void ofApp::setup(){
     selectedMode = "draw";
     setGUI();
     setGUIForce();
+    setGUIOscillate();
 }
 
 //--------------------------------------------------------------
@@ -381,6 +382,7 @@ void ofApp::setGUI(){
     ofColor guiColor = ofColor(0, 150, 200, 100);
     gui->setColorFill(255);
     gui->setColorBack(guiColor);
+    gui->setFontSize(OFX_UI_FONT_SMALL, 5);
     gui->addSpacer();
     
     gui->addLabel("MODES");
@@ -400,13 +402,8 @@ void ofApp::setGUI(){
     gui->addLabel("3D");
     gui->addSlider("THICKNESS", 2.0, 50.0, thickness);
     gui->addSlider("DEPTH", -1.0, -20.0, zDepth);
-    gui->addSpacer();
-    
-    gui->addLabel("OSCILLATION");
     gui->addToggle("OSCILLATE", isOscillating);
-    gui->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
-    gui->addSlider("FREQUENCY", 1, 10, frequencyInSeconds);
-    gui->addSlider("LENGTH", 0, 200, nModifier);
+    gui->addSpacer();
     
     gui->addLabel("VIDEO");
     gui->addSlider("PLAYBACK", 0, 1, playbackSlider);
@@ -423,19 +420,42 @@ void ofApp::setGUI(){
 }
 
 void ofApp::setGUIForce(){
-    
-    guiForce = new ofxUISuperCanvas("CONTROLS");
+
+    guiForce = new ofxUISuperCanvas("FORCE");
     ofColor guiForceColor = ofColor(0, 150, 200, 100);
+
+    guiForce->setPosition(0, 557);
     guiForce->setColorFill(255);
     guiForce->setColorBack(guiForceColor);
-    guiForce->addSpacer();
+    guiForce->setFontSize(OFX_UI_FONT_SMALL, 5);
     
-    guiForce->addLabel("REPULSION/ATTRACTION");
     guiForce->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
     guiForce->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
     
     guiForce->autoSizeToFitWidgets();
     ofAddListener(guiForce->newGUIEvent,this,&ofApp::guiEvent);
+    guiForce->setVisible(false);
+    //    gui->loadSettings("guiSettings.xml");
+}
+
+void ofApp::setGUIOscillate(){
+    
+    guiOscillate = new ofxUISuperCanvas("OSCILLATION");
+    ofColor guiOscillateColor = ofColor(0, 150, 200, 100);
+    
+    guiOscillate->setPosition(0, 650);
+    guiOscillate->setColorFill(255);
+    guiOscillate->setColorBack(guiOscillateColor);
+//    guiOscillate->setFontSize(OFX_UI_FONT_MEDIUM, 8);
+    guiOscillate->setFontSize(OFX_UI_FONT_SMALL, 5);
+    
+    guiOscillate->addSlider("AMPLITUDE", 2.0, 200.0, amplitude);
+    guiOscillate->addSlider("FREQUENCY", 1, 10, frequencyInSeconds);
+    guiOscillate->addSlider("LENGTH", 0, 200, nModifier);
+    
+    guiOscillate->autoSizeToFitWidgets();
+    ofAddListener(guiOscillate->newGUIEvent,this,&ofApp::guiEvent);
+    guiOscillate->setVisible(false);
     //    gui->loadSettings("guiSettings.xml");
 }
 
@@ -448,6 +468,11 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     if(name == "MODE"){
         ofxUIRadio *radio = (ofxUIRadio *) e.widget;
         selectedMode = radio->getActiveName();
+        if(selectedMode == "repulsion" || selectedMode == "attraction"){
+            guiForce->setVisible(true);
+        }else{
+            guiForce->setVisible(false);
+        }
         
     
     // DRAWING ------------------------------------------
@@ -475,10 +500,10 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
             }
             
         }else if(name == "ERASE SHAPES"){
-//            ofxUIButton *button = (ofxUIButton *) e.getButton();
-//            if(button->getValue()){
-//                eraseShapes();
-//            }
+            ofxUIButton *button = (ofxUIButton *) e.getButton();
+            if(button->getValue()){
+                eraseShapes();
+            }
         }
         
     // COLOR -----------------------------------------------
@@ -525,9 +550,10 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
     }else if(e.getName() == "OSCILLATE"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         isOscillating = toggle->getValue();
+        guiOscillate->toggleVisible();
         if(selectedMode == "draw"){
             selectedMode = "camera";
-            ((ofxUIRadio *)gui->getWidget("CURSOR MODE"))->activateToggle(selectedMode);
+            ((ofxUIRadio *)gui->getWidget("MODE"))->activateToggle(selectedMode);
         }
 
     }else if(name == "AMPLITUDE"){

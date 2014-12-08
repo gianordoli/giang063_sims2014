@@ -33,6 +33,14 @@ public:
     bool isErasing;
     void eraseShapes();
     
+    /*-------------------- GUI --------------------*/
+    ofxUISuperCanvas *gui;
+    void guiEvent(ofxUIEventArgs &e);
+    void setGUI();
+    vector<string> modes;
+    string selectedMode;
+    
+    
     /*----------------- PLAYBACK -------------------*/
     int totalVertices;
     float playbackSlider;
@@ -67,19 +75,6 @@ public:
     float amplitude;
     int frequencyInSeconds;
     int nModifier;
-    bool isOscillating;
-    
-    /*-------------------- GUI --------------------*/
-    ofxUISuperCanvas * gui;
-//    ofxUISuperCanvas * gui2;    
-    
-    void guiEvent(ofxUIEventArgs &e);
-    void setGUI();
-    vector<string> modes;
-    string selectedMode;
-    
-    void setGUI2();
-    //    ofxUISuperCanvas *guiOscillation;
-    void setGUISOscillation();
+    bool isOscillating;    
 
 };

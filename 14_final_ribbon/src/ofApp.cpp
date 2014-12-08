@@ -16,12 +16,13 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
     /*----------------- OF SETUP ------------------*/
     ofEnableSmoothing();
     ofSetFrameRate(30);
     ofSetVerticalSync(true);
 //    ofSetWindowShape(1280, 720);
-    ofToggleFullscreen();
+//    ofToggleFullscreen();
     
     /*------------------ DRAWING ------------------*/
     isDrawing = false;
@@ -92,6 +93,7 @@ void ofApp::setup(){
     modes.push_back("wind");
     selectedMode = "draw";
     setGUI();
+    setGUI2();
     
 }
 
@@ -211,7 +213,7 @@ void ofApp::draw(){
         // Vector Field ("wind")
         if(selectedMode == "wind"){
             
-            ofDrawBitmapString("WIND CONTROLS\n---------------\nClick and drag to set\nspeed and direction", 20, ofGetHeight() - 80);
+            ofDrawBitmapString("WIND CONTROLS\n---------------\nClick and drag to set\nspeed and direction", ofGetWidth() - 210, ofGetHeight() - 90);
             
             if(isWinding){
                 ofPushMatrix();
@@ -237,7 +239,7 @@ void ofApp::draw(){
         }else{
             
             // Camera controls
-            ofDrawBitmapString("CAMERA CONTROLS\n---------------\nDrag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan", 20, ofGetHeight() - 80);
+            ofDrawBitmapString("CAMERA CONTROLS\n---------------\nDrag: rotate camera\nCTRL+drag: zoom\nALT+drag: pan", ofGetWidth() - 210, ofGetHeight() - 100);
             
             // Mouse modifier
             if(selectedMode == "repulsion" || selectedMode == "attraction"){
@@ -401,9 +403,9 @@ void ofApp::setGUI(){
     gui->addSlider("DEPTH", -1.0, -20.0, zDepth);
     gui->addSpacer();
     
-    gui->addLabel("REPULSION/ATTRACTION");
-    gui->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
-    gui->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
+//    gui->addLabel("REPULSION/ATTRACTION");
+//    gui->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
+//    gui->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
     
     gui->addLabel("OSCILLATION");
     gui->addToggle("OSCILLATE", isOscillating);
@@ -423,6 +425,23 @@ void ofApp::setGUI(){
     gui->autoSizeToFitWidgets();
     ofAddListener(gui->newGUIEvent,this,&ofApp::guiEvent);
 //    gui->loadSettings("guiSettings.xml");
+}
+
+void ofApp::setGUI2(){
+//        gui2 = new ofxUISuperCanvas("FORCE");
+////        guiForce->loadSettings("guiForceSettings.xml");
+//        ofColor guiColor = ofColor(0, 150, 200, 100);
+//        gui2->setColorFill(255);
+//        gui2->setColorBack(guiColor);
+//        gui2->addSpacer();
+//    
+//        gui2->addLabel("REPULSION/ATTRACTION");
+//        gui2->addSlider("FORCE RADIUS", 10.0, 200.0, addForceRadius);
+//        gui2->addSlider("FORCE STRENGTH", 0.1, 1.0, addForceStrength);
+//    //
+//        gui2->autoSizeToFitWidgets();
+//        ofAddListener(gui2->newGUIEvent,this,&ofApp::guiEvent);
+
 }
 
 void ofApp::guiEvent(ofxUIEventArgs &e){

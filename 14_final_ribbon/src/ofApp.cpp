@@ -22,6 +22,7 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofSetWindowTitle("Ribbons 0.1");
     ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
+    ofSetWindowPosition(0, 0);
 //    ofToggleFullscreen();
     int w = ofGetWindowWidth();
     int h = ofGetHeight();
@@ -64,7 +65,7 @@ void ofApp::setup(){
     
     lightColor.set(1.0, 0.0, 0.0);
     light.setDiffuseColor(lightColor);
-//    light.setPosition(ofPoint(-ofGetWidth()*0.5, 0.0, 10.0));
+    light.setPosition(ofPoint(ofGetWidth()*0.5, 0.0, 100.0));
     cam.setVFlip(true); // you need this, otherwise the camera starts flipped vertically
     // I have no idea why
 //    zDepth = -1;

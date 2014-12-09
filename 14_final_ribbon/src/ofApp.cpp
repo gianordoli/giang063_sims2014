@@ -20,8 +20,9 @@ void ofApp::setup(){
     ofEnableSmoothing();
     ofSetFrameRate(30);
     ofSetVerticalSync(true);
-//    ofSetWindowShape(1280, 720);
-    ofToggleFullscreen();
+    ofSetWindowTitle("Ribbons 0.1");
+    ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
+//    ofToggleFullscreen();
     int w = ofGetWindowWidth();
     int h = ofGetHeight();
     
@@ -593,7 +594,7 @@ void ofApp::guiEvent(ofxUIEventArgs &e){
 }
 
 void ofApp::exit(){
-    gui->saveSettings("guiSettings.xml");
+//    gui->saveSettings("guiSettings.xml");
     delete gui;
 }
 

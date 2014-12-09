@@ -18,7 +18,7 @@ void Mover::setup(float _x, float _y){
 
 void Mover::update(){
     aVel += aAcc;   // Update velocity
-    aVel *= 0.99f;  // Dampening
+    aVel *= 0.99f;  // Damping
     *this += aVel;  // Update position
     aAcc *= 0;      // Reset accelleration
 }

@@ -1,7 +1,8 @@
+![Ribbon Lettering](../_images/14_ribbon_2.png)
 ![Ribbon Lettering](../_images/14_ribbon_0.png)
 ![Ribbon Lettering](../_images/14_ribbon_1.png)
 
-# Ribbon Drawing Tool
+# Ribbons
 
 MFA Design and Technology, Parsons The New School for Design
 
@@ -11,7 +12,7 @@ Fall, 2014
 
 ---
 
-This is a tool I’m working on right now. It still doesn’t have a proper name, so I’m calling it a ‘ribbon drawing tool…’ It was inspired by [this trend of letterings with ribbons](https://www.google.com/search?q=images&espv=2&biw=1597&bih=816&source=lnms&tbm=isch&sa=X&ei=UYd6VNaeNO7fsATdooLgAg&ved=0CAYQ_AUoAQ#tbm=isch&q=ribbon+typography), which was very popular a few years ago. 
+This is a tool I’m working on right now. It still doesn’t have a proper name, so I’m calling it a **Ribbons**. It was inspired by [this trend of letterings with ribbons](https://www.google.com/search?q=images&espv=2&biw=1597&bih=816&source=lnms&tbm=isch&sa=X&ei=UYd6VNaeNO7fsATdooLgAg&ved=0CAYQ_AUoAQ#tbm=isch&q=ribbon+typography), which was very popular a few years ago. 
 
 Prototypes:
 
@@ -26,4 +27,5 @@ The previous version developed for the midterm can be found [here](../06_midterm
 
 ## To do
 
-* Create separate GUIs for functions dependent on modes — ATTRACTION/REPULSION, OSCILLATE, etc.
+* Set normals
+* Add option to save vector shape

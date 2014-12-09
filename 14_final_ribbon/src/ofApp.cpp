@@ -21,11 +21,12 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofSetVerticalSync(true);
     ofSetWindowTitle("Ribbons 0.1");
-    ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
-    ofSetWindowPosition(0, 0);
-//    ofToggleFullscreen();
+//    ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
+//    ofSetWindowPosition(0, 0);
+    ofToggleFullscreen();
     int w = ofGetWindowWidth();
     int h = ofGetHeight();
+
     
     /*------------------ DRAWING ------------------*/
     isDrawing = false;
@@ -166,6 +167,7 @@ void ofApp::update(){
         //    cout << v << endl;
         for(int i = 0; i < shapes.size(); i++){
             if(nVertices > 0){
+                ofSetColor(255);
                 shapes[i].draw(selectedMode, isOscillating, nVertices, thickness, zDepth, lightColor);
             }
             nVertices -= shapes[i].currentLine.size();
@@ -188,6 +190,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    
+    ofShowCursor();
     
     ofBackground(0);
     
@@ -268,6 +272,14 @@ void ofApp::draw(){
         }
     }
 
+    // CLOSE
+    ofSetColor(255);
+    ofFill();
+    ofRect(ofGetWidth() - margins[1], 0, margins[1], margins[1]);
+    ofNoFill();
+    ofSetColor(0);
+    ofLine(ofGetWidth() - margins[1], 0, ofGetWidth(), margins[1]);
+    ofLine(ofGetWidth() - margins[1], margins[1], ofGetWidth(), 0);
 }
 
 //--------------------------------------------------------------
@@ -290,12 +302,24 @@ void ofApp::mousePressed(int x, int y, int button){
         isWinding = true;
         initMouse.set(x, y);
         cam.disableMouseInput();
+
+    }
+    
+    // Exit
+    if(ofGetWidth() - margins[1] < x && x < ofGetWidth() &&
+             0 < y && y < margins[1]){
+        ofExit();
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+//    cout << x << endl;
+//    if(x < 0 || x > ofGetWidth() || y < 0 || y > ofGetHeight()){
+//        ofHideCursor();
+//    }else{
+//        ofShowCursor();
+//    }
 }
 
 //--------------------------------------------------------------
@@ -617,5 +641,5 @@ void ofApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
-    
+
 }
